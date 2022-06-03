@@ -6,15 +6,41 @@
 </head>
 <body>
 
+<script type="text/javascript">
+    function setDoctor(doctor_id, date, time) {
+        document.getElementById("doctor_id").setAttribute("value", doctor_id)
+        document.getElementById("appointment_date").setAttribute("value", date + 'T' + time)
+    }
+</script>
+
+<div th:each="doctor : ${doctors}">
+    <div th:text="${doctor.key.fullName}"></div>
+    <div th:each="date : ${doctor.value}">
+        <div th:text="${date.key}"></div>
+        <div style="display: inline-flex;">
+            <div th:each="time : ${date.value}" >
+                <button th:data-date="${date.key}" th:data-time="${time}" th:text="${time}"
+                        th:onclick="|setDoctor(${doctor.key.id}, this.getAttribute('data-date'), this.getAttribute('data-time'));|"></button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <form action="/appointments/add" method="post">
-    <input type="text" name="doctor" placeholder="Доктор">
-    <input type="text" name="client" placeholder="Клиент">
-    <input type="datetime-local" name="dateStr" placeholder="Время">
+    <input id="doctor_id" type="text" name="doctor" placeholder="Доктор">
+    <input id="appointment_date" type="datetime-local" name="dateStr" placeholder="Время">
     <button type="submit">Добавить запись</button>
 </form>
 
+<!--<div th:each="doctor : ${doctors}">-->
+<!--    <div th:text="${doctor.id} + ' принимает ' + ${doctor.username}"></div>-->
+<!--</div>-->
 
+<p>
+    Today is:
+    <span th:text="${#calendars.format(today,'yyyy-MM-dd')}">13 february 2011</span>
+</p>
 
 </body>
 </html>

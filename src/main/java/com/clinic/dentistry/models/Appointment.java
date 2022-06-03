@@ -10,12 +10,16 @@ public class Appointment {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String doctor, status, description;
+    private String status, description;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "client_id")
     private User client;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "doctor_id")
+    private User doctor;
     private LocalDateTime date;
+    private Boolean active;
 
     public String getClientName(){
         return client != null ? client.getUsername() : "None";
@@ -29,11 +33,11 @@ public class Appointment {
         this.id = id;
     }
 
-    public String getDoctor() {
+    public User getDoctor() {
         return doctor;
     }
 
-    public void setDoctor(String doctor) {
+    public void setDoctor(User doctor) {
         this.doctor = doctor;
     }
 
@@ -69,15 +73,23 @@ public class Appointment {
         this.date = date;
     }
 
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
     public Appointment() {
     }
 
-    public Appointment(String doctor, User client, LocalDateTime date) {
+    public Appointment(User doctor, User client, LocalDateTime date) {
         this.doctor = doctor;
         this.client = client;
         this.date = date;
     }
-    public Appointment(String doctor, LocalDateTime date) {
+    public Appointment(User doctor, LocalDateTime date) {
         this.doctor = doctor;
         this.client = client;
         this.date = date;

@@ -9,7 +9,5 @@
 <div th:each="appointment : ${appointments}">
     <div th:text="${appointment.doctor} + ' принимает ' + ${appointment.getClientName}"></div>
 </div>
-
-
 </body>
 </html>
