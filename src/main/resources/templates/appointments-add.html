@@ -3,6 +3,7 @@
 <head>
     <title>Getting Started: Serving Web Content</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
 </head>
 <body>
 
@@ -12,6 +13,8 @@
         document.getElementById("appointment_date").setAttribute("value", date + 'T' + time)
     }
 </script>
+
+<header th:insert="blocks/header :: header"></header>
 
 <div th:each="doctor : ${doctors}">
     <div th:text="${doctor.key.fullName}"></div>
@@ -42,5 +45,6 @@
     <span th:text="${#calendars.format(today,'yyyy-MM-dd')}">13 february 2011</span>
 </p>
 
+<div th:insert="blocks/footer :: footer"></div>
 </body>
 </html>

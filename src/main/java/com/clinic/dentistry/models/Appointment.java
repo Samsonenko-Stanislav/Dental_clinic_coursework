@@ -24,6 +24,9 @@ public class Appointment {
     public String getClientName(){
         return client != null ? client.getUsername() : "None";
     }
+    public String getDoctorName(){
+        return doctor != null ? client.getFullName() : "None";
+    }
 
     public Long getId() {
         return id;

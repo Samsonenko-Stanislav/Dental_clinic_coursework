@@ -28,8 +28,8 @@ public class AppointmentController {
     private UserRepository userRepository;
 
     @GetMapping("/appointments")
-    public String appointmentsMain(Model model){
-        Iterable<Appointment> appointments = appointmentRepository.findAll();
+    public String appointmentsMain(@AuthenticationPrincipal User user, Model model){
+        Iterable<Appointment> appointments = appointmentRepository.findByClientOrDoctorAndActiveTrue(user, user);
         model.addAttribute("appointments", appointments);
         return "appointments-main";
 
