@@ -8,22 +8,32 @@
 <body>
 
 <script type="text/javascript">
-    function setDoctor(doctor_id, date, time) {
+    function setDoctor(doctor_id, date, time, button) {
+        document.querySelectorAll('button').forEach(function (element) {
+            element.disabled = false;
+        })
         document.getElementById("doctor_id").setAttribute("value", doctor_id)
         document.getElementById("appointment_date").setAttribute("value", date + 'T' + time)
+        button.disabled = true;
     }
 </script>
 
 <header th:insert="blocks/header :: header"></header>
 
-<div th:each="doctor : ${doctors}">
-    <div th:text="${doctor.key.fullName}"></div>
-    <div th:each="date : ${doctor.value}">
-        <div th:text="${date.key}"></div>
-        <div style="display: inline-flex;">
-            <div th:each="time : ${date.value}" >
-                <button th:data-date="${date.key}" th:data-time="${time}" th:text="${time}"
-                        th:onclick="|setDoctor(${doctor.key.id}, this.getAttribute('data-date'), this.getAttribute('data-time'));|"></button>
+<div class="row mx-2 mt-4">
+    <div class="col-md-12" th:each="doctor : ${doctors}">
+        <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+            <div class="col p-4 d-flex flex-column position-static">
+                <h3 class="mb-2" th:text="${doctor.key.fullName}"></h3>
+                <div class="row m-0">
+                    <div class="col-md-4 border rounded" th:each="date : ${doctor.value}">
+                        <div class="ps-2 pt-2" th:text="${date.key}"></div>
+                        <div class="p-2">
+                            <button class="mt-1 ms-1" th:each="time : ${date.value}" th:data-date="${date.key}" th:data-time="${time}" th:text="${time}"
+                                    th:onclick="|setDoctor(${doctor.key.id}, this.getAttribute('data-date'), this.getAttribute('data-time'), this);|"></button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -31,19 +41,10 @@
 
 
 <form action="/appointments/add" method="post">
-    <input id="doctor_id" type="text" name="doctor" placeholder="Доктор">
-    <input id="appointment_date" type="datetime-local" name="dateStr" placeholder="Время">
+    <input hidden id="doctor_id" type="text" name="doctor" placeholder="Доктор">
+    <input hidden id="appointment_date" type="datetime-local" name="dateStr" placeholder="Время">
     <button type="submit">Добавить запись</button>
 </form>
-
-<!--<div th:each="doctor : ${doctors}">-->
-<!--    <div th:text="${doctor.id} + ' принимает ' + ${doctor.username}"></div>-->
-<!--</div>-->
-
-<p>
-    Today is:
-    <span th:text="${#calendars.format(today,'yyyy-MM-dd')}">13 february 2011</span>
-</p>
 
 <div th:insert="blocks/footer :: footer"></div>
 </body>
