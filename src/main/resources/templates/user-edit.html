@@ -8,17 +8,42 @@
 <body>
 <header th:insert="blocks/header :: header"></header>
 
-<form action="/user" method="post">
-    <input type="text" name="username" th:value="${user.username}">
-    <div th:each="role : ${roles}">
-        <label > <input th:text="${role}" type="checkbox" th:name="${role}"  th:checked="${#arrays.contains(user.roles, role)}">  </label>
+<div class="container">
+    <div class="col-md-7 col-lg-8">
+        <h4 class="mb-3">Редактирование пользователя</h4>
+        <div th:if="${message}">
+            <div th:text="${message}"></div>
+        </div>
+        <form action="/user" method="post">
+            <div class="row">
+                <div class="row col-12">
+                    <div class="col-6">
+                        <label for="username" class="form-label">User name</label>
+                        <input type="text" name="username" class="form-control" id="username" th:value="${user.username}">
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <div th:each="role : ${roles}">
+                        <input type="checkbox" th:name="${role}" th:id="${role}" th:checked="${#arrays.contains(user.roles, role)}">
+                        <label th:for="${role}" class="form-label" th:text="${role}" >Role</label>
+                    </div>
+                </div>
+
+                <div class="col-md-5">
+                    <label for="employee" class="form-label">Employee</label>
+                    <select class="form-select" id="employee" name="employee">
+                        <option value="0"></option>
+                        <option th:each="employee : ${employees}" th:value="${employee.id}" th:text="|${employee.id}:${employee.fullName}|" th:selected="${employee.id}==${user.employeeId}"></option>
+                    </select>
+                </div>
+
+                <button class="w-100 btn btn-primary btn-lg" type="submit">Save</button>
+            </div>
+            <input type="hidden" name="userId" th:value="${user.id}">
+        </form>
     </div>
-    <input type="hidden" name="userId" th:value="${user.id}">
-
-
-    <button type="submit">Save</button>
-</form>
-
+</div>
 
 <div th:insert="blocks/footer :: footer"></div>
 </body>

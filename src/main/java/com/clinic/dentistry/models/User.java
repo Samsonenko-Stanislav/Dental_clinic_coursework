@@ -19,10 +19,22 @@ public class  User implements UserDetails {
     private String password;
     private boolean active;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "employee_id")
+    private Employee employee;
+
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
+
+    public Long getEmployeeId(){
+        return employee != null ? employee.getId() : 0;
+    }
+
+    public String getEmployeeJobTitle(){
+        return employee != null ? employee.getJobTitle() : "";
+    }
 
     public Long getId() {
         return id;
@@ -95,5 +107,13 @@ public class  User implements UserDetails {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 }

@@ -1,5 +1,7 @@
 package com.clinic.dentistry.models;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -10,7 +12,7 @@ public class Appointment {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String status, description;
+    private String status;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "client_id")
@@ -21,11 +23,17 @@ public class Appointment {
     private LocalDateTime date;
     private Boolean active;
 
+    @Type(type="text")
+    private String conclusion;
+
     public String getClientName(){
         return client != null ? client.getUsername() : "None";
     }
     public String getDoctorName(){
-        return doctor != null ? client.getFullName() : "None";
+        return doctor != null ? doctor.getFullName() : "None";
+    }
+    public String getDoctorJobTitle(){
+        return doctor != null ? doctor.getEmployeeJobTitle() : "None";
     }
 
     public Long getId() {
@@ -60,14 +68,6 @@ public class Appointment {
         this.status = status;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public LocalDateTime getDate() {
         return date;
     }
@@ -98,5 +98,11 @@ public class Appointment {
         this.date = date;
     }
 
+    public String getConclusion() {
+        return conclusion;
+    }
 
+    public void setConclusion(String conclusion) {
+        this.conclusion = conclusion;
+    }
 }

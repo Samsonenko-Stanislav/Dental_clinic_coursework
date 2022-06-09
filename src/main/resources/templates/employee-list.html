@@ -7,22 +7,22 @@
 </head>
 <body>
 <header th:insert="blocks/header :: header"></header>
+List of employees
 
 <div class="row mb-2">
-    <div class="col-md-4" th:each="appointment : ${appointments}">
+    <div class="col-md-11" th:each="employee : ${employees}">
         <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
             <div class="col p-4 d-flex flex-column position-static">
-                <strong class="d-inline-block mb-2 text-primary" th:text="${appointment.DoctorName}"></strong>
-                <h3 class="mb-0" th:text="${appointment.doctorJobTitle}">Doctor profession</h3>
-                <div class="mb-1 text-muted" th:text="${appointment.date}">Nov 12</div>
-                <a th:href="|/appointments/${appointment.id}/edit|" class="stretched-link">More</a>
+                <strong class="d-inline-block mb-2 text-primary" th:text="|${employee.id}:${employee.fullName}|">None</strong>
+                <h3 class="mb-0" th:text="${employee.jobTitle}">Doctor profession</h3>
+                <div class="mb-1 text-muted" th:text="|${employee.workStart}-${employee.workEnd}|"></div>
+                <a th:href="|/employee/${employee.id}|" class="stretched-link">Edit</a>
             </div>
         </div>
     </div>
+
+    <a href="/employee/new" class="btn btn-primary">New</a>
 </div>
-
-<a href="/appointments/add" class="btn btn-primary">Add new appointment</a>
-
 <div th:insert="blocks/footer :: footer"></div>
 </body>
 </html>
