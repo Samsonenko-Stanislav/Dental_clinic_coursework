@@ -8,10 +8,10 @@
 <body>
 
 <div th:if="${param.error}">
-    Invalid username and password.
+    Неверный логин или пароль.
 </div>
 <div th:if="${param.logout}">
-    You have been logged out.
+    Вы вышли.
 </div>
 
 <div th:if="${message}">
@@ -19,9 +19,9 @@
 </div>
 
 <form th:action="@{/sign_up}" method="post">
-    <div><label> User Name : <input type="text" name="username"/> </label></div>
-    <div><label> Password: <input type="password" name="password"/> </label></div>
-    <div><input type="submit" value="Sign Up"/></div>
+    <div><label> Логин : <input type="text" name="username"/> </label></div>
+    <div><label> Пароль: <input type="password" name="password"/> </label></div>
+    <div><input type="submit" value="Зарегестироваться"/></div>
 </form>
 </body>
 </html>

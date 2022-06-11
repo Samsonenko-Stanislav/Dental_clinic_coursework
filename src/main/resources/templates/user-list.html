@@ -12,8 +12,8 @@ List of users
 <table>
     <thead>
     <tr>
-        <th>Name</th>
-        <th>Role</th>
+        <th>Логин</th>
+        <th>Роли</th>
         <th></th>
     </tr>
     </thead>
@@ -24,13 +24,13 @@ List of users
            <p th:each="role : ${user.roles}" th:text="${role}+','"></p>
         </td>
         <td>
-            <a th:href="|/user/${user.id}|">edit</a>
+            <a th:href="|/user/${user.id}|">Редактировать</a>
         </td>
     </tr>
     </tbody>
 </table>
 
-<a href="/user/new" class="btn btn-primary">New</a>
+<a href="/user/new" class="btn btn-primary">Сохранить</a>
 
 <div th:insert="blocks/footer :: footer"></div>
 </body>
