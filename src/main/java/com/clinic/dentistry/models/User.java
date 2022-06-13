@@ -14,7 +14,6 @@ public class  User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String fullName;
     private String username;
     private String password;
     private boolean active;
@@ -23,6 +22,10 @@ public class  User implements UserDetails {
     @JoinColumn(name = "employee_id")
     private Employee employee;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "outpatient_card_id")
+    private OutpatientCard outpatientCard;
+
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
@@ -30,6 +33,20 @@ public class  User implements UserDetails {
 
     public Long getEmployeeId(){
         return employee != null ? employee.getId() : 0;
+    }
+
+    public Long getOutpatientCardId(){
+        return outpatientCard != null ? outpatientCard.getId() : 0;
+    }
+
+    public String getFullName() {
+        String fullName = "";
+        if (employee != null){
+            fullName = employee.getFullName();
+        } else if (outpatientCard != null) {
+            fullName = outpatientCard.getFullName();
+        }
+        return fullName;
     }
 
     public String getEmployeeJobTitle(){
@@ -42,14 +59,6 @@ public class  User implements UserDetails {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
     }
 
     public String getUsername() {
@@ -115,5 +124,13 @@ public class  User implements UserDetails {
 
     public void setEmployee(Employee employee) {
         this.employee = employee;
+    }
+
+    public OutpatientCard getOutpatientCard() {
+        return outpatientCard;
+    }
+
+    public void setOutpatientCard(OutpatientCard outpatientCard) {
+        this.outpatientCard = outpatientCard;
     }
 }

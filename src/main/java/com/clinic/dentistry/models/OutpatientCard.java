@@ -6,21 +6,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.time.LocalTime;
 
 @Entity
 @Data
-public class Employee {
+public class OutpatientCard {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
     private String fullName;
-    private String jobTitle;
-    private LocalTime workStart, workEnd;
-
-    public Long getId() {
-        return id;
-    }
 
 }

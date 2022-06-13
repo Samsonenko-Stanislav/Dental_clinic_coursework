@@ -16,10 +16,10 @@ public class Appointment {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "client_id")
-    private User client;
+    private OutpatientCard client;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "doctor_id")
-    private User doctor;
+    private Employee doctor;
     private LocalDateTime date;
     private Boolean active;
 
@@ -27,13 +27,14 @@ public class Appointment {
     private String conclusion;
 
     public String getClientName(){
-        return client != null ? client.getUsername() : "None";
+        return client != null ? client.getFullName() : "None";
     }
+
     public String getDoctorName(){
         return doctor != null ? doctor.getFullName() : "None";
     }
     public String getDoctorJobTitle(){
-        return doctor != null ? doctor.getEmployeeJobTitle() : "None";
+        return doctor != null ? doctor.getJobTitle() : "None";
     }
 
     public Long getId() {
@@ -44,19 +45,19 @@ public class Appointment {
         this.id = id;
     }
 
-    public User getDoctor() {
+    public Employee getDoctor() {
         return doctor;
     }
 
-    public void setDoctor(User doctor) {
+    public void setDoctor(Employee doctor) {
         this.doctor = doctor;
     }
 
-    public User getClient() {
+    public OutpatientCard getClient() {
         return client;
     }
 
-    public void setClient(User client) {
+    public void setClient(OutpatientCard client) {
         this.client = client;
     }
 
@@ -87,12 +88,7 @@ public class Appointment {
     public Appointment() {
     }
 
-    public Appointment(User doctor, User client, LocalDateTime date) {
-        this.doctor = doctor;
-        this.client = client;
-        this.date = date;
-    }
-    public Appointment(User doctor, LocalDateTime date) {
+    public Appointment(Employee doctor, OutpatientCard client, LocalDateTime date) {
         this.doctor = doctor;
         this.client = client;
         this.date = date;

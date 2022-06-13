@@ -6,21 +6,17 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.time.LocalTime;
 
 @Entity
 @Data
-public class Employee {
+public class Good {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String fullName;
-    private String jobTitle;
-    private LocalTime workStart, workEnd;
+    private boolean is_active;
 
-    public Long getId() {
-        return id;
-    }
+    private String name;
 
+    private float price;
 }
