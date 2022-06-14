@@ -1,11 +1,7 @@
 package com.clinic.dentistry.controllers;
 
-import com.clinic.dentistry.models.Appointment;
-import com.clinic.dentistry.models.Employee;
-import com.clinic.dentistry.models.Role;
-import com.clinic.dentistry.models.User;
-import com.clinic.dentistry.repo.AppointmentRepository;
-import com.clinic.dentistry.repo.UserRepository;
+import com.clinic.dentistry.models.*;
+import com.clinic.dentistry.repo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -27,12 +23,20 @@ public class AppointmentController {
     @Autowired
     private AppointmentRepository appointmentRepository;
     @Autowired
+    private GoodRepository goodRepository;
+    @Autowired
+    private CheckRepository checkRepository;
+    @Autowired
+    private CheckLineRepository checkLineRepository;
+    @Autowired
     private UserRepository userRepository;
 
     @GetMapping("/appointments")
     public String appointmentsMain(@AuthenticationPrincipal User user, Model model){
-        Iterable<Appointment> appointments = appointmentRepository.findByClientOrDoctorAndActiveTrue(user, user);
-        model.addAttribute("appointments", appointments);
+        Iterable<Appointment> appointmentsClient = appointmentRepository.findByClient(user.getOutpatientCard());
+        Iterable<Appointment> appointmentsDoctor = appointmentRepository.findByDoctorAndActiveTrue(user.getEmployee());
+        model.addAttribute("appointmentsClient", appointmentsClient);
+        model.addAttribute("appointmentsDoctor", appointmentsDoctor);
         return "appointments-main";
 
     }
@@ -88,9 +92,8 @@ public class AppointmentController {
     public String appointmentsAdd(@AuthenticationPrincipal User user, @RequestParam User doctor,
                                   @RequestParam String dateStr, Model model){
         LocalDateTime date = LocalDateTime.parse(dateStr);
-        Appointment appointment = new Appointment(doctor, user, date);
+        Appointment appointment = new Appointment(doctor.getEmployee(), user.getOutpatientCard(), date);
         appointment.setActive(Boolean.TRUE);
-//        Appointment appointment = new Appointment();
         appointmentRepository.save(appointment);
         return "redirect:/appointments";
     }
@@ -101,8 +104,10 @@ public class AppointmentController {
                                    Model model
     ){
         Boolean readOnly = Boolean.TRUE;
-        if (appointment.getDoctor() != null && appointment.getDoctor().getId() == user.getId()){
+        if (appointment.getDoctor() != null && appointment.getDoctor().getId() == user.getEmployee().getId()){
             readOnly = Boolean.FALSE;
+            Iterable<Good> goods = goodRepository.findAll();
+            model.addAttribute("goods", goods);
         }
 
         model.addAttribute("appointment", appointment);

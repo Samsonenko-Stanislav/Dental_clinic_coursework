@@ -1,7 +1,9 @@
 package com.clinic.dentistry.controllers;
 
+import com.clinic.dentistry.models.OutpatientCard;
 import com.clinic.dentistry.models.Role;
 import com.clinic.dentistry.models.User;
+import com.clinic.dentistry.repo.OutpatientCardRepository;
 import com.clinic.dentistry.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,6 +18,8 @@ import java.util.Map;
 public class RegistrationController {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private OutpatientCardRepository outpatientCardRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -26,16 +30,19 @@ public class RegistrationController {
     }
 
     @PostMapping("/sign_up")
-    public String signUp(User user, Map<String, Object> model){
+    public String signUp(User user, OutpatientCard outpatientCard, Map<String, Object> model){
         User userFromDb = userRepository.findByUsername(user.getUsername());
         if (userFromDb != null) {
             model.put("message", "User exists!");
             return "sign-up";
         }
 
+        outpatientCardRepository.save(outpatientCard);
+
         user.setActive(true);
         user.setRoles(Collections.singleton(Role.USER));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setOutpatientCard(outpatientCard);
         userRepository.save(user);
 
         return "redirect:/";
