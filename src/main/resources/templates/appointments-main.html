@@ -10,10 +10,10 @@
 <header th:insert="blocks/header :: header"></header>
 
 <div class="row mb-2">
-    <div class="col-md-4" th:each="appointment : ${appointments}">
+    <div class="col-md-4" th:each="appointment : ${appointmentsClient}">
         <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
             <div class="col p-4 d-flex flex-column position-static" th:classappend="${appointment.active} ? '' : 'disabled'">
-                <strong class="d-inline-block mb-2 text-primary" th:text="${appointment.DoctorName}"></strong>
+                <strong class="d-inline-block mb-2 text-primary" th:text="${appointment.doctorName}"></strong>
                 <h3 class="mb-0" th:text="${appointment.doctorJobTitle}">Doctor profession</h3>
                 <div class="mb-1 text-muted" th:text="${appointment.date}">Nov 12</div>
                 <a th:href="|/appointments/${appointment.id}/edit|" class="stretched-link">More</a>
