@@ -4,9 +4,11 @@ import com.clinic.dentistry.models.Employee;
 import com.clinic.dentistry.models.Role;
 import com.clinic.dentistry.models.User;
 import com.clinic.dentistry.repo.EmployeeRepository;
+import com.clinic.dentistry.repo.OutpatientCardRepository;
 import com.clinic.dentistry.repo.UserRepository;
 import org.hibernate.collection.internal.PersistentSet;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +24,8 @@ public class UserController {
     private UserRepository userRepository;
     @Autowired
     private EmployeeRepository employeeRepository;
+    @Autowired
+    private OutpatientCardRepository outpatientCardRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -37,7 +41,24 @@ public class UserController {
         model.addAttribute("user", user);
         model.addAttribute("roles", Role.values());
         model.addAttribute("employees", employeeRepository.findAll());
+        model.addAttribute("users", outpatientCardRepository.findAll());
         return "user-edit";
+    }
+
+    @GetMapping("/me")
+    public String userMeEditForm(@AuthenticationPrincipal User user, Model model) {
+        model.addAttribute("user", user);
+        return "user-me";
+    }
+
+    @PostMapping("/me")
+    public String userMeSave(@AuthenticationPrincipal User user,
+                             @RequestParam String fullName,
+                             Model model) {
+        user.setFullName(fullName);
+        outpatientCardRepository.save(user.getOutpatientCard());
+        model.addAttribute("user", user);
+        return "user-me";
     }
 
     @GetMapping("/new")

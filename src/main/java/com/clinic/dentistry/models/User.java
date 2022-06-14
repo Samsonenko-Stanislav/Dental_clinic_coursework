@@ -48,6 +48,14 @@ public class  User implements UserDetails {
         }
         return fullName;
     }
+    public void setFullName(String fullName) {
+        if (employee != null){
+            employee.setFullName(fullName);
+        }
+        if (outpatientCard != null) {
+            outpatientCard.setFullName(fullName);
+        }
+    }
 
     public String getEmployeeJobTitle(){
         return employee != null ? employee.getJobTitle() : "";

@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <title>Главная</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -7,6 +8,21 @@
 </head>
 <body>
     <header th:insert="blocks/header :: header"></header>
+
+    <div sec:authorize="isAuthenticated()">
+        This content is only shown to authenticated users.
+        Logged user: <span sec:authentication="name">Bob</span>
+        Roles: <span sec:authentication="principal.authorities">[ROLE_USER, ROLE_ADMIN]</span>
+        <p sec:authentication="principal.username">Username</p>
+        <p sec:authentication="principal.fullName">Username</p>
+    </div>
+
+
+
+    <p th:text="${session}" />
+    <th:block th:text="${session.size()}">-1</th:block>.
+
+
 
     <p th:text="'Hello, ' + ${title} + '!'" />
     <form th:action="@{/logout}" method="post">
