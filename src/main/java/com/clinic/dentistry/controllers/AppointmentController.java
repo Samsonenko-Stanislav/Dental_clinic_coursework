@@ -104,7 +104,7 @@ public class AppointmentController {
                                    Model model
     ){
         Boolean readOnly = Boolean.TRUE;
-        if (appointment.getDoctor() != null && appointment.getDoctor().getId() == user.getEmployee().getId()){
+        if (appointment.getDoctor() != null && user.getEmployee() != null && appointment.getDoctor().getId() == user.getEmployee().getId()){
             readOnly = Boolean.FALSE;
             Iterable<Good> goods = goodRepository.findAll();
             model.addAttribute("goods", goods);

@@ -71,6 +71,7 @@ public class UserController {
     public String userNewForm(
             @RequestParam Map<String, String> form,
             User user,
+            Employee employee,
             Map<String, Object> model
     ) {
         User userFromDb = userRepository.findByUsername(user.getUsername());
@@ -78,6 +79,9 @@ public class UserController {
             model.put("message", "User exists!");
             return "user-new";
         }
+
+        employeeRepository.save(employee);
+        user.setEmployee(employee);
 
         user.setActive(true);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
