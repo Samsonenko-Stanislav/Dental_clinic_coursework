@@ -1,12 +1,12 @@
 package com.clinic.dentistry.controllers;
 
 import com.clinic.dentistry.models.Employee;
+import com.clinic.dentistry.models.OutpatientCard;
 import com.clinic.dentistry.models.Role;
 import com.clinic.dentistry.models.User;
 import com.clinic.dentistry.repo.EmployeeRepository;
 import com.clinic.dentistry.repo.OutpatientCardRepository;
 import com.clinic.dentistry.repo.UserRepository;
-import org.hibernate.collection.internal.PersistentSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,7 +14,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
@@ -71,6 +74,7 @@ public class UserController {
     public String userNewForm(
             @RequestParam Map<String, String> form,
             User user,
+            OutpatientCard outpatientCard,
             Employee employee,
             Map<String, Object> model
     ) {
@@ -80,8 +84,15 @@ public class UserController {
             return "user-new";
         }
 
-        employeeRepository.save(employee);
-        user.setEmployee(employee);
+        if (form.get("createOutpatientCard") != null && form.get("createOutpatientCard").equals("on")){
+            outpatientCardRepository.save(outpatientCard);
+            user.setOutpatientCard(outpatientCard);
+        }
+
+        if (form.get("createEmployee") != null && form.get("createEmployee").equals("on")){
+            employeeRepository.save(employee);
+            user.setEmployee(employee);
+        }
 
         user.setActive(true);
         user.setPassword(passwordEncoder.encode(user.getPassword()));

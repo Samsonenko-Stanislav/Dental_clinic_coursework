@@ -1,6 +1,9 @@
 package com.clinic.dentistry.controllers;
 
-import com.clinic.dentistry.models.*;
+import com.clinic.dentistry.models.Appointment;
+import com.clinic.dentistry.models.Good;
+import com.clinic.dentistry.models.Role;
+import com.clinic.dentistry.models.User;
 import com.clinic.dentistry.repo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -122,7 +125,7 @@ public class AppointmentController {
                                    Model model
     ){
         Boolean readOnly = Boolean.TRUE;
-        if (appointment.getDoctor() != null && appointment.getDoctor().getId() == user.getId()){
+        if (appointment.getDoctor() != null && user.getEmployee() != null && appointment.getDoctor().getId() == user.getEmployee().getId()){
             readOnly = Boolean.FALSE;
             appointment.setConclusion(form.get("conclusion"));
             appointmentRepository.save(appointment);

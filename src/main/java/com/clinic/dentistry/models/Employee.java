@@ -19,8 +19,4 @@ public class Employee {
     private String jobTitle;
     private LocalTime workStart, workEnd;
 
-    public Long getId() {
-        return id;
-    }
-
 }

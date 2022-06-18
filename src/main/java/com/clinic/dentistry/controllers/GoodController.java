@@ -1,8 +1,6 @@
 package com.clinic.dentistry.controllers;
 
-import com.clinic.dentistry.models.Employee;
 import com.clinic.dentistry.models.Good;
-import com.clinic.dentistry.repo.EmployeeRepository;
 import com.clinic.dentistry.repo.GoodRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
