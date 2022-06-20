@@ -36,6 +36,8 @@
     </div>
 </div>
 <a href="/appointments/add" class="btn btn-primary">Записаться</a>
+<a th:if="!${withArchived}" href="/appointments?withArchived" class="btn btn-primary">Показать архивные записи</a>
+<a th:if="${withArchived}" href="/appointments" class="btn btn-primary">Скрыть архивные записи</a>
 
 
 <div th:insert="blocks/footer :: footer"></div>

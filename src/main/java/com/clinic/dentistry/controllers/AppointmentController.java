@@ -1,10 +1,11 @@
 package com.clinic.dentistry.controllers;
 
-import com.clinic.dentistry.models.Appointment;
-import com.clinic.dentistry.models.Good;
-import com.clinic.dentistry.models.Role;
-import com.clinic.dentistry.models.User;
+import com.clinic.dentistry.models.*;
 import com.clinic.dentistry.repo.*;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -35,8 +36,20 @@ public class AppointmentController {
     private UserRepository userRepository;
 
     @GetMapping("/appointments")
-    public String appointmentsMain(@AuthenticationPrincipal User user, Model model){
-        Iterable<Appointment> appointmentsClient = appointmentRepository.findByClient(user.getOutpatientCard());
+    public String appointmentsMain(
+            @AuthenticationPrincipal User user,
+            @RequestParam(value = "withArchived", required = false) String withArchived,
+            Model model
+    ){
+        Iterable<Appointment> appointmentsClient;
+        if (withArchived != null){
+            appointmentsClient = appointmentRepository.findByClient(user.getOutpatientCard());
+            model.addAttribute("withArchived", true);
+        } else {
+            appointmentsClient = appointmentRepository.findByClientAndActiveTrue(user.getOutpatientCard());
+            model.addAttribute("withArchived", false);
+        }
+
         Iterable<Appointment> appointmentsDoctor = appointmentRepository.findByDoctorAndActiveTrue(user.getEmployee());
         model.addAttribute("appointmentsClient", appointmentsClient);
         model.addAttribute("appointmentsDoctor", appointmentsDoctor);
@@ -106,15 +119,28 @@ public class AppointmentController {
                                    @PathVariable Appointment appointment,
                                    Model model
     ){
+        LocalDateTime now = LocalDateTime.now();
         Boolean readOnly = Boolean.TRUE;
-        if (appointment.getDoctor() != null && user.getEmployee() != null && appointment.getDoctor().getId() == user.getEmployee().getId()){
+        Boolean canCancel = Boolean.FALSE;
+        if (appointment.getDoctor() != null && user.getEmployee() != null && appointment.getDoctor().getId() == user.getEmployee().getId() && now.isAfter(appointment.getDate()) && appointment.getActive()){
             readOnly = Boolean.FALSE;
             Iterable<Good> goods = goodRepository.findAll();
             model.addAttribute("goods", goods);
         }
 
+        Optional<Check> check = checkRepository.findFirstByAppointment(appointment);
+        if (check.isPresent()){
+            Iterable<CheckLine> checkLines = checkLineRepository.findByCheck(check.get());
+            model.addAttribute("checkLines", checkLines);
+        }
+
+        if (appointment.getClient() != null && user.getOutpatientCard() != null && appointment.getClient().getId() == user.getOutpatientCard().getId() && now.isBefore(appointment.getDate())){
+            canCancel = Boolean.TRUE;
+        }
+
         model.addAttribute("appointment", appointment);
         model.addAttribute("readOnly", readOnly);
+        model.addAttribute("canCancel", canCancel);
         return "appointments-edit";
     }
 
@@ -124,16 +150,39 @@ public class AppointmentController {
                                    @RequestParam Map<String, String> form,
                                    Model model
     ){
-        Boolean readOnly = Boolean.TRUE;
-        if (appointment.getDoctor() != null && user.getEmployee() != null && appointment.getDoctor().getId() == user.getEmployee().getId()){
-            readOnly = Boolean.FALSE;
-            appointment.setConclusion(form.get("conclusion"));
-            appointmentRepository.save(appointment);
+        appointment.setConclusion(form.get("conclusion"));
+        appointment.setActive(false);
+        appointmentRepository.save(appointment);
+
+        String checkJson = form.get("checkJson");
+        if (!checkJson.equals("")){
+            JsonArray goodsJson = new Gson().fromJson(checkJson, JsonArray.class);
+
+            Float goodPrice;
+            int goodQty;
+            long good_id;
+            Optional<Good> good;
+            CheckLine checkLine;
+            Check check = new Check();
+            check.setAppointment(appointment);
+            checkRepository.save(check);
+            for (JsonElement goodJson : goodsJson) {
+                goodPrice = ((JsonObject) goodJson).get("price").getAsFloat();
+                good_id = ((JsonObject) goodJson).get("good_id").getAsLong();
+                goodQty = ((JsonObject) goodJson).get("qty").getAsInt();
+                good = goodRepository.findById(good_id);
+                if (good.isPresent()){
+                    checkLine = new CheckLine();
+                    checkLine.setGood(good.get());
+                    checkLine.setPrice(goodPrice);
+                    checkLine.setQty(goodQty);
+                    checkLine.setCheck(check);
+                    checkLineRepository.save(checkLine);
+                }
+            }
         }
 
-        model.addAttribute("appointment", appointment);
-        model.addAttribute("readOnly", readOnly);
-        return "appointments-edit";
+        return "redirect:/appointments/" + appointment.getId().toString() + "/edit";
     }
 
     @GetMapping("/appointments/{appointment}/cancel")

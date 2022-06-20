@@ -34,8 +34,16 @@ public class UserController {
     private PasswordEncoder passwordEncoder;
 
     @GetMapping
-    public String userList(Model model) {
-        model.addAttribute("users", userRepository.findAll());
+    public String userList(Model model,
+                           @RequestParam(value = "withArchived", required = false) String withArchived
+                           ) {
+        if (withArchived != null){
+            model.addAttribute("users", userRepository.findAll());
+            model.addAttribute("withArchived", true);
+        } else {
+            model.addAttribute("users", userRepository.findByActiveTrue());
+            model.addAttribute("withArchived", false);
+        }
         return "user-list";
     }
 
@@ -119,9 +127,17 @@ public class UserController {
             @RequestParam("userId") User user,
             @RequestParam Map<String, String> form,
             @RequestParam String username,
+            @RequestParam(value = "active", required = false) String active,
             Employee employee
             ) {
         user.setUsername(username);
+        if (active != null){
+            user.setActive(true);
+        } else {
+            user.setActive(false);
+        }
+
+
         Set<String> roles = Arrays.stream(Role.values())
                 .map(Role::name)
                 .collect(Collectors.toSet());

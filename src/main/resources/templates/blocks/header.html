@@ -11,6 +11,7 @@
                 <li><a href="/appointments" class="nav-link px-2 text-white">Список записей</a></li>
                 <li><a href="/user" class="nav-link px-2 text-white" sec:authorize="hasAuthority('ADMIN')">Пользователи</a></li>
                 <li><a href="/employee" class="nav-link px-2 text-white" sec:authorize="hasAuthority('ADMIN')">Сотрудники</a></li>
+                <li><a href="/good" class="nav-link px-2 text-white" sec:authorize="hasAuthority('ADMIN')">Услуги</a></li>
             </ul>
 
             <div class="text-end" sec:authorize="!isAuthenticated()">

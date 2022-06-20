@@ -6,6 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Data
+@Table(name = "app_check_line")
 public class CheckLine{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

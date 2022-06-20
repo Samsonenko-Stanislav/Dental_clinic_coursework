@@ -16,10 +16,14 @@
         </div>
         <form action="/user" method="post">
             <div class="row">
-                <div class="row col-12">
+                <div class="row col-12 justify-content-between">
                     <div class="col-6">
                         <label for="username" class="form-label">Логин</label>
                         <input type="text" name="username" class="form-control" id="username" th:value="${user.username}">
+                    </div>
+                    <div class="col-3">
+                        <input type="checkbox" name="active" id="active" th:checked="${user.active}">
+                        <label for="active" class="form-label" >Активен</label>
                     </div>
                 </div>
 

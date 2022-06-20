@@ -8,5 +8,6 @@ import org.springframework.data.repository.CrudRepository;
 public interface AppointmentRepository extends CrudRepository<Appointment, Long> {
     Iterable<Appointment> findByActiveTrue();
     Iterable<Appointment> findByClient(OutpatientCard outpatientCard);
+    Iterable<Appointment> findByClientAndActiveTrue(OutpatientCard outpatientCard);
     Iterable<Appointment> findByDoctorAndActiveTrue(Employee employee);
 }
