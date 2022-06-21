@@ -33,7 +33,7 @@ public class RegistrationController {
     public String signUp(User user, OutpatientCard outpatientCard, Map<String, Object> model){
         User userFromDb = userRepository.findByUsername(user.getUsername());
         if (userFromDb != null) {
-            model.put("message", "User exists!");
+            model.put("message", "Пользователь с таким логином уже существует!");
             return "sign-up";
         }
 
@@ -45,6 +45,6 @@ public class RegistrationController {
         user.setOutpatientCard(outpatientCard);
         userRepository.save(user);
 
-        return "redirect:/";
+        return "redirect:/login";
     }
 }

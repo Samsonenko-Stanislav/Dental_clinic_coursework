@@ -16,7 +16,9 @@
     <form th:action="@{/sign_up}" method="post">
         <img class="mb-4" src="/static/img/bootstrap-logo.svg" alt="" width="72" height="57">
         <h1 class="h3 mb-3 fw-normal">Пожалуйста, зарегистрируйтесь</h1>
-
+        <div th:if="${message}">
+            <div th:text="${message}"></div>
+        </div>
         <div class="form-floating">
             <input type="text" class="form-control" id="floatingName" placeholder="ФИО" name="fullname">
             <label for="floatingInput">ФИО</label>
