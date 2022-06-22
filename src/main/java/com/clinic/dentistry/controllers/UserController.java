@@ -8,6 +8,7 @@ import com.clinic.dentistry.repo.EmployeeRepository;
 import com.clinic.dentistry.repo.OutpatientCardRepository;
 import com.clinic.dentistry.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -34,6 +35,7 @@ public class UserController {
     private PasswordEncoder passwordEncoder;
 
     @GetMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public String userList(Model model,
                            @RequestParam(value = "withArchived", required = false) String withArchived
                            ) {
@@ -48,6 +50,7 @@ public class UserController {
     }
 
     @GetMapping("{user}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public String userEditForm(@PathVariable User user, Model model) {
         model.addAttribute("user", user);
         model.addAttribute("roles", Role.values());
@@ -73,12 +76,14 @@ public class UserController {
     }
 
     @GetMapping("/new")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public String userNewForm(Model model) {
         model.addAttribute("roles", Role.values());
         return "user-new";
     }
 
     @PostMapping("/new")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public String userNewForm(
             @RequestParam Map<String, String> form,
             User user,
@@ -123,6 +128,7 @@ public class UserController {
 
 
     @PostMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public String userSave(
             @RequestParam("userId") User user,
             @RequestParam Map<String, String> form,

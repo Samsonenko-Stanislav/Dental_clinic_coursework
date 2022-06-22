@@ -3,6 +3,7 @@ package com.clinic.dentistry.controllers;
 import com.clinic.dentistry.models.Employee;
 import com.clinic.dentistry.repo.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/employee")
+@PreAuthorize("hasAuthority('ADMIN')")
 public class EmployeeController {
 
     @Autowired
