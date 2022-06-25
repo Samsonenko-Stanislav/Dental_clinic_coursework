@@ -20,6 +20,17 @@ function updateCheckJson (){
     $('#checkJson').val(checkJson)
 }
 
+function updateCheckTotal () {
+    let checkLine
+    let checkTotal = 0
+    $("#check > tr:not(.last)").each(function() {
+        checkLine = $(this)
+        checkTotal += Number(checkLine.find(".total").val())
+    })
+    $('#total').val(checkTotal)
+
+}
+
 function addCheckLine (checkLine){
     let newCheckLine = checkLine.clone(true)
     $("#check").append(newCheckLine)
@@ -53,9 +64,11 @@ function updateCheckLine (){
     }
 
     updateCheckJson()
+    updateCheckTotal()
 }
 
 $(document).ready(function() {
     console.log( "ready!" )
     $(".last").on('change', updateCheckLine)
+    updateCheckTotal()
 })

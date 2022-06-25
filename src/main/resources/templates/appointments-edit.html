@@ -51,15 +51,18 @@
                                         <td><input type="number" disabled step="0.01" name="total" class="form-control total"></td>
                                     </tr>
                                     <tr th:each="checkLine : ${checkLines}">
-                                        <td th:text="${checkLine.good.name}"></td>
-<!--                                        <td th:text="${#numbers.formatDecimal(checkLine.price,0,2}"></td>-->
-                                        <td th:text="${checkLine.price}"></td>
-                                        <td th:text="${checkLine.qty}"></td>
-                                        <td th:text="${#numbers.formatDecimal(checkLine.price * checkLine.qty,0,2)}"></td>
+                                        <td class="w-25" th:text="${checkLine.good.name}"></td>
+                                        <td><input type="number" disabled step="0.01" name="price" class="form-control price" th:value="${checkLine.price}"></td>
+                                        <td><input type="number" disabled step="1" name="qty" class="form-control qty" th:value="${checkLine.qty}"></td>
+                                        <td><input type="number" disabled step="0.01" name="total" class="form-control total" th:value="${checkLine.price* checkLine.qty}"></td>
                                     </tr>
-
                                 </tbody>
                             </table>
+                            <div class="row col-12 justify-content-end">
+                                <div class="col-1 me-4">Итого:</div>
+
+                                <input id="total" type="number" disabled="" step="0.01" class="col-4">
+                            </div>
                         </div>
                         <div id="goodsPrices" class="d-none">
                             <div th:each="good : ${goods}" th:id="${good.id}">
