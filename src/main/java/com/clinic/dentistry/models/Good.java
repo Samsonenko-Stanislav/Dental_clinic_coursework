@@ -14,7 +14,7 @@ public class Good {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private boolean is_active;
+    private boolean active;
 
     private String name;
 

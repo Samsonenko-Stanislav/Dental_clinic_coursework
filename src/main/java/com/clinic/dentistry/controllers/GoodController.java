@@ -19,42 +19,47 @@ public class GoodController {
     private GoodRepository goodRepository;
 
     @GetMapping
-    public String employeeList(Model model) {
+    public String goodList(Model model) {
         model.addAttribute("goods", goodRepository.findAll());
         return "good-list";
     }
 
     @GetMapping("{good}")
-    public String employeeEditForm(@PathVariable Good good, Model model) {
+    public String goodEditForm(@PathVariable Good good, Model model) {
         model.addAttribute("good", good);
         return "good-edit";
     }
 
     @GetMapping("/new")
-    public String employeeNewForm(Model model) {
+    public String goodNewForm(Model model) {
         return "good-new";
     }
 
     @PostMapping("/new")
-    public String employeeNewForm(
+    public String goodNewForm(
             @RequestParam Map<String, String> form,
             Good good,
             Map<String, Object> model
     ) {
-        good.set_active(true);
+        good.setActive(true);
         goodRepository.save(good);
         return "redirect:/good";
     }
 
 
     @PostMapping
-    public String employeeSave(
+    public String goodSave(
             @RequestParam("goodId") Good good,
             Good good_new,
             @RequestParam Map<String, String> form
     ) {
         good.setName(good_new.getName());
         good.setPrice(good_new.getPrice());
+        if (form.get("active") != null && form.get("active").equals("on")){
+            good.setActive(true);
+        } else {
+            good.setActive(false);
+        }
         goodRepository.save(good);
         return "redirect:/good";
     }

@@ -45,7 +45,7 @@ create table employee (
 
 create table good (
     id int8 not null,
-    is_active boolean not null,
+    active boolean not null,
     name varchar(255),
     price float4 not null,
     primary key (id)

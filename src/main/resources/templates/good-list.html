@@ -11,6 +11,10 @@
     <div class="col-md-11" th:each="good : ${goods}">
         <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
             <div class="col p-4 d-flex flex-column position-static">
+                <div class="col-3">
+                    <input type="checkbox" name="active" id="active" th:checked="${good.active}">
+                    <label for="active" class="form-label" >Активный</label>
+                </div>
                 <strong class="d-inline-block mb-2 text-primary" th:text="${good.name}"></strong>
                 <div class="mb-1 text-muted" th:text="${good.price}"></div>
                 <a th:href="|/good/${good.id}|" class="stretched-link">Редактировать</a>

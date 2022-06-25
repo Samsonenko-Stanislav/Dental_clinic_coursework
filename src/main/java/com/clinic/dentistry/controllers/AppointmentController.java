@@ -2,10 +2,8 @@ package com.clinic.dentistry.controllers;
 
 import com.clinic.dentistry.models.*;
 import com.clinic.dentistry.repo.*;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.clinic.dentistry.service.AppointmentService;
+import com.clinic.dentistry.service.CheckService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -15,11 +13,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Optional;
 
 @Controller
 public class AppointmentController {
@@ -34,6 +32,12 @@ public class AppointmentController {
     private CheckLineRepository checkLineRepository;
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private AppointmentService appointmentService;
+
+    @Autowired
+    private CheckService checkService;
 
     @GetMapping("/appointments")
     public String appointmentsMain(
@@ -60,45 +64,7 @@ public class AppointmentController {
     @GetMapping("/appointments/add")
     public String appointmentsAddForm(Model model){
         Iterable<User> doctors = userRepository.findByRolesIn(Collections.singleton(Role.DOCTOR));
-        Iterable<Appointment> appointments = appointmentRepository.findByActiveTrue();
-
-        Map<User, Map<String ,ArrayList<String>>> availableDatesByDoctor = new HashMap<>();
-        Map<String ,ArrayList<String>> availableDates;
-        ArrayList<String> avalibleTimes;
-        Boolean dateTaken;
-
-        DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern("HH:mm");
-
-        for (User doctor : doctors) {
-            LocalDate startDate = LocalDate.now();
-            LocalDate endDate = startDate.plusWeeks(2);
-            availableDates = new TreeMap<>();
-            for (LocalDate date = startDate; date.isBefore(endDate); date = date.plusDays(1)) {
-                avalibleTimes = new ArrayList();
-                LocalTime workStart = LocalTime.of(8, 0);
-                LocalTime workEnd = LocalTime.of(17, 0);
-                if (doctor.getEmployee() != null) {
-                    workStart = doctor.getEmployee().getWorkStart();
-                    workEnd = doctor.getEmployee().getWorkEnd();
-                }
-                LocalDateTime startTime = date.atTime(workStart);
-                LocalDateTime endTime = date.atTime(workEnd);
-                for (LocalDateTime time = startTime; time.isBefore(endTime); time = time.plusMinutes(30)) {
-                    dateTaken = Boolean.FALSE;
-                    for (Appointment appointment : appointments){
-                        if (appointment.getDoctor().equals(doctor) && appointment.getDate().equals(time)) {
-                            dateTaken = Boolean.TRUE;
-                        }
-                    }
-                    if (dateTaken.equals(Boolean.FALSE)){
-                        avalibleTimes.add(time.format(formatterTime));
-                    }
-                }
-                availableDates.put(date.format(formatterDate), avalibleTimes);
-            }
-            availableDatesByDoctor.put(doctor, availableDates);
-        }
+        Map<User, Map<String, ArrayList<String>>> availableDatesByDoctor = appointmentService.getAvailableDatesByDoctors(doctors);
 
         model.addAttribute("doctors", availableDatesByDoctor);
         return "appointments-add";
@@ -124,7 +90,7 @@ public class AppointmentController {
         Boolean canCancel = Boolean.FALSE;
         if (appointment.getDoctor() != null && user.getEmployee() != null && appointment.getDoctor().getId() == user.getEmployee().getId() && now.isAfter(appointment.getDate()) && appointment.getActive()){
             readOnly = Boolean.FALSE;
-            Iterable<Good> goods = goodRepository.findAll();
+            Iterable<Good> goods = goodRepository.findAllByActiveTrue();
             model.addAttribute("goods", goods);
         }
 
@@ -155,32 +121,7 @@ public class AppointmentController {
         appointmentRepository.save(appointment);
 
         String checkJson = form.get("checkJson");
-        if (!checkJson.equals("")){
-            JsonArray goodsJson = new Gson().fromJson(checkJson, JsonArray.class);
-
-            Float goodPrice;
-            int goodQty;
-            long good_id;
-            Optional<Good> good;
-            CheckLine checkLine;
-            Check check = new Check();
-            check.setAppointment(appointment);
-            checkRepository.save(check);
-            for (JsonElement goodJson : goodsJson) {
-                goodPrice = ((JsonObject) goodJson).get("price").getAsFloat();
-                good_id = ((JsonObject) goodJson).get("good_id").getAsLong();
-                goodQty = ((JsonObject) goodJson).get("qty").getAsInt();
-                good = goodRepository.findById(good_id);
-                if (good.isPresent()){
-                    checkLine = new CheckLine();
-                    checkLine.setGood(good.get());
-                    checkLine.setPrice(goodPrice);
-                    checkLine.setQty(goodQty);
-                    checkLine.setCheck(check);
-                    checkLineRepository.save(checkLine);
-                }
-            }
-        }
+        Check check = checkService.createCheckFromJson(checkJson, appointment);
 
         return "redirect:/appointments/" + appointment.getId().toString() + "/edit";
     }
