@@ -1,5 +1,6 @@
 package com.clinic.dentistry.controllers;
 
+import com.clinic.dentistry.models.Appointment;
 import com.clinic.dentistry.models.Good;
 import com.clinic.dentistry.repo.GoodRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,18 @@ public class GoodController {
     private GoodRepository goodRepository;
 
     @GetMapping
-    public String goodList(Model model) {
-        model.addAttribute("goods", goodRepository.findAll());
+    public String goodList(
+            Model model,
+            @RequestParam(value = "withArchived", required = false) String withArchived) {
+        Iterable<Good> goods;
+        if (withArchived != null){
+            goods = goodRepository.findAll();
+            model.addAttribute("withArchived", true);
+        } else {
+            goods = goodRepository.findAllByActiveTrue();
+            model.addAttribute("withArchived", false);
+        }
+        model.addAttribute("goods", goods);
         return "good-list";
     }
 
