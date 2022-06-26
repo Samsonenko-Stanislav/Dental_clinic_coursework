@@ -48,19 +48,22 @@
                         <label for="fullName" class="form-label">Полное имя</label>
                         <input type="text" name="fullName" class="form-control" id="fullName">
                     </div>
+
+                </div>
+                <div id="forEmpl" style="display: none">
                     <div class="col-6">
                         <label for="jobTitle" class="form-label">Должность</label>
-                        <input type="text" name="jobTitle" class="form-control" id="jobTitle">
+                        <input type="text" name="jobTitle" class="form-control" id="jobTitle" style="">
                     </div>
-                </div>
-                <div class="row col-12">
-                    <div class="col-6">
-                        <label for="workStart" class="form-label">Старт рабочего дня</label>
-                        <input type="time" name="workStart" class="form-control" id="workStart">
-                    </div>
-                    <div class="col-6">
-                        <label for="workEnd" class="form-label">Конец рабочего дня</label>
-                        <input type="time" name="workEnd" class="form-control" id="workEnd">
+                    <div class="row col-12">
+                        <div class="col-6">
+                            <label for="workStart" class="form-label">Старт рабочего дня</label>
+                            <input type="time" name="workStart" class="form-control" id="workStart">
+                        </div>
+                        <div class="col-6">
+                            <label for="workEnd" class="form-label">Конец рабочего дня</label>
+                            <input type="time" name="workEnd" class="form-control" id="workEnd">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -71,5 +74,18 @@
 
 
 <div th:insert="blocks/footer :: footer"></div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+    function toggleEmpl() {
+        var div = document.getElementById('forEmpl');
+        if(this.checked)
+            div.style.display = 'block';
+        else
+            div.style.display = 'none'
+    }
+    document.getElementById('createEmployee').onchange = toggleEmpl;
+
+</script>
 </body>
+
 </html>
