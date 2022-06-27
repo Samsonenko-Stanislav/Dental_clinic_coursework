@@ -8,6 +8,23 @@
 </head>
 <body>
     <header th:insert="blocks/header :: header"></header>
+    <div class="content m-5">
+        <p style="text-align: center"> <b>О стоматологической клинике "Улыбка премиум"</b></p>
+        <p>В нашей стоматологической клинике работают настоящие профессионалы, которые  безболезненно лечат
+            любые стоматологические заболевания с использованием только лучшего оборудования и материалов
+        </p>
+        <p>Мы открыты со вторника по субботу с 8:00 до 21:00</p>
+    </div>
+    <div class="content padding-site m-3">
+        <p class="invisible"> temp</p>
+        <div class="container">
+            <div class="row">
+                <div class="col-4 text-center">
+                    <img class="main_pict" src="/static/img/main.jpg" width="360" height="240" alt="Стоматология"/>
+                </div>
+            </div>
+        </div>
+    </div>
     <div th:insert="blocks/footer :: footer"></div>
 </body>
 </html>

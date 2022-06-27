@@ -15,6 +15,8 @@
 <main class="form-signup w-100 m-auto">
     <form th:action="@{/sign_up}" method="post">
         <img class="mb-4" src="/static/img/bootstrap-logo.svg" alt="" width="72" height="57">
+        <br>
+        <a href="/">Вернуться на главную</a>
         <h1 class="h3 mb-3 fw-normal">Пожалуйста, зарегистрируйтесь</h1>
         <div th:if="${message}">
             <div th:text="${message}"></div>
