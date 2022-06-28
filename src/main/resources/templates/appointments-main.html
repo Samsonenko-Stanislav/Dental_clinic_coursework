@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <title>Записи: Список</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -35,7 +35,7 @@
         </div>
     </div>
 </div>
-<a href="/appointments/add" class="btn btn-primary">Записаться</a>
+<a href="/appointments/add" sec:authorize= "hasAuthority('USER')" class="btn btn-primary">Записаться</a>
 <a th:if="!${withArchived}" href="/appointments?withArchived" class="btn btn-primary">Показать архивные записи</a>
 <a th:if="${withArchived}" href="/appointments" class="btn btn-primary">Скрыть архивные записи</a>
 

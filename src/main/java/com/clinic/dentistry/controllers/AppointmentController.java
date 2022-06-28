@@ -64,6 +64,7 @@ public class AppointmentController {
     }
 
     @GetMapping("/appointments/add")
+    @PreAuthorize("hasAuthority('USER')")
     public String appointmentsAddForm(Model model){
         Iterable<User> doctors = userRepository.findByRolesIn(Collections.singleton(Role.DOCTOR));
         Map<User, Map<String, ArrayList<String>>> availableDatesByDoctor = appointmentService.getAvailableDatesByDoctors(doctors);
@@ -73,6 +74,7 @@ public class AppointmentController {
     }
 
     @PostMapping("/appointments/add")
+    @PreAuthorize("hasAuthority('USER')")
     public String appointmentsAdd(@AuthenticationPrincipal User user, @RequestParam User doctor,
                                   @RequestParam String dateStr, Model model){
         LocalDateTime date = LocalDateTime.parse(dateStr);
@@ -119,6 +121,7 @@ public class AppointmentController {
     }
 
     @PostMapping("/appointments/{appointment}/edit")
+    @PreAuthorize("hasAuthority('DOCTOR')")
     public String appointmentsEdit(@AuthenticationPrincipal User user,
                                    @PathVariable Appointment appointment,
                                    @RequestParam Map<String, String> form,
@@ -135,6 +138,7 @@ public class AppointmentController {
     }
 
     @GetMapping("/appointments/{appointment}/cancel")
+    @PreAuthorize("hasAuthority('USER')")
     public String appointmentsCancel(@AuthenticationPrincipal User user,
                                      @PathVariable Appointment appointment,
                                      Model model
