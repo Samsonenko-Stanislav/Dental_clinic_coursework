@@ -5,6 +5,7 @@ import com.clinic.dentistry.repo.*;
 import com.clinic.dentistry.service.AppointmentService;
 import com.clinic.dentistry.service.CheckService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +21,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Controller
+@PreAuthorize("hasAuthority('USER') or hasAuthority('DOCTOR')")
 public class AppointmentController {
 
     @Autowired
@@ -88,7 +90,10 @@ public class AppointmentController {
         LocalDateTime now = LocalDateTime.now();
         Boolean readOnly = Boolean.TRUE;
         Boolean canCancel = Boolean.FALSE;
-        if (appointment.getDoctor() != null && user.getEmployee() != null && appointment.getDoctor().getId() == user.getEmployee().getId() && now.isAfter(appointment.getDate()) && appointment.getActive()){
+        if (appointment.getDoctor() != null && user.getEmployee() != null &&
+                appointment.getDoctor().getId() == user.getEmployee().getId() && now.isAfter(appointment.getDate())
+                && appointment.getActive()
+        ){
             readOnly = Boolean.FALSE;
             Iterable<Good> goods = goodRepository.findAllByActiveTrue();
             model.addAttribute("goods", goods);
@@ -100,7 +105,10 @@ public class AppointmentController {
             model.addAttribute("checkLines", checkLines);
         }
 
-        if (appointment.getClient() != null && user.getOutpatientCard() != null && appointment.getClient().getId() == user.getOutpatientCard().getId() && now.isBefore(appointment.getDate())){
+        if (appointment.getClient() != null && user.getOutpatientCard() != null
+                && appointment.getClient().getId() == user.getOutpatientCard().getId()
+                && now.isBefore(appointment.getDate())
+        ){
             canCancel = Boolean.TRUE;
         }
 

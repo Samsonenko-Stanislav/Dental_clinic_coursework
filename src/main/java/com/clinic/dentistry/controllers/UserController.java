@@ -60,12 +60,14 @@ public class UserController {
     }
 
     @GetMapping("/me")
+    @PreAuthorize("hasAuthority('USER')")
     public String userMeEditForm(@AuthenticationPrincipal User user, Model model) {
         model.addAttribute("user", user);
         return "user-me";
     }
 
     @PostMapping("/me")
+    @PreAuthorize("hasAuthority('USER')")
     public String userMeSave(@AuthenticationPrincipal User user,
                              @RequestParam String fullName,
                              Model model) {
@@ -97,12 +99,12 @@ public class UserController {
             return "user-new";
         }
 
-        if (form.get("createOutpatientCard") != null && form.get("createOutpatientCard").equals("on")){
+        if (form.get("USER") != null && form.get("USER").equals("on")){
             outpatientCardRepository.save(outpatientCard);
             user.setOutpatientCard(outpatientCard);
         }
 
-        if (form.get("createEmployee") != null && form.get("createEmployee").equals("on")){
+        if (form.get("DOCTOR") != null && form.get("DOCTOR").equals("on")){
             employeeRepository.save(employee);
             user.setEmployee(employee);
         }
