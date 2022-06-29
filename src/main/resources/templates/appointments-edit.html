@@ -75,8 +75,8 @@
                 </div>
 
                 <input type="hidden" name="appointmentId" th:value="${appointment.id}">
-                <button sec:authorize="!hasAuthority('DOCTOR')" class="w-100 my-3 btn btn-primary btn-lg" th:if="${!readOnly}" type="submit">Сохранить</button>
-                <a sec:authorize="!hasAuthority('USER')" th:href="|/appointments/${appointment.id}/cancel|" th:if="${canCancel}" class="btn btn-primary">Отменить запись</a>
+                <button sec:authorize="hasAuthority('DOCTOR')" class="w-100 my-3 btn btn-primary btn-lg" th:if="${!readOnly}" type="submit">Сохранить</button>
+                <a sec:authorize="hasAuthority('USER')" th:href="|/appointments/${appointment.id}/cancel|" th:if="${canCancel}" class="btn btn-primary">Отменить запись</a>
             </div>
         </form>
     </div>

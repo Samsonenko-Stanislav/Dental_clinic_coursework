@@ -24,8 +24,8 @@
     </div>
 
     <a href="/good/new" class="btn btn-primary">Создать новую</a>
-    <a th:if="!${withArchived}" href="/good?withArchived" class="btn btn-primary">Показать архивные записи</a>
-    <a th:if="${withArchived}" href="/good" class="btn btn-primary">Скрыть архивные записи</a>
+    <a th:if="!${withArchived}" href="/good?withArchived" class="btn btn-primary">Показать архивные услуги</a>
+    <a th:if="${withArchived}" href="/good" class="btn btn-primary">Скрыть архивные услуги</a>
 </div>
 
 <div th:insert="blocks/footer :: footer"></div>
