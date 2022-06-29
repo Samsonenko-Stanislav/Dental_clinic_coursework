@@ -48,15 +48,18 @@ public class AppointmentController {
             Model model
     ){
         Iterable<Appointment> appointmentsClient;
+        Iterable<Appointment> appointmentsDoctor;
         if (withArchived != null){
-            appointmentsClient = appointmentRepository.findByClient(user.getOutpatientCard());
+            appointmentsClient = appointmentRepository.findByClientAndConclusionNotNull(user.getOutpatientCard());
+            appointmentsDoctor = appointmentRepository.findByDoctorAndConclusionNotNull(user.getEmployee());
             model.addAttribute("withArchived", true);
         } else {
-            appointmentsClient = appointmentRepository.findByClientAndActiveTrue(user.getOutpatientCard());
+            appointmentsClient = appointmentRepository.findByClientAndActiveTrueAndConclusionNull(user.getOutpatientCard());
+            appointmentsDoctor = appointmentRepository.findByDoctorAndActiveTrueAndConclusionNull(user.getEmployee());
             model.addAttribute("withArchived", false);
         }
 
-        Iterable<Appointment> appointmentsDoctor = appointmentRepository.findByDoctorAndActiveTrue(user.getEmployee());
+
         model.addAttribute("appointmentsClient", appointmentsClient);
         model.addAttribute("appointmentsDoctor", appointmentsDoctor);
         return "appointments-main";
