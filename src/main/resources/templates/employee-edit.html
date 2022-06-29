@@ -9,7 +9,7 @@
 <header th:insert="blocks/header :: header"></header>
 <div class="container">
     <div class="col-md-7 col-lg-8">
-        <h4 class="mb-3">Создать нового сотрудника</h4>
+        <h4 class="mb-3">Редактировать сотрудника</h4>
         <div th:if="${message}">
             <div th:text="${message}"></div>
         </div>
@@ -17,7 +17,7 @@
             <div class="row">
                 <div class="row col-12">
                     <div class="col-6">
-                        <label for="fullName" class="form-label">Полное имя</label>
+                        <label for="fullName" class="form-label">ФИО</label>
                         <input type="text" name="fullName" class="form-control" id="fullName" th:value="${employee.fullName}">
                     </div>
                     <div class="col-6">
