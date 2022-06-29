@@ -23,7 +23,7 @@
 </div>
 
 <div class="row mb-2" th:if="${not #lists.isEmpty(appointmentsClient)}">
-    <div th:if="!${withArchived}"class="col-12"> <h3> Вы записаны к врачам::</h3></div>
+    <div th:if="!${withArchived}"class="col-12"> <h3> Вы записаны к врачам:</h3></div>
     <div th:if="${withArchived}"class="col-12"> <h3>Вы были у врачей: </h3></div>
     <div class="col-md-4" th:each="appointment : ${appointmentsClient}">
         <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
