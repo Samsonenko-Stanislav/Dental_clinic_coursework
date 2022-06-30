@@ -111,7 +111,7 @@ public class AppointmentController {
         }
 
         if (appointment.getClient() != null && user.getOutpatientCard() != null
-                && appointment.getClient().getId() == user.getOutpatientCard().getId()
+                && appointment.getClient().getId() - user.getOutpatientCard().getId() == 0
                 && now.isBefore(appointment.getDate())
         ){
             canCancel = Boolean.TRUE;
