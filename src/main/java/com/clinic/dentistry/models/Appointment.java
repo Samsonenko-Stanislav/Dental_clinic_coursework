@@ -12,8 +12,6 @@ public class Appointment {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String status;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "client_id")
     private OutpatientCard client;
@@ -61,13 +59,6 @@ public class Appointment {
         this.client = client;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 
     public LocalDateTime getDate() {
         return date;

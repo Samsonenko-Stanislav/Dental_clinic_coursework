@@ -25,14 +25,20 @@
                         <input type="password" name="password" class="form-control" id="password">
                     </div>
                 </div>
-
-                <div class="col-md-5">
-                    <div th:each="role : ${roles}">
-                        <input type="checkbox" th:name="${role}" th:id="${role}">
-                        <label th:for="${role}" class="form-label" th:text="${role}">Role</label>
+                <div class="col">
+                    <div class="col-md-5">
+                            <input type="checkbox" name="ADMIN" id="ADMIN">
+                            <label for="ADMIN" class="form-label">Администратор (ADMIN)</label>
+                    </div>
+                    <div class="col-md-5">
+                        <input type="checkbox" name="DOCTOR" id="DOCTOR">
+                        <label for="DOCTOR" class="form-label">Врач (DOCTOR)</label>
+                    </div>
+                    <div class="col-md-5">
+                        <input type="checkbox" name="USER" id="USER">
+                        <label for="USER" class="form-label">Пациент (USER)</label>
                     </div>
                 </div>
-
             </div>
                 <div class="row col-12">
                     <div class="col-6">
@@ -65,7 +71,6 @@
 
 
 <div th:insert="blocks/footer :: footer"></div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script>
     function toggleEmpl() {
         var div = document.getElementById('forEmpl');

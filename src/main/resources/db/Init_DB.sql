@@ -1,67 +1,88 @@
-create table usr (
-    id int8 not null,
-    active boolean not null,
-    password varchar(255),
-    username varchar(255),
-    employee_id int8,
-    outpatient_card_id int8,
-    primary key (id)
+CREATE TABLE appointment
+(
+    id         BIGINT NOT NULL,
+    client_id  BIGINT,
+    doctor_id  BIGINT,
+    date       TIMESTAMP WITHOUT TIME ZONE,
+    active     BOOLEAN,
+    conclusion VARCHAR(255),
+    CONSTRAINT pk_appointment PRIMARY KEY (id)
 );
 
-create table appointment (
-    id int8 not null,
-    active boolean,
-    conclusion text,
-    date timestamp,
-    status varchar(255),
-    client_id int8,
-    doctor_id int8,
-    primary key (id)
+ALTER TABLE appointment
+    ADD CONSTRAINT FK_APPOINTMENT_ON_CLIENT FOREIGN KEY (client_id) REFERENCES outpatient_card (id);
+
+ALTER TABLE appointment
+    ADD CONSTRAINT FK_APPOINTMENT_ON_DOCTOR FOREIGN KEY (doctor_id) REFERENCES employee (id);
+CREATE TABLE app_check
+(
+    id             BIGINT NOT NULL,
+    appointment_id BIGINT,
+    CONSTRAINT pk_app_check PRIMARY KEY (id)
 );
 
-create table app_check (
-    id int8 not null,
-    appointment_id int8,
-    primary key (id)
+ALTER TABLE app_check
+    ADD CONSTRAINT FK_APP_CHECK_ON_APPOINTMENT FOREIGN KEY (appointment_id) REFERENCES appointment (id);
+CREATE TABLE app_check_line
+(
+    id       BIGINT  NOT NULL,
+    check_id BIGINT,
+    good_id  BIGINT,
+    qty      INTEGER NOT NULL,
+    price    FLOAT   NOT NULL,
+    CONSTRAINT pk_app_check_line PRIMARY KEY (id)
 );
 
-create table app_check_line (
-    id int8 not null,
-    price float4 not null,
-    qty int4 not null,
-    check_id int8,
-    good_id int8,
-    primary key (id)
+ALTER TABLE app_check_line
+    ADD CONSTRAINT FK_APP_CHECK_LINE_ON_CHECK FOREIGN KEY (check_id) REFERENCES app_check (id);
+
+ALTER TABLE app_check_line
+    ADD CONSTRAINT FK_APP_CHECK_LINE_ON_GOOD FOREIGN KEY (good_id) REFERENCES good (id);
+CREATE TABLE employee
+(
+    id         BIGINT NOT NULL,
+    full_name  VARCHAR(255),
+    job_title  VARCHAR(255),
+    work_start TIME WITHOUT TIME ZONE,
+    work_end   TIME WITHOUT TIME ZONE,
+    CONSTRAINT pk_employee PRIMARY KEY (id)
+);
+CREATE TABLE good
+(
+    id     BIGINT  NOT NULL,
+    active BOOLEAN NOT NULL,
+    name   VARCHAR(255),
+    price  FLOAT   NOT NULL,
+    CONSTRAINT pk_good PRIMARY KEY (id)
+);
+CREATE TABLE outpatient_card
+(
+    id        BIGINT NOT NULL,
+    full_name VARCHAR(255),
+    CONSTRAINT pk_outpatientcard PRIMARY KEY (id)
+);
+CREATE TABLE user_role
+(
+    user_id BIGINT NOT NULL,
+    roles   VARCHAR(255)
 );
 
-create table employee (
-    id int8 not null,
-    full_name varchar(255),
-    job_title varchar(255),
-    work_end time,
-    work_start time,
-    primary key (id)
+CREATE TABLE usr
+(
+    id                 BIGINT  NOT NULL,
+    username           VARCHAR(255),
+    password           VARCHAR(255),
+    active             BOOLEAN NOT NULL,
+    employee_id        BIGINT,
+    outpatient_card_id BIGINT,
+    CONSTRAINT pk_usr PRIMARY KEY (id)
 );
 
-create table good (
-    id int8 not null,
-    active boolean not null,
-    name varchar(255),
-    price float4 not null,
-    primary key (id)
-);
+ALTER TABLE usr
+    ADD CONSTRAINT FK_USR_ON_EMPLOYEE FOREIGN KEY (employee_id) REFERENCES employee (id);
 
-create table outpatient_card (
-    id int8 not null,
-    full_name varchar(255),
-    primary key (id)
-);
+ALTER TABLE usr
+    ADD CONSTRAINT FK_USR_ON_OUTPATIENT_CARD FOREIGN KEY (outpatient_card_id) REFERENCES outpatient_card (id);
 
-create table user_role (
-    user_id int8 not null,
-    roles varchar(255)
-);
-
-alter table if exists appointment add constraint FKbssqq2v4js7nrx4uqkin7kpip foreign key (client_id) references outpatient_card;
-alter table if exists appointment add constraint FKluecmccq4yh46ixfixwuu3m78 foreign key (doctor_id) references employee;
-alter table if exists app_check add constraint FKjii5rphoc7eymdm21iokxbqlc foreign key (appointment_id) references appointment;
+ALTER TABLE user_role
+    ADD CONSTRAINT fk_user_role_on_user FOREIGN KEY (user_id) REFERENCES usr (id);
