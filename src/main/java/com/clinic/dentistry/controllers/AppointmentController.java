@@ -96,7 +96,8 @@ public class AppointmentController {
         Boolean readOnly = Boolean.TRUE;
         Boolean canCancel = Boolean.FALSE;
         if (appointment.getDoctor() != null && user.getEmployee() != null &&
-                appointment.getDoctor().getId() == user.getEmployee().getId() && now.isAfter(appointment.getDate())
+                appointment.getDoctor().getId().equals(user.getEmployee().getId())
+                && now.isAfter(appointment.getDate())
                 && appointment.getActive()
         ){
             readOnly = Boolean.FALSE;
@@ -111,7 +112,7 @@ public class AppointmentController {
         }
 
         if (appointment.getClient() != null && user.getOutpatientCard() != null
-                && appointment.getClient().getId() - user.getOutpatientCard().getId() == 0
+                && appointment.getClient().getId().equals(user.getOutpatientCard().getId())
                 && now.isBefore(appointment.getDate())
         ){
             canCancel = Boolean.TRUE;
