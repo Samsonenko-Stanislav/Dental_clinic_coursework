@@ -69,7 +69,7 @@ public class AppointmentController {
     @GetMapping("/appointments/add")
     @PreAuthorize("hasAuthority('USER')")
     public String appointmentsAddForm(Model model){
-        Iterable<User> doctors = userRepository.findByRolesIn(Collections.singleton(Role.DOCTOR));
+        Iterable<User> doctors = userRepository.findByRolesInAndActiveTrue(Collections.singleton(Role.DOCTOR));
         Map<User, Map<String, ArrayList<String>>> availableDatesByDoctor = appointmentService.getAvailableDatesByDoctors(doctors);
 
         model.addAttribute("doctors", availableDatesByDoctor);
