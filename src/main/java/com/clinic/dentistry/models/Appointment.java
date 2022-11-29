@@ -36,4 +36,12 @@ public class Appointment {
     public String getDoctorJobTitle(){
         return doctor != null ? doctor.getJobTitle() : "None";
     }
+
+    public String getClientEmail(){
+        return  client != null ? client.getEmail() : "None";
+    }
+
+    public Gender getClientGender(){
+        return client != null ? client.getGender() : Gender.None;
+    }
 }

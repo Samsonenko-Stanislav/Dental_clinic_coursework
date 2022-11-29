@@ -1,9 +1,6 @@
 package com.clinic.dentistry.controllers;
 
-import com.clinic.dentistry.models.Employee;
-import com.clinic.dentistry.models.OutpatientCard;
-import com.clinic.dentistry.models.Role;
-import com.clinic.dentistry.models.User;
+import com.clinic.dentistry.models.*;
 import com.clinic.dentistry.repo.EmployeeRepository;
 import com.clinic.dentistry.repo.OutpatientCardRepository;
 import com.clinic.dentistry.repo.UserRepository;
@@ -100,6 +97,13 @@ public class UserController {
         }
 
         if (form.get("USER") != null && form.get("USER").equals("on")){
+            outpatientCard.setEmail(form.get("EMAIL"));
+            if (form.get("MALE") != null && form.get("FEMALE") != null){
+                outpatientCard.setGender(Gender.MALE);
+            }
+            if (form.get("FEMALE") != null && form.get("FEMALE") != null){
+                outpatientCard.setGender(Gender.FEMALE);
+            }
             outpatientCardRepository.save(outpatientCard);
             user.setOutpatientCard(outpatientCard);
         }

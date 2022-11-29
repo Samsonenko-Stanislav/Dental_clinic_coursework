@@ -17,6 +17,10 @@ public class  User implements UserDetails {
     private String password;
     private boolean active;
 
+    private String email;
+
+    private Gender gender;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "employee_id")
     private Employee employee;
@@ -29,14 +33,6 @@ public class  User implements UserDetails {
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
-
-    public Long getEmployeeId(){
-        return employee != null ? employee.getId() : 0;
-    }
-
-    public Long getOutpatientCardId(){
-        return outpatientCard != null ? outpatientCard.getId() : 0;
-    }
 
     public String getFullName() {
         String fullName = "";
@@ -54,10 +50,6 @@ public class  User implements UserDetails {
         if (outpatientCard != null) {
             outpatientCard.setFullName(fullName);
         }
-    }
-
-    public String getEmployeeJobTitle(){
-        return employee != null ? employee.getJobTitle() : "";
     }
 
     public Long getId() {
@@ -140,4 +132,25 @@ public class  User implements UserDetails {
     public void setOutpatientCard(OutpatientCard outpatientCard) {
         this.outpatientCard = outpatientCard;
     }
+
+    public void setEmail(String email){
+        this.email = email;
+    }
+
+    public void setGender(Gender gender){
+        this.gender = gender;
+    }
+
+    public String getEmail(){
+        return  email != null ? email : "None";
+    }
+
+    public Gender getGender(){
+        return gender != null ? gender : Gender.None;
+    }
+
+    public String employeeJobTitle(){
+        return employee.getJobTitle();
+    }
+
 }
