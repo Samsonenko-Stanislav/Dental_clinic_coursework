@@ -85,7 +85,7 @@ public class AppointmentController {
         appointment.setDate(date);
         appointment.setActive(Boolean.TRUE);
         appointmentRepository.save(appointment);
-        return "redirect:/appointments";
+        return "redirect:/appointments/";
     }
 
     @GetMapping("/{appointment}/edit")
@@ -150,6 +150,6 @@ public class AppointmentController {
     ){
         appointment.setActive(Boolean.FALSE);
         appointmentRepository.save(appointment);
-        return "redirect:/appointments";
+        return "redirect:/appointments/";
     }
 }
