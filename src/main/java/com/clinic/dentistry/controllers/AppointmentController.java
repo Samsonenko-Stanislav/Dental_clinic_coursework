@@ -81,7 +81,10 @@ public class AppointmentController {
     public String appointmentsAdd(@AuthenticationPrincipal User user, @RequestParam User doctor,
                                   @RequestParam String dateStr, Model model){
         LocalDateTime date = LocalDateTime.parse(dateStr);
-        Appointment appointment = new Appointment(doctor.getEmployee(), user.getOutpatientCard(), date);
+        Appointment appointment = new Appointment();
+        appointment.setDoctor(doctor.getEmployee());
+        appointment.setClient(user.getOutpatientCard());
+        appointment.setDate(date);
         appointment.setActive(Boolean.TRUE);
         appointmentRepository.save(appointment);
         return "redirect:/appointments";

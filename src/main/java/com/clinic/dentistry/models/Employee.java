@@ -18,5 +18,6 @@ public class Employee {
     private String fullName;
     private String jobTitle;
     private LocalTime workStart, workEnd;
+    private int durationApp;
 
 }
