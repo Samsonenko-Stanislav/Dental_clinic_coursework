@@ -26,5 +26,14 @@ public class Appointment {
     @Type(type="text")
     private String conclusion;
 
+    public String getClientName(){
+        return client != null ? client.getFullName() : "None";
+    }
 
+    public String getDoctorName(){
+        return doctor != null ? doctor.getFullName() : "None";
+    }
+    public String getDoctorJobTitle(){
+        return doctor != null ? doctor.getJobTitle() : "None";
+    }
 }
