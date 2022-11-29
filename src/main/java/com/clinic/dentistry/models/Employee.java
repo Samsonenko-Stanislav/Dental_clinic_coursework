@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.time.LocalTime;
+import java.util.ArrayList;
 
 @Entity
 @Data
@@ -19,5 +20,6 @@ public class Employee {
     private String jobTitle;
     private LocalTime workStart, workEnd;
     private int durationApp;
+    private String workDays;
 
 }
