@@ -8,7 +8,7 @@
 
             <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                 <li><a href="/" class="nav-link px-2 text-secondary">Домой</a></li>
-                <li><a href="/appointments" class="nav-link px-2 text-white" sec:authorize="hasAuthority('USER') or hasAuthority('DOCTOR')">Список записей</a></li>
+                <li><a href="/appointments/" class="nav-link px-2 text-white" sec:authorize="hasAuthority('USER') or hasAuthority('DOCTOR')">Список записей</a></li>
                 <li><a href="/user" class="nav-link px-2 text-white" sec:authorize="hasAuthority('ADMIN')">Пользователи</a></li>
                 <li><a href="/employee" class="nav-link px-2 text-white" sec:authorize="hasAuthority('ADMIN')">Сотрудники</a></li>
                 <li><a href="/good" class="nav-link px-2 text-white" sec:authorize="hasAuthority('ADMIN')">Услуги</a></li>
