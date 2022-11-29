@@ -40,7 +40,7 @@ public class AppointmentServiceImpl implements AppointmentService {
             LocalDate endDate = startDate.plusWeeks(2);
             availableDates = new TreeMap<>();
             for (LocalDate date = startDate; date.isBefore(endDate); date = date.plusDays(1)) {
-                if (!(date.getDayOfWeek().equals(DayOfWeek.SUNDAY) || (date.getDayOfWeek().equals(DayOfWeek.MONDAY)))) {
+               if (!(date.getDayOfWeek().equals(DayOfWeek.SUNDAY) || (date.getDayOfWeek().equals(DayOfWeek.MONDAY)))) {
                     avalibleTimes = new ArrayList();
                     LocalTime workStart = LocalTime.of(8, 0);
                     LocalTime workEnd = LocalTime.of(17, 0);
@@ -50,7 +50,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                     }
                     LocalDateTime startTime = date.atTime(workStart);
                     LocalDateTime endTime = date.atTime(workEnd);
-                    for (LocalDateTime time = startTime; time.isBefore(endTime); time = time.plusMinutes(30)) {
+                    for (LocalDateTime time = startTime; time.isBefore(endTime); time = time.plusMinutes(doctor.getEmployee().getDurationApp())) {
                         dateTaken = Boolean.FALSE;
                         for (Appointment appointment : appointments) {
                             if (appointment.getDoctor().equals(doctor.getEmployee()) && appointment.getDate().equals(time)) {

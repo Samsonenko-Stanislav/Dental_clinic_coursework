@@ -56,6 +56,7 @@ public class EmployeeController {
         employee.setJobTitle(employee_new.getJobTitle());
         employee.setWorkStart(employee_new.getWorkStart());
         employee.setWorkEnd(employee_new.getWorkEnd());
+        employee.setDurationApp(employee_new.getDurationApp());
         employeeRepository.save(employee);
         return "redirect:/employee";
     }
