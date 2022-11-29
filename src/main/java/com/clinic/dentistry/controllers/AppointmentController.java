@@ -9,10 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -21,6 +18,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Controller
+@RequestMapping("/appointments")
 @PreAuthorize("hasAuthority('USER') or hasAuthority('DOCTOR')")
 public class AppointmentController {
 
@@ -41,7 +39,7 @@ public class AppointmentController {
     @Autowired
     private CheckService checkService;
 
-    @GetMapping("/appointments")
+    @GetMapping("/")
     public String appointmentsMain(
             @AuthenticationPrincipal User user,
             @RequestParam(value = "withArchived", required = false) String withArchived,
@@ -66,7 +64,7 @@ public class AppointmentController {
 
     }
 
-    @GetMapping("/appointments/add")
+    @GetMapping("/add")
     @PreAuthorize("hasAuthority('USER')")
     public String appointmentsAddForm(Model model){
         Iterable<User> doctors = userRepository.findByRolesInAndActiveTrue(Collections.singleton(Role.DOCTOR));
@@ -76,7 +74,7 @@ public class AppointmentController {
         return "appointments-add";
     }
 
-    @PostMapping("/appointments/add")
+    @PostMapping("/add")
     @PreAuthorize("hasAuthority('USER')")
     public String appointmentsAdd(@AuthenticationPrincipal User user, @RequestParam User doctor,
                                   @RequestParam String dateStr, Model model){
@@ -90,7 +88,7 @@ public class AppointmentController {
         return "redirect:/appointments";
     }
 
-    @GetMapping("/appointments/{appointment}/edit")
+    @GetMapping("/{appointment}/edit")
     public String appointmentsEdit(@AuthenticationPrincipal User user,
                                    @PathVariable Appointment appointment,
                                    Model model
@@ -127,7 +125,7 @@ public class AppointmentController {
         return "appointments-edit";
     }
 
-    @PostMapping("/appointments/{appointment}/edit")
+    @PostMapping("/{appointment}/edit")
     @PreAuthorize("hasAuthority('DOCTOR')")
     public String appointmentsEdit(@AuthenticationPrincipal User user,
                                    @PathVariable Appointment appointment,
@@ -144,7 +142,7 @@ public class AppointmentController {
         return "redirect:/appointments/" + appointment.getId().toString() + "/edit";
     }
 
-    @GetMapping("/appointments/{appointment}/cancel")
+    @GetMapping("/{appointment}/cancel")
     @PreAuthorize("hasAuthority('USER')")
     public String appointmentsCancel(@AuthenticationPrincipal User user,
                                      @PathVariable Appointment appointment,
