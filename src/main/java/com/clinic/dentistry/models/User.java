@@ -39,26 +39,40 @@ public class  User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return getRoles();
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return isActive();
+    }
+
+    public String getFullName() {
+        String fullName = "";
+        if (employee != null){
+            fullName = employee.getFullName();
+        } else if (outpatientCard != null) {
+            fullName = outpatientCard.getFullName();
+        }
+        return fullName;
     }
 }
