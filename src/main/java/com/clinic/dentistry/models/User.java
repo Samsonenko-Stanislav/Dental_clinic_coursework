@@ -18,7 +18,7 @@ public class  User implements UserDetails {
     private boolean active;
 
     private String email;
-
+    @Enumerated(EnumType.STRING)
     private Gender gender;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -146,11 +146,19 @@ public class  User implements UserDetails {
     }
 
     public Gender getGender(){
-        return gender != null ? gender : Gender.None;
+        return gender != null ? outpatientCard.getGender() : Gender.NONE;
     }
 
     public String employeeJobTitle(){
         return employee.getJobTitle();
     }
+    public Long getEmployeeId(){
+        return employee != null ? employee.getId() : 0;
+    }
+
+    public Long getOutpatientCardId(){
+        return outpatientCard != null ? outpatientCard.getId() : 0;
+    }
+
 
 }

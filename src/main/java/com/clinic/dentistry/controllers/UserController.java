@@ -67,8 +67,12 @@ public class UserController {
     @PreAuthorize("hasAuthority('USER')")
     public String userMeSave(@AuthenticationPrincipal User user,
                              @RequestParam String fullName,
+                             @RequestParam String email,
+                             @RequestParam String username,
                              Model model) {
         user.setFullName(fullName);
+        user.setEmail(email);
+        user.setUsername(username);
         outpatientCardRepository.save(user.getOutpatientCard());
         model.addAttribute("user", user);
         return "user-me";
@@ -98,10 +102,10 @@ public class UserController {
 
         if (form.get("USER") != null && form.get("USER").equals("on")){
             outpatientCard.setEmail(form.get("EMAIL"));
-            if (form.get("MALE") != null && form.get("FEMALE") != null){
+            if (form.get("MALE") != null){
                 outpatientCard.setGender(Gender.MALE);
             }
-            if (form.get("FEMALE") != null && form.get("FEMALE") != null){
+            if (form.get("FEMALE") != null){
                 outpatientCard.setGender(Gender.FEMALE);
             }
             outpatientCardRepository.save(outpatientCard);

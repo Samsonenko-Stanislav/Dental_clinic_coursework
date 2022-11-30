@@ -42,6 +42,6 @@ public class Appointment {
     }
 
     public Gender getClientGender(){
-        return client != null ? client.getGender() : Gender.None;
+        return client != null ? client.getGender() : Gender.NONE;
     }
 }

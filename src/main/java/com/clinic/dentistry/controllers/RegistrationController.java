@@ -1,5 +1,6 @@
 package com.clinic.dentistry.controllers;
 
+import com.clinic.dentistry.models.Gender;
 import com.clinic.dentistry.models.OutpatientCard;
 import com.clinic.dentistry.models.Role;
 import com.clinic.dentistry.models.User;
