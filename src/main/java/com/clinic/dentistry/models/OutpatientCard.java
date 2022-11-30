@@ -16,4 +16,6 @@ public class OutpatientCard {
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
+
+
 }
