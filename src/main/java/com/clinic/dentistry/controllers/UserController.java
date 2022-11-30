@@ -70,7 +70,7 @@ public class UserController {
                              @RequestParam String email,
                              @RequestParam String username,
                              Model model) {
-        user.setFullName(fullName);
+        user.getOutpatientCard().setFullName(fullName);
         user.setEmail(email);
         user.setUsername(username);
         outpatientCardRepository.save(user.getOutpatientCard());
