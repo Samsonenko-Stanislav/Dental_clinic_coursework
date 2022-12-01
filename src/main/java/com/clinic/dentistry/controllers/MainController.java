@@ -2,19 +2,20 @@ package com.clinic.dentistry.controllers;
 
 import com.clinic.dentistry.models.Good;
 import com.clinic.dentistry.models.User;
+import com.clinic.dentistry.service.GoodService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import com.clinic.dentistry.repo.GoodRepository;
 
 import javax.servlet.http.HttpSession;
 
 @Controller
 public class MainController {
     @Autowired
-    GoodRepository goodRepository;
+    private GoodService goodService;
+
     @GetMapping("/")
     public String home(HttpSession session,
                        @AuthenticationPrincipal User user,
@@ -24,8 +25,7 @@ public class MainController {
     }
     @GetMapping("/price")
     public String price( Model model) {
-        Iterable<Good> goods;
-        goods = goodRepository.findAllByActiveTrue();
+        Iterable<Good> goods = goodService.findActiveGoods();
         model.addAttribute("goods", goods);
         return "price-list";
     }
