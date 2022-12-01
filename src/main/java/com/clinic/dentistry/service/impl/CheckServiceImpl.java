@@ -33,9 +33,9 @@ public class CheckServiceImpl implements CheckService {
     private AppointmentRepository appointmentRepository;
 
     @Override
-    public Check createCheckFromJson(String checkJson, Appointment appointment) {
-        Check check = null;
-
+    public Check createCheckFromJson(Map<String, String> form, Appointment appointment) {
+        Check check;
+        String checkJson = form.get("checkJson");
         if (checkJson.equals("")){
             return null;
         }
@@ -73,6 +73,16 @@ public class CheckServiceImpl implements CheckService {
         appointment.setConclusion(form.get("conclusion"));
         appointment.setActive(false);
         appointmentRepository.save(appointment);
+    }
+
+    @Override
+    public Optional<Check> findCheck(Appointment appointment){
+        return checkRepository.findFirstByAppointment(appointment);
+    }
+
+    @Override
+    public Iterable<CheckLine> findCheckLines(Optional<Check> check){
+        return checkLineRepository.findByCheck(check.get());
     }
 
 }

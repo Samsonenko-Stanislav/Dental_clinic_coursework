@@ -25,6 +25,8 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Autowired
     private UserRepository userRepository;
 
+    private  LocalDateTime now = LocalDateTime.now();
+
     @Override
     public Map<User, Map<String, ArrayList<String>>> getAvailableDatesByDoctors(Iterable<User> doctors) {
         Map<User, Map<String ,ArrayList<String>>> availableDatesByDoctor = new HashMap<>();
@@ -106,6 +108,28 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointment.setActive(Boolean.TRUE);
         appointmentRepository.save(appointment);
         return appointment;
+    }
+
+    @Override
+    public void cancelAppointment(Appointment appointment){
+        appointment.setActive(Boolean.FALSE);
+        appointmentRepository.save(appointment);
+    }
+
+    @Override
+    public Boolean isCanEditByDoctor(User user, Appointment appointment){
+        return appointment.getDoctor() != null && user.getEmployee() != null &&
+                appointment.getDoctor().getId().equals(user.getEmployee().getId())
+                && now.isAfter(appointment.getDate())
+                && appointment.getActive();
+    }
+
+    @Override
+
+    public Boolean isCanCancel(User user, Appointment appointment){
+        return appointment.getClient() != null && user.getOutpatientCard() != null
+                && appointment.getClient().getId().equals(user.getOutpatientCard().getId())
+                && now.isBefore(appointment.getDate());
     }
 
 }
