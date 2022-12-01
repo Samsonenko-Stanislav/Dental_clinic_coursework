@@ -24,20 +24,31 @@
             <div class="row">
                 <div class="row col-12">
                     <div class="col-6">
-                        <label for="username" class="form-label">Логин</label>
-                        <input type="text"   name="username" class="form-control" id="username" th:value="${user.username}">
+                    <label for="username" class="form-label">Логин</label>
+                    <input type="text"   name="username" class="form-control" id="username" th:value="${user.username}">
+                </div>
+            </div>
+            <div class="row">
+                <div class="row col-12">
+                    <div class="col-6">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="text"  name = "email" class="form-control" id="email" th:value="${user.outpatientCard.email}">
                     </div>
                 </div>
-                <div class="row">
-                    <div class="row col-12">
-                        <div class="col-6">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="text"  name = "email" class="form-control" id="email" th:value="${user.outpatientCard.email}">
-                        </div>
-                    </div>
+
+            </div>
+                <div>
+                    <br>
+                    <a>Пол:</a>
+
+                    <input type="radio" id="MALE" name="gender" value="МУЖСКОЙ" th:checked="${user.outpatientCard.gender == T(com.clinic.dentistry.models.Gender).MALE}">
+                    <label for="MALE">Мужской</label>
+                    <input type="radio" id="FEMALE" name="gender" value="ЖЕНСКИЙ" th:checked="${user.outpatientCard.gender == T(com.clinic.dentistry.models.Gender).FEMALE}>
+                    <label for="FEMALE">Женский</label>
+                </div>
 
                 <button class="w-100 btn btn-primary btn-lg" type="submit">Сохранить</button>
-                </div>
+            </div>
             <input type="hidden" name="userId" th:value="${user.id}">
         </form>
     </div>

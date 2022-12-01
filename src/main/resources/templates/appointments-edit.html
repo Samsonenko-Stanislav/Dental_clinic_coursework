@@ -23,9 +23,12 @@
                     <h3 class="mb-0" th:text="|Доктор: ${appointment.doctor.getJobTitle()} ${appointment.doctor.fullName}|">Doctor profession</h3>
                     <h3 class="mb-0" th:text="|Пациент: ${appointment.client.fullName}|">Client name</h3>
                     <h3 class="mb-0" th:text="|Email пациента: ${appointment.client.email}|">Client email</h3>
-                    <h3 class="mb-0" th:text="|Пол пациента: ${appointment.client.getGender()}|">Client gender</h3>
+                    <h3 class="mb-0" th:if =  "${appointment.client.getGender() == T(com.clinic.dentistry.models.Gender).MALE}">Пол пациента: Мужской</h3>
+                    <h3 class="mb-0" th:if =  "${appointment.client.getGender() == T(com.clinic.dentistry.models.Gender).FEMALE}">Пол пациента: Женский</h3>
 
                 </div>
+
+            </div>
                 <div class="row col-12 justify-content-between">
                     <div class="row col-4">
                         <h4>Заключение</h4>
