@@ -48,12 +48,12 @@ public class AppointmentController {
         Iterable<Appointment> appointmentsClient;
         Iterable<Appointment> appointmentsDoctor;
         if (withArchived != null){
-            appointmentsClient = appointmentRepository.findByClientAndConclusionNotNull(user.getOutpatientCard());
-            appointmentsDoctor = appointmentRepository.findByDoctorAndConclusionNotNull(user.getEmployee());
+            appointmentsClient = appointmentService.getArchiveAppointmentsForClient(user);
+            appointmentsDoctor = appointmentService.getArchiveAppointmentsForDoctor(user);
             model.addAttribute("withArchived", true);
         } else {
-            appointmentsClient = appointmentRepository.findByClientAndActiveTrueAndConclusionNull(user.getOutpatientCard());
-            appointmentsDoctor = appointmentRepository.findByDoctorAndActiveTrueAndConclusionNull(user.getEmployee());
+            appointmentsClient = appointmentService.getActiveAppointmentsForClient(user);
+            appointmentsDoctor = appointmentService.getActiveAppointmentsForDoctor(user);
             model.addAttribute("withArchived", false);
         }
 
@@ -67,9 +67,8 @@ public class AppointmentController {
     @GetMapping("/add")
     @PreAuthorize("hasAuthority('USER')")
     public String appointmentsAddForm(Model model){
-        Iterable<User> doctors = userRepository.findByRolesInAndActiveTrue(Collections.singleton(Role.DOCTOR));
+        Iterable<User> doctors = appointmentService.getActiveDoctors();
         Map<User, Map<String, ArrayList<String>>> availableDatesByDoctor = appointmentService.getAvailableDatesByDoctors(doctors);
-
         model.addAttribute("doctors", availableDatesByDoctor);
         return "appointments-add";
     }
@@ -78,13 +77,7 @@ public class AppointmentController {
     @PreAuthorize("hasAuthority('USER')")
     public String appointmentsAdd(@AuthenticationPrincipal User user, @RequestParam User doctor,
                                   @RequestParam String dateStr, Model model){
-        LocalDateTime date = LocalDateTime.parse(dateStr);
-        Appointment appointment = new Appointment();
-        appointment.setDoctor(doctor.getEmployee());
-        appointment.setClient(user.getOutpatientCard());
-        appointment.setDate(date);
-        appointment.setActive(Boolean.TRUE);
-        appointmentRepository.save(appointment);
+        appointmentService.addAppointment(dateStr, doctor, user);
         return "redirect:/appointments/";
     }
 
@@ -129,16 +122,12 @@ public class AppointmentController {
     @PreAuthorize("hasAuthority('DOCTOR')")
     public String appointmentsEdit(@AuthenticationPrincipal User user,
                                    @PathVariable Appointment appointment,
-                                   @RequestParam Map<String, String> form,
-                                   Model model
+                                   @RequestParam Map<String, String> form
     ){
-        appointment.setConclusion(form.get("conclusion"));
-        appointment.setActive(false);
-        appointmentRepository.save(appointment);
 
+        checkService.addConclusion(appointment, form);
         String checkJson = form.get("checkJson");
-        Check check = checkService.createCheckFromJson(checkJson, appointment);
-
+        checkService.createCheckFromJson(checkJson, appointment);
         return "redirect:/appointments/" + appointment.getId().toString() + "/edit";
     }
 
