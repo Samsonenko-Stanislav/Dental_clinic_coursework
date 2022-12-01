@@ -15,10 +15,6 @@ import java.util.Map;
 @RequestMapping("/employee")
 @PreAuthorize("hasAuthority('ADMIN')")
 public class EmployeeController {
-
-    @Autowired
-    private EmployeeRepository employeeRepository;
-
     @Autowired
     private EmployeeService employeeService;
 
