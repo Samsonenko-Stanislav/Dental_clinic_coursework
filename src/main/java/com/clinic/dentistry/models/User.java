@@ -72,4 +72,7 @@ public class  User implements UserDetails {
         }
         return fullName;
     }
+    public Long getEmployeeId(){
+        return employee != null ? employee.getId() : 0;
+    }
 }

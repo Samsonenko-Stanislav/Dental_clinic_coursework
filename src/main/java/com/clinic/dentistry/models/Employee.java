@@ -20,6 +20,4 @@ public class Employee {
     private String jobTitle;
     private LocalTime workStart, workEnd;
     private int durationApp;
-    private String workDays;
-
 }
