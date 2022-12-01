@@ -4,6 +4,7 @@ import com.clinic.dentistry.models.*;
 import com.clinic.dentistry.repo.*;
 import com.clinic.dentistry.service.AppointmentService;
 import com.clinic.dentistry.service.CheckService;
+import com.clinic.dentistry.service.GoodService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 
@@ -38,6 +38,8 @@ public class AppointmentController {
 
     @Autowired
     private CheckService checkService;
+    @Autowired
+    private GoodService goodService;
 
     @GetMapping("/")
     public String appointmentsMain(
@@ -86,29 +88,21 @@ public class AppointmentController {
                                    @PathVariable Appointment appointment,
                                    Model model
     ){
-        LocalDateTime now = LocalDateTime.now();
         Boolean readOnly = Boolean.TRUE;
         Boolean canCancel = Boolean.FALSE;
-        if (appointment.getDoctor() != null && user.getEmployee() != null &&
-                appointment.getDoctor().getId().equals(user.getEmployee().getId())
-                && now.isAfter(appointment.getDate())
-                && appointment.getActive()
-        ){
+        if (appointmentService.isCanEditByDoctor(user, appointment)){
             readOnly = Boolean.FALSE;
-            Iterable<Good> goods = goodRepository.findAllByActiveTrue();
+            Iterable<Good> goods = goodService.findActiveGoods();
             model.addAttribute("goods", goods);
         }
 
-        Optional<Check> check = checkRepository.findFirstByAppointment(appointment);
+        Optional<Check> check = checkService.findCheck(appointment);
         if (check.isPresent()){
-            Iterable<CheckLine> checkLines = checkLineRepository.findByCheck(check.get());
+            Iterable<CheckLine> checkLines = checkService.findCheckLines(check);
             model.addAttribute("checkLines", checkLines);
         }
 
-        if (appointment.getClient() != null && user.getOutpatientCard() != null
-                && appointment.getClient().getId().equals(user.getOutpatientCard().getId())
-                && now.isBefore(appointment.getDate())
-        ){
+        if (appointmentService.isCanCancel(user, appointment)){
             canCancel = Boolean.TRUE;
         }
 
@@ -126,19 +120,16 @@ public class AppointmentController {
     ){
 
         checkService.addConclusion(appointment, form);
-        String checkJson = form.get("checkJson");
-        checkService.createCheckFromJson(checkJson, appointment);
+        checkService.createCheckFromJson(form, appointment);
         return "redirect:/appointments/" + appointment.getId().toString() + "/edit";
     }
 
     @GetMapping("/{appointment}/cancel")
     @PreAuthorize("hasAuthority('USER')")
     public String appointmentsCancel(@AuthenticationPrincipal User user,
-                                     @PathVariable Appointment appointment,
-                                     Model model
+                                     @PathVariable Appointment appointment
     ){
-        appointment.setActive(Boolean.FALSE);
-        appointmentRepository.save(appointment);
+        appointmentService.cancelAppointment(appointment);
         return "redirect:/appointments/";
     }
 }
