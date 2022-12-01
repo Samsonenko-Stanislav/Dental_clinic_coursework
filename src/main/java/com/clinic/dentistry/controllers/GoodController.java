@@ -1,8 +1,7 @@
 package com.clinic.dentistry.controllers;
 
-import com.clinic.dentistry.models.Appointment;
 import com.clinic.dentistry.models.Good;
-import com.clinic.dentistry.repo.GoodRepository;
+import com.clinic.dentistry.service.GoodService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -15,9 +14,8 @@ import java.util.Map;
 @RequestMapping("/good")
 @PreAuthorize("hasAuthority('ADMIN')")
 public class GoodController {
-
     @Autowired
-    private GoodRepository goodRepository;
+    private GoodService goodService;
 
     @GetMapping
     public String goodList(
@@ -25,10 +23,10 @@ public class GoodController {
             @RequestParam(value = "withArchived", required = false) String withArchived) {
         Iterable<Good> goods;
         if (withArchived != null){
-            goods = goodRepository.findAll();
+            goods = goodService.findAllGoods();
             model.addAttribute("withArchived", true);
         } else {
-            goods = goodRepository.findAllByActiveTrue();
+            goods = goodService.findActiveGoods();
             model.addAttribute("withArchived", false);
         }
         model.addAttribute("goods", goods);
@@ -52,26 +50,18 @@ public class GoodController {
             Good good,
             Map<String, Object> model
     ) {
-        good.setActive(true);
-        goodRepository.save(good);
+        goodService.goodSave(good);
         return "redirect:/good";
     }
 
 
     @PostMapping
-    public String goodSave(
+    public String goodEdit(
             @RequestParam("goodId") Good good,
             Good good_new,
             @RequestParam Map<String, String> form
     ) {
-        good.setName(good_new.getName());
-        good.setPrice(good_new.getPrice());
-        if (form.get("active") != null && form.get("active").equals("on")){
-            good.setActive(true);
-        } else {
-            good.setActive(false);
-        }
-        goodRepository.save(good);
+        goodService.goodEdit(good, good_new, form);
         return "redirect:/good";
     }
 
