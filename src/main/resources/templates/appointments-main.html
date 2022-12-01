@@ -37,8 +37,8 @@
     </div>
 </div>
 <a href="/appointments/add" sec:authorize= "hasAuthority('USER')" class="btn btn-primary">Записаться</a>
-<a th:if="!${withArchived}" href="/appointments?withArchived" class="btn btn-primary">Показать предыдущие записи</a>
-<a th:if="${withArchived}" href="/appointments" class="btn btn-primary">Показать текущие записи</a>
+<a th:if="!${withArchived}" href="/appointments/?withArchived" class="btn btn-primary">Показать предыдущие записи</a>
+<a th:if="${withArchived}" href="/appointments/" class="btn btn-primary">Показать текущие записи</a>
 
 
 <div th:insert="blocks/footer :: footer"></div>
