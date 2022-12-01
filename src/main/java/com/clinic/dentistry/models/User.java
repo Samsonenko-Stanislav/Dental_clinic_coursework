@@ -19,7 +19,6 @@ public class  User implements UserDetails {
     private String password;
     private boolean active;
 
-    private String email;
     @Enumerated(EnumType.STRING)
     private Gender gender;
 

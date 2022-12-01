@@ -32,12 +32,12 @@
                     <div class="row col-12">
                         <div class="col-6">
                             <label for="email" class="form-label">Email</label>
-                            <input type="text"  name = "email" class="form-control" id="email" th:value="${user.email}">
+                            <input type="text"  name = "email" class="form-control" id="email" th:value="${user.outpatientCard.email}">
                         </div>
                     </div>
 
                 <button class="w-100 btn btn-primary btn-lg" type="submit">Сохранить</button>
-            </div>
+                </div>
             <input type="hidden" name="userId" th:value="${user.id}">
         </form>
     </div>

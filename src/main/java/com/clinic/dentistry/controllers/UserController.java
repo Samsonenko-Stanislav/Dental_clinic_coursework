@@ -71,7 +71,7 @@ public class UserController {
                              @RequestParam String username,
                              Model model) {
         user.getOutpatientCard().setFullName(fullName);
-        user.setEmail(email);
+        user.getOutpatientCard().setEmail(email);
         user.setUsername(username);
         outpatientCardRepository.save(user.getOutpatientCard());
         model.addAttribute("user", user);
