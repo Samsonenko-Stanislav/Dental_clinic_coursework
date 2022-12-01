@@ -105,11 +105,11 @@ public class UserController {
         }
 
         if (form.get("USER") != null && form.get("USER").equals("on")){
-            outpatientCard.setEmail(form.get("EMAIL"));
+            outpatientCard.setEmail(form.get("email"));
             if (form.get("MALE") != null){
                 outpatientCard.setGender(Gender.MALE);
             }
-            if (form.get("FEMALE") != null){
+            if (form.get("FEMALE") != null) {
                 outpatientCard.setGender(Gender.FEMALE);
             }
             outpatientCardRepository.save(outpatientCard);
