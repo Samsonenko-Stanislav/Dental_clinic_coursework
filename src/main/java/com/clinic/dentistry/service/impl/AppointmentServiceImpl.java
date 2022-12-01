@@ -1,8 +1,10 @@
 package com.clinic.dentistry.service.impl;
 
 import com.clinic.dentistry.models.Appointment;
+import com.clinic.dentistry.models.Role;
 import com.clinic.dentistry.models.User;
 import com.clinic.dentistry.repo.AppointmentRepository;
+import com.clinic.dentistry.repo.UserRepository;
 import com.clinic.dentistry.service.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,16 +14,16 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 @Service
 public class AppointmentServiceImpl implements AppointmentService {
 
     @Autowired
     private AppointmentRepository appointmentRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public Map<User, Map<String, ArrayList<String>>> getAvailableDatesByDoctors(Iterable<User> doctors) {
@@ -69,4 +71,41 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         return availableDatesByDoctor;
     }
+    @Override
+    public Iterable<Appointment> getArchiveAppointmentsForClient(User user){
+        return appointmentRepository.findByClientAndConclusionNotNull(user.getOutpatientCard());
+    }
+
+    @Override
+    public Iterable<Appointment> getArchiveAppointmentsForDoctor(User user){
+        return appointmentRepository.findByDoctorAndConclusionNotNull(user.getEmployee());
+    }
+
+    @Override
+    public Iterable<Appointment> getActiveAppointmentsForClient(User user){
+        return appointmentRepository.findByClientAndActiveTrueAndConclusionNull(user.getOutpatientCard());
+    }
+
+    @Override
+    public Iterable<Appointment> getActiveAppointmentsForDoctor(User user){
+        return appointmentRepository.findByDoctorAndActiveTrueAndConclusionNull(user.getEmployee());
+    }
+
+    @Override
+    public Iterable<User> getActiveDoctors(){
+        return userRepository.findByRolesInAndActiveTrue(Collections.singleton(Role.DOCTOR));
+    }
+
+    @Override
+    public Appointment addAppointment(String dateStr, User doctor, User user){
+        LocalDateTime date = LocalDateTime.parse(dateStr);
+        Appointment appointment = new Appointment();
+        appointment.setDoctor(doctor.getEmployee());
+        appointment.setClient(user.getOutpatientCard());
+        appointment.setDate(date);
+        appointment.setActive(Boolean.TRUE);
+        appointmentRepository.save(appointment);
+        return appointment;
+    }
+
 }

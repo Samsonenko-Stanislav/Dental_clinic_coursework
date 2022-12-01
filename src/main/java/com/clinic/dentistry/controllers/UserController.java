@@ -4,6 +4,7 @@ import com.clinic.dentistry.models.*;
 import com.clinic.dentistry.repo.EmployeeRepository;
 import com.clinic.dentistry.repo.OutpatientCardRepository;
 import com.clinic.dentistry.repo.UserRepository;
+import com.sun.xml.bind.v2.TODO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -71,15 +72,16 @@ public class UserController {
         user.getOutpatientCard().setFullName(form.get("fullName"));
         user.getOutpatientCard().setEmail(form.get("email"));
         user.setUsername(form.get("username"));
-        if (form.get("gender") != null){
+        //TODO Понять почему не меняется пол, а точнее почему не находит MALE и FEMALE
+        if (form.get("MALE") != null){
             user.getOutpatientCard().setGender(Gender.MALE);
         }
-        if (form.get("FEMALE") != null){
+        if (form.get("FEMALE") != null) {
             user.getOutpatientCard().setGender(Gender.FEMALE);
         }
         outpatientCardRepository.save(user.getOutpatientCard());
         model.addAttribute("user", user);
-        return "user-me";
+        return "home";
     }
 
     @GetMapping("/new")
