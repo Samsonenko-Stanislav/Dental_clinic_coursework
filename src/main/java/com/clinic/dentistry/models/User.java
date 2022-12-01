@@ -19,8 +19,6 @@ public class  User implements UserDetails {
     private String password;
     private boolean active;
 
-    @Enumerated(EnumType.STRING)
-    private Gender gender;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "employee_id")

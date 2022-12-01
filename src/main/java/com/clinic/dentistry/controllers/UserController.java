@@ -66,13 +66,17 @@ public class UserController {
     @PostMapping("/me")
     @PreAuthorize("hasAuthority('USER')")
     public String userMeSave(@AuthenticationPrincipal User user,
-                             @RequestParam String fullName,
-                             @RequestParam String email,
-                             @RequestParam String username,
+                             @RequestParam Map<String, String> form,
                              Model model) {
-        user.getOutpatientCard().setFullName(fullName);
-        user.getOutpatientCard().setEmail(email);
-        user.setUsername(username);
+        user.getOutpatientCard().setFullName(form.get("fullName"));
+        user.getOutpatientCard().setEmail(form.get("email"));
+        user.setUsername(form.get("username"));
+        if (form.get("gender") != null){
+            user.getOutpatientCard().setGender(Gender.MALE);
+        }
+        if (form.get("FEMALE") != null){
+            user.getOutpatientCard().setGender(Gender.FEMALE);
+        }
         outpatientCardRepository.save(user.getOutpatientCard());
         model.addAttribute("user", user);
         return "user-me";
