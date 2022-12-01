@@ -2,6 +2,7 @@ package com.clinic.dentistry.controllers;
 
 import com.clinic.dentistry.models.Employee;
 import com.clinic.dentistry.repo.EmployeeRepository;
+import com.clinic.dentistry.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -18,9 +19,12 @@ public class EmployeeController {
     @Autowired
     private EmployeeRepository employeeRepository;
 
+    @Autowired
+    private EmployeeService employeeService;
+
     @GetMapping
     public String employeeList(Model model) {
-        model.addAttribute("employees", employeeRepository.findAll());
+        model.addAttribute("employees", employeeService.findAllEmployees());
         return "employee-list";
     }
 
@@ -41,7 +45,7 @@ public class EmployeeController {
             Employee employee,
             Map<String, Object> model
     ) {
-        employeeRepository.save(employee);
+        employeeService.saveEmployee(employee);
         return "redirect:/employee";
     }
 
@@ -52,12 +56,7 @@ public class EmployeeController {
             Employee employee_new,
             @RequestParam Map<String, String> form
     ) {
-        employee.setFullName(employee_new.getFullName());
-        employee.setJobTitle(employee_new.getJobTitle());
-        employee.setWorkStart(employee_new.getWorkStart());
-        employee.setWorkEnd(employee_new.getWorkEnd());
-        employee.setDurationApp(employee_new.getDurationApp());
-        employeeRepository.save(employee);
+        employeeService.editEmployee(employee, employee_new);
         return "redirect:/employee";
     }
 
