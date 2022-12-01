@@ -21,18 +21,6 @@ import java.util.Optional;
 @RequestMapping("/appointments")
 @PreAuthorize("hasAuthority('USER') or hasAuthority('DOCTOR')")
 public class AppointmentController {
-
-    @Autowired
-    private AppointmentRepository appointmentRepository;
-    @Autowired
-    private GoodRepository goodRepository;
-    @Autowired
-    private CheckRepository checkRepository;
-    @Autowired
-    private CheckLineRepository checkLineRepository;
-    @Autowired
-    private UserRepository userRepository;
-
     @Autowired
     private AppointmentService appointmentService;
 
