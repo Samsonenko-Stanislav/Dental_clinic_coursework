@@ -38,7 +38,7 @@
                     <label for="employee" class="form-label">Сотрудник</label>
                     <select class="form-select" id="employee" name="employee">
                         <option value="0"></option>
-                        <option th:each="employee : ${employees}" th:value="${employee.id}" th:text="|${employee.id}:${employee.fullName}|" th:selected="${employee.id}==${user.employeeId}"></option>
+                        <option th:each="employee : ${employees}" th:value="${employee.id}" th:text="|${employee.id}:${employee.fullName}|" th:selected="${employee.id}==${user.employee.id}"></option>
                     </select>
                 </div>
 
