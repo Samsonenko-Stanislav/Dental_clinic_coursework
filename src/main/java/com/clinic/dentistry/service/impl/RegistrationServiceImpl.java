@@ -87,7 +87,8 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
-    public void editUser(User user, String username, String active, Employee employee, OutpatientCard outpatientCard, Map<String, String> form){
+    public void editUser(User user, String username, String active, Employee employee,
+                         OutpatientCard outpatientCard, Map<String, String> form){
         user.setUsername(username);
         if (active != null){
             user.setActive(true);

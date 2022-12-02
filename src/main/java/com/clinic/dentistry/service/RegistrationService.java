@@ -13,5 +13,6 @@ public interface RegistrationService {
                     User user,
                     OutpatientCard outpatientCard,
                     Employee employee);
-    void editUser(User user, String username, String active, Employee employee, OutpatientCard outpatientCard, Map<String,String> form);
+    void editUser(User user, String username, String active, Employee employee, OutpatientCard outpatientCard,
+                  Map<String,String> form);
 }
