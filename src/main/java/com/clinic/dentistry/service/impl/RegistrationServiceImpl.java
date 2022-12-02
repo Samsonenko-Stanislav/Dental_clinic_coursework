@@ -87,7 +87,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
-    public void editUser(User user, String username, String active, Employee employee, Map<String, String> form){
+    public void editUser(User user, String username, String active, Employee employee, OutpatientCard outpatientCard, Map<String, String> form){
         user.setUsername(username);
         if (active != null){
             user.setActive(true);
@@ -112,6 +112,18 @@ public class RegistrationServiceImpl implements RegistrationService {
             user.setEmployee(employee);
         } else {
             user.setEmployee(null);
+        }
+
+        if (form.get("USER") != null && form.get("USER").equals("on")){
+            outpatientCard.setEmail(form.get("email"));
+            if (form.get("MALE") != null){
+                outpatientCard.setGender(Gender.MALE);
+            }
+            if (form.get("FEMALE") != null) {
+                outpatientCard.setGender(Gender.FEMALE);
+            }
+            outpatientCardRepository.save(outpatientCard);
+            user.setOutpatientCard(outpatientCard);
         }
         userRepository.save(user);
     }
