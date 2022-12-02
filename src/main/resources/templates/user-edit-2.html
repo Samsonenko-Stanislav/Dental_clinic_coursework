@@ -1,0 +1,83 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Редактирование пользователя</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+</head>
+<body>
+<header th:insert="blocks/header :: header"></header>
+
+<div class="container">
+    <div class="col-md-7 col-lg-8">
+        <h4 class="mb-3">Редактирование пользователя</h4>
+        <div th:if="${message}">
+            <div th:text="${message}"></div>
+        </div>
+        <form action="/user" method="post">
+            <div class="row">
+                <div class="row col-12 justify-content-between">
+                    <div class="col-6">
+                        <label for="username" class="form-label">Логин</label>
+                        <input type="text" name="username" class="form-control" id="username" th:value="${user.username}">
+                    </div>
+                    <div class="col-3">
+                        <input type="checkbox" name="active" id="active" th:checked="${user.active}">
+                        <label for="active" class="form-label" >Активен</label>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <div th:each="role : ${roles}">
+                        <input type="checkbox" th:name="${role}" th:id="${role}" th:checked="${#arrays.contains(user.roles, role)}">
+                        <label th:for="${role}" class="form-label" th:text="${role}" >Роли</label>
+                    </div>
+                </div>
+                <div id="forEmpl">
+                    <div class="col-md-5">
+                        <label for="employee" class="form-label">Сотрудник</label>
+                        <select class="form-select" id="employee" name="employee">
+                            <option value="0"></option>
+                            <option th:each="employee : ${employees}" th:value="${employee.id}" th:text="|${employee.id}:${employee.fullName}|" th:selected="${employee.id}==${user.employeeId}"></option>
+                        </select>
+                    </div>
+                </div>
+                <button class="w-100 btn btn-primary btn-lg" type="submit">Сохранить</button>
+            </div>
+            <input type="hidden" name="userId" th:value="${user.id}">
+        </form>
+    </div>
+</div>
+
+<div th:insert="blocks/footer :: footer"></div>
+</body>
+<script>
+    function toggleEmpl() {
+        var div = document.getElementById('forEmpl');
+        if(this.checked)
+            div.style.display = 'block';
+        else
+            div.style.display = 'none'
+    }
+    document.getElementById('DOCTOR').onchange = toggleEmpl;
+
+    function toggleUser() {
+        var div2 = document.getElementById('forUser');
+        if(this.checked)
+            div2.style.display = 'block';
+        else
+            div2.style.display = 'none'
+    }
+    document.getElementById('USER').onchange = toggleUser;
+    document.querySelector("#submit").onclick = function(){
+        if (document.getElementById('USER').checked && !document.getElementById('DOCTOR').checked){
+            document.getElementById('forEmpl').remove()
+        }
+        if (!document.getElementById('USER').checked && document.getElementById('DOCTOR').checked){
+            document.getElementById('forUser').remove()
+        }
+    }
+
+
+</script>
+</html>
