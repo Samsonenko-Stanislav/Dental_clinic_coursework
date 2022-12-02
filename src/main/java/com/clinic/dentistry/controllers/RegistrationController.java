@@ -14,8 +14,6 @@ import java.util.Map;
 @Controller
 public class RegistrationController {
     @Autowired
-    private UserRepository userRepository;
-    @Autowired
     private RegistrationService registrationService;
 
     @GetMapping("/sign_up")
