@@ -33,15 +33,38 @@
                         <label th:for="${role}" class="form-label" th:text="${role}" >Роли</label>
                     </div>
                 </div>
-
-                <div class="col-md-5">
-                    <label for="employee" class="form-label">Сотрудник</label>
-                    <select class="form-select" id="employee" name="employee">
-                        <option value="0"></option>
-                        <option th:each="employee : ${employees}" th:value="${employee.id}" th:text="|${employee.id}:${employee.fullName}|" th:selected="${employee.id}==${user.employeeId}"></option>
-                    </select>
+                <div id="forEmpl" style="display: none">
+                    <div class="col-md-5">
+                        <label for="employee" class="form-label">Сотрудник</label>
+                        <select class="form-select" id="employee" name="employee">
+                            <option value="0"></option>
+                            <option th:each="employee : ${employees}" th:value="${employee.id}" th:text="|${employee.id}:${employee.fullName}|" th:selected="${employee.id}==${user.employeeId}"></option>
+                        </select>
+                    </div>
                 </div>
-
+                <div id="forUser" style="display: none">
+                    <div class="col-6">
+                        <label for="email" class="form-label">e-mail</label>
+                        <input  type="email" name="email" class="form-control" id="email" style="" th:value="${user.outpatientCard.email}">
+                    </div>
+                    <div class="row col-12">
+                        <div class="col-6">
+                            <input type="radio" id="MALE" name="gender" value="MALE">
+                            <label for="MALE">Мужской</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="FEMALE" name="gender" value="FEMALE">
+                            <label for="FEMALE">Женский</label>
+                        </div>
+                        <div class="col-6">
+                            <label for="fullName" class="form-label">ФИО</label>
+                            <input type="text" name="fullName" class="form-control" id="fullName" style=""
+                                   th:value="${user.outpatientCard.fullName}">
+                        </div>
+                        <input type="text" hidden name="outpatientCard" class="form-control" id="outpatientCard" style=""
+                        th:value="${user.outpatientCard.id}">
+                    </div>
+                </div>
                 <button class="w-100 btn btn-primary btn-lg" type="submit">Сохранить</button>
             </div>
             <input type="hidden" name="userId" th:value="${user.id}">
@@ -51,4 +74,32 @@
 
 <div th:insert="blocks/footer :: footer"></div>
 </body>
+<script>
+    function toggleEmpl() {
+        var div = document.getElementById('forEmpl');
+        if(this.checked)
+            div.style.display = 'block';
+        else
+            div.style.display = 'none'
+    }
+    document.getElementById('DOCTOR').onchange = toggleEmpl;
+
+    function toggleUser() {
+        var div2 = document.getElementById('forUser');
+        if(this.checked)
+            div2.style.display = 'block';
+        else
+            div2.style.display = 'none'
+    }
+    document.getElementById('USER').onchange = toggleUser;
+    document.querySelector("#submit").onclick = function(){
+        if (document.getElementById('USER').checked && !document.getElementById('DOCTOR').checked){
+            document.getElementById('forEmpl').remove()
+        }
+        if (!document.getElementById('USER').checked && document.getElementById('DOCTOR').checked){
+            document.getElementById('forUser').remove()
+        }
+    }
+
+</script>
 </html>

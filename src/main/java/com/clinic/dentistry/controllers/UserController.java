@@ -104,9 +104,10 @@ public class UserController {
             @RequestParam Map<String, String> form,
             @RequestParam String username,
             @RequestParam(value = "active", required = false) String active,
-            Employee employee
+            Employee employee,
+            OutpatientCard outpatientCard
             ) {
-        registrationService.editUser(user, username, active, employee, form);
+        registrationService.editUser(user, username, active, employee, outpatientCard, form);
         return "redirect:/user";
     }
 }
