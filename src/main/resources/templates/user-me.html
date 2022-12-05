@@ -18,14 +18,22 @@
             <div class="row col-12">
                 <div class="col-6">
                     <label for="fullName" class="form-label">ФИО</label>
-                    <input type="text" name="fullName" class="form-control" id="fullName" th:value="${user.fullName}">
+                    <input type="text" name="fullName" class="form-control" id="fullName" required th:value="${user.fullName}">
                 </div>
             </div>
+            <input type="checkbox" name="changePassword" id="changePassword">
+            <label for="changePassword" class="form-label">Сменить пароль</label>
+            <div class="col-6" id="forChangePassword" style="display: none">
+                <label for="password" class="form-label">Новый пароль</label>
+                <input type="password" name="password" id="password" class="form-control">
+
+            </div>
+
             <div class="row">
                 <div class="row col-12">
                     <div class="col-6">
                         <label for="username" class="form-label">Логин</label>
-                        <input type="text"   name="username" class="form-control" id="username" th:value="${user.username}">
+                        <input type="text"   name="username" class="form-control" id="username" required th:value="${user.username}">
                     </div>
                 </div>
             <div class="row">
@@ -55,4 +63,19 @@
 
 <div th:insert="blocks/footer :: footer"></div>
 </body>
+<script>
+    function togglePassword() {
+        var div = document.getElementById('forChangePassword');
+        if(this.checked)
+            div.style.display = 'block';
+        else
+            div.style.display = 'none'
+    }
+    document.getElementById('changePassword').onchange = togglePassword;
+    document.querySelector("#submit").onclick = function() {
+        if (!document.getElementById('changePassword').checked) {
+            document.getElementById('forChangePassword').remove()
+        }
+    }
+</script>
 </html>
