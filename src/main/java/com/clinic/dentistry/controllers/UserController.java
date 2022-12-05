@@ -51,9 +51,7 @@ public class UserController {
         model.addAttribute("roles", Role.values());
         model.addAttribute("employees", employeeService.findAllEmployees());
         model.addAttribute("users", outpatientCardService.findAllCards());
-        if(user.getRoles().contains(Role.USER))
-            return "user-edit";
-        return "user-edit-2";
+        return "user-edit";
 
     }
 
@@ -109,18 +107,7 @@ public class UserController {
             Employee employee,
             OutpatientCard outpatientCard
             ) {
-        Boolean flag;
-        if (user.getRoles().contains(Role.USER)) {
-            flag = true;
-        }
-        else flag = false;
         registrationService.editUser(user, username, active, employee, outpatientCard, form);
-        if (flag && user.getRoles().contains(Role.USER)) {
-            return "redirect:/user";
-        } else if (!flag && user.getRoles().contains(Role.USER)) {
-            return "redirect:/user/" + user.getId().toString();
-
-        }
         return "redirect:/user";
     }
 }
