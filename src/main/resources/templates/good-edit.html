@@ -22,11 +22,11 @@
                 <div class="row col-12">
                     <div class="col-6">
                         <label for="name" class="form-label">Название</label>
-                        <input type="text" name="name" class="form-control" id="name" th:value="${good.name}">
+                        <input type="text" name="name" class="form-control" id="name" required th:value="${good.name}">
                     </div>
                     <div class="col-6">
                         <label for="price" class="form-label">Цена</label>
-                        <input type="number" step="0.01" name="price" class="form-control" id="price" th:value="${good.price}">
+                        <input type="number" step="0.01" name="price" class="form-control" id="price" required th:value="${good.price}">
                     </div>
                 </div>
                 <input type="hidden" name="goodId" th:value="${good.id}">
