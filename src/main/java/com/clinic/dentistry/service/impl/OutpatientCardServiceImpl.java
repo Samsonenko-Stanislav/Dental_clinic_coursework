@@ -34,7 +34,7 @@ public class OutpatientCardServiceImpl implements OutpatientCardService {
         user.getOutpatientCard().setFullName(form.get("fullName"));
         user.getOutpatientCard().setEmail(form.get("email"));
         user.setUsername(form.get("username"));
-        if (form.get("changePassword").equals("on")){
+        if (form.get("changePassword") != null && form.get("changePassword").equals("on")){
             user.setPassword(passwordEncoder.encode(form.get("password")));
         }
         //TODO Понять почему не меняется пол, а точнее почему не находит MALE и FEMALE
