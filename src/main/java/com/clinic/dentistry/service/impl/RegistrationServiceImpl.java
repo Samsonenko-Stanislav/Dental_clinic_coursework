@@ -90,7 +90,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     public void editUser(User user, String username, String active, Employee employee,
                          OutpatientCard outpatientCard, Map<String, String> form){
         user.setUsername(username);
-        if (active != null){
+        if (active.equals("true") || active.equals("1") || active.equals("on")){
             user.setActive(true);
         } else {
             user.setActive(false);
@@ -116,6 +116,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         }
 
         if (form.get("USER") != null && form.get("USER").equals("on")){
+
             outpatientCard.setEmail(form.get("email"));
             if (form.get("MALE") != null){
                 outpatientCard.setGender(Gender.MALE);
