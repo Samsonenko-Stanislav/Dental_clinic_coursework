@@ -73,7 +73,7 @@
     }
     document.getElementById('changePassword').onchange = togglePassword;
     document.querySelector("#submit").onclick = function() {
-        if (!document.getElementById('changePassword').checked) {
+        if (!document.getElementById('changePassword')) {
             document.getElementById('forChangePassword').remove()
         }
     }
