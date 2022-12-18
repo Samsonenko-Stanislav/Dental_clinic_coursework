@@ -48,7 +48,8 @@ public class RegistrationServiceImpl implements RegistrationService {
                            User user,
                            OutpatientCard outpatientCard,
                            Employee employee){
-        if (form.get("USER") != null && form.get("USER").equals("on")){
+        if (form.get("USER") != null &&
+                form.get("USER").equals("on")){
             outpatientCard.setEmail(form.get("email"));
             if (form.get("MALE") != null){
                 outpatientCard.setGender(Gender.MALE);
@@ -127,6 +128,18 @@ public class RegistrationServiceImpl implements RegistrationService {
             user.setOutpatientCard(outpatientCard);
         }
         userRepository.save(user);
+    }
+
+    @Override
+    public boolean isUsernameVacant(Map<String, String> form){
+        User user = userRepository.findUserById(Long.valueOf(form.get("userId")));
+        String newUsername = form.get("username");
+        User userWithNewUsername = userRepository.findFirstByUsername(newUsername);
+        if (userWithNewUsername == null || user.getId().equals(userWithNewUsername.getId())){
+            return true;
+        }
+        else
+            return false;
     }
 
 }

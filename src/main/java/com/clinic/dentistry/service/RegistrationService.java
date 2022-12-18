@@ -15,4 +15,5 @@ public interface RegistrationService {
                     Employee employee);
     void editUser(User user, String username, String active, Employee employee, OutpatientCard outpatientCard,
                   Map<String,String> form);
+    boolean isUsernameVacant(Map<String, String> form);
 }
