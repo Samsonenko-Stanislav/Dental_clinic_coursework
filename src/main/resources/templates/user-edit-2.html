@@ -19,14 +19,22 @@
                 <div class="row col-12 justify-content-between">
                     <div class="col-6">
                         <label for="username" class="form-label">Логин</label>
-                        <input type="text" name="username" class="form-control" id="username" required th:value="${user.username}">
+                        <input type="text" name="username" class="form-control" readonly id="username" required th:value="${user.username}">
                     </div>
+
                     <div class="col-3">
                         <input type="checkbox" name="active" id="active" th:checked="${user.active}">
                         <label for="active" class="form-label" >Активен</label>
                     </div>
                 </div>
-
+                <div class="col-12">
+                <input type="checkbox" name="changePassword" id="changePassword">
+                <label for="changePassword" class="form-label">Сменить пароль</label>
+                <div class="col-6" id="forChangePassword" style="display: none">
+                    <label for="password" class="form-label">Новый пароль</label>
+                    <input type="password" name="password" id="password" class="form-control">
+                </div>
+                </div>
                 <div class="col-12">
                     <div th:each="role : ${roles}">
                         <input type="checkbox" th:name="${role}" th:id="${role}" th:checked="${#arrays.contains(user.roles, role)}">
@@ -52,6 +60,14 @@
 <div th:insert="blocks/footer :: footer"></div>
 </body>
 <script>
+    function togglePassword() {
+        var div = document.getElementById('forChangePassword');
+        if(this.checked)
+            div.style.display = 'block';
+        else
+            div.style.display = 'none'
+    }
+    document.getElementById('changePassword').onchange = togglePassword;
     function toggleEmpl() {
         var div = document.getElementById('forEmpl');
         if(this.checked)
@@ -73,10 +89,14 @@
         if (document.getElementById('USER').checked && !document.getElementById('DOCTOR').checked){
             document.getElementById('forEmpl').remove()
         }
-        if (!document.getElementById('USER').checked && document.getElementById('DOCTOR').checked){
+        if (!document.getElementById('USER').checked){
             document.getElementById('forUser').remove()
         }
+        if (!document.getElementById('forChangePassword').checked){
+            document.getElementById('changePassword').remove()
+        }
     }
+
 
 
 </script>

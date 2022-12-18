@@ -95,7 +95,9 @@ public class RegistrationServiceImpl implements RegistrationService {
         } else {
             user.setActive(false);
         }
-
+        if (form.get("changePassword") != null && form.get("changePassword").equals("on")){
+            user.setPassword(passwordEncoder.encode(form.get("password")));
+        }
 
         Set<String> roles = Arrays.stream(Role.values())
                 .map(Role::name)
