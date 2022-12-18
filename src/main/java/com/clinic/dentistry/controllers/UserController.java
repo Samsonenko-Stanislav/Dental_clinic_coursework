@@ -8,14 +8,15 @@ import com.clinic.dentistry.service.EmployeeService;
 import com.clinic.dentistry.service.OutpatientCardService;
 import com.clinic.dentistry.service.RegistrationService;
 import com.clinic.dentistry.service.UserService;
-import org.apache.catalina.filters.ExpiresFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Map;
 
@@ -46,17 +47,22 @@ public class UserController {
         return "user-list";
     }
 
-    @GetMapping("{user}")
+    @GetMapping("{userId}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public String userEditForm(@PathVariable("user") User user, Model model) {
-        model.addAttribute("user", user);
-        model.addAttribute("roles", Role.values());
-        model.addAttribute("employees", employeeService.findAllEmployees());
-        model.addAttribute("users", outpatientCardService.findAllCards());
-        if(user.getRoles().contains(Role.USER))
-            return "user-edit";
-        return "user-edit-2";
-
+    public Object userEditForm(@PathVariable("userId") Long userId, Model model) {
+        User user = userService.findUser(userId);
+        if (user != null) {
+            model.addAttribute("user", user);
+            model.addAttribute("roles", Role.values());
+            model.addAttribute("employees", employeeService.findAllEmployees());
+            model.addAttribute("users", outpatientCardService.findAllCards());
+            if (user.getRoles().contains(Role.USER))
+                return "user-edit";
+            return "user-edit-2";
+        }
+        throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND
+        );
     }
 
     @GetMapping("/me")
@@ -71,9 +77,19 @@ public class UserController {
     public String userMeEdit(@AuthenticationPrincipal User user,
                              @RequestParam Map<String, String> form,
                              Model model) {
-        outpatientCardService.userMeEdit(user, form);
-        model.addAttribute("user", user);
-        return "user-me";
+        if (registrationService.isUsernameVacant(form)){
+            model.addAttribute("message", "Данные успешно обновлены!");
+            outpatientCardService.userMeEdit(user, form);
+            model.addAttribute("user", user);
+            return "user-me";
+        }
+        else {
+            model.addAttribute("message", "Пользователь с таким логином уже существует!");
+            model.addAttribute("user", user);
+            return "user-me";
+        }
+
+
     }
 
     @GetMapping("/new")
@@ -95,9 +111,12 @@ public class UserController {
         if (registrationService.isUserInDB(user)) {
             model.put("message", "Пользователь с таким логином уже существует!");
             return "user-new";
+
+
         }
         registrationService.createUser(form, user, outpatientCard, employee);
         return "redirect:/user";
+
     }
 
 

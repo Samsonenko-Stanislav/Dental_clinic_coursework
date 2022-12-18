@@ -16,7 +16,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class UserService implements UserDetailsService {
+public class UserService implements UserDetailsService{
     @Autowired
     private UserRepository userRepository;
 
@@ -27,6 +27,9 @@ public class UserService implements UserDetailsService {
 
     public List<User> findAllUsers(){
         return userRepository.findAll();
+    }
+    public User findUser(Long id){
+        return userRepository.findUserById(id);
     }
 
     public List<User> findAllActiveUsers(){
