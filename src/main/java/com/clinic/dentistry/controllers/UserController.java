@@ -8,12 +8,14 @@ import com.clinic.dentistry.service.EmployeeService;
 import com.clinic.dentistry.service.OutpatientCardService;
 import com.clinic.dentistry.service.RegistrationService;
 import com.clinic.dentistry.service.UserService;
+import org.apache.catalina.filters.ExpiresFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.Map;
 
@@ -46,12 +48,14 @@ public class UserController {
 
     @GetMapping("{user}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public String userEditForm(@PathVariable User user, Model model) {
+    public String userEditForm(@PathVariable("user") User user, Model model) {
         model.addAttribute("user", user);
         model.addAttribute("roles", Role.values());
         model.addAttribute("employees", employeeService.findAllEmployees());
         model.addAttribute("users", outpatientCardService.findAllCards());
-        return "user-edit";
+        if(user.getRoles().contains(Role.USER))
+            return "user-edit";
+        return "user-edit-2";
 
     }
 
@@ -107,7 +111,18 @@ public class UserController {
             Employee employee,
             OutpatientCard outpatientCard
             ) {
+        Boolean flag;
+        if (user.getRoles().contains(Role.USER)) {
+            flag = true;
+        }
+        else flag = false;
         registrationService.editUser(user, username, active, employee, outpatientCard, form);
+        if (flag && user.getRoles().contains(Role.USER)) {
+            return "redirect:/user";
+        } else if (!flag && user.getRoles().contains(Role.USER)) {
+            return "redirect:/user/" + user.getId().toString();
+
+        }
         return "redirect:/user";
     }
 }
