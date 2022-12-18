@@ -5,9 +5,6 @@ import com.clinic.dentistry.repo.EmployeeRepository;
 import com.clinic.dentistry.repo.OutpatientCardRepository;
 import com.clinic.dentistry.repo.UserRepository;
 import com.clinic.dentistry.service.RegistrationService;
-import com.clinic.dentistry.service.UserService;
-import com.fasterxml.jackson.core.Base64Variant;
-import org.apache.catalina.Store;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -90,7 +87,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     public void editUser(User user, String username, String active, Employee employee,
                          OutpatientCard outpatientCard, Map<String, String> form){
         user.setUsername(username);
-        if (active.equals("true") || active.equals("1") || active.equals("on")){
+        if (active.equals("on")){
             user.setActive(true);
         } else {
             user.setActive(false);
