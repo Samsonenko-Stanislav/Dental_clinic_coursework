@@ -41,11 +41,10 @@
                         <label th:for="${role}" class="form-label" th:text="${role}" >Роли</label>
                     </div>
                 </div>
-                <div id="forEmpl">
+                <div id="forEmpl" style="display: none">
                     <div class="col-md-5">
                         <label for="employee" class="form-label">Сотрудник</label>
                         <select class="form-select" id="employee" name="employee">
-                            <option value="0"></option>
                             <option th:each="employee : ${employees}" th:value="${employee.id}" th:text="|${employee.id}:${employee.fullName}|" th:selected="${employee.id}==${user.employeeId}"></option>
                         </select>
                     </div>

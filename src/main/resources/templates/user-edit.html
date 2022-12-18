@@ -43,12 +43,11 @@
                     <div class="col-md-5">
                         <label for="employee" class="form-label">Сотрудник</label>
                         <select class="form-select" id="employee" name="employee">
-                            <option value="0"></option>
-                            <option th:each="employee : ${employees}" th:value="${employee.id}" th:text="|${employee.id}:${employee.fullName}|" th:selected="${employee.id}==${user.employeeId}"></option>
+                            <option  th:each="employee : ${employees}" th:value="${employee.id}" th:text="|${employee.id}:${employee.fullName}|" th:selected="${employee.id}==${user.employeeId}"></option>
                         </select>
                     </div>
                 </div>
-                <div id="forUser" >
+                <div id="forUser" style="display: none">
                     <div class="col-6">
                         <label for="email" class="form-label">e-mail</label>
                         <input  type="email" name="email" class="form-control" id="email" style="" th:value="${user.outpatientCard.email}">
@@ -80,6 +79,12 @@
 <div th:insert="blocks/footer :: footer"></div>
 </body>
 <script>
+    if (document.getElementById('USER').checked){
+        document.getElementById('forUser').style.display = 'block'
+    }
+    if (document.getElementById('DOCTOR').checked){
+        document.getElementById('forEmpl').style.display = 'block'
+    }
     function togglePassword() {
         var div = document.getElementById('forChangePassword');
         if(this.checked)

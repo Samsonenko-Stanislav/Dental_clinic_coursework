@@ -73,7 +73,7 @@ public class UserController {
                              Model model) {
         outpatientCardService.userMeEdit(user, form);
         model.addAttribute("user", user);
-        return "home";
+        return "user-me";
     }
 
     @GetMapping("/new")
