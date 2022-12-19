@@ -8,12 +8,12 @@
 <body>
 
 <script type="text/javascript">
-    function setDoctor(doctor_id, date, time, button) {
+    function setDoctor(doctorId, date, time, button) {
         document.querySelectorAll('button').forEach(function (element) {
             element.disabled = false;
         })
-        document.getElementById("doctor_id").setAttribute("value", doctor_id)
-        document.getElementById("appointment_date").setAttribute("value", date + 'T' + time)
+        document.getElementById("doctorId").setAttribute("value", doctorId)
+        document.getElementById("appointmentDate").setAttribute("value", date + 'T' + time)
         button.disabled = true;
         document.getElementById("add_appointment").scrollIntoView();
     }
@@ -42,8 +42,8 @@
 
 
 <form action="/appointments/add" method="post">
-    <input hidden id="doctor_id" type="text" name="doctor" placeholder="Доктор">
-    <input hidden id="appointment_date" type="datetime-local" name="dateStr" placeholder="Время">
+    <input hidden id="doctorId" type="text" name="doctorId" placeholder="Доктор">
+    <input hidden id="appointmentDate" type="datetime-local" name="dateStr" placeholder="Время">
     <button class="btn btn-primary btn-lg" id="add_appointment" type="submit">Добавить запись</button>
 </form>
 

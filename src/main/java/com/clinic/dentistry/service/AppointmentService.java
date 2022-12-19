@@ -1,6 +1,7 @@
 package com.clinic.dentistry.service;
 
 import com.clinic.dentistry.models.Appointment;
+import com.clinic.dentistry.models.Employee;
 import com.clinic.dentistry.models.User;
 import java.util.ArrayList;
 import java.util.Map;
@@ -17,4 +18,5 @@ public interface AppointmentService {
     void cancelAppointment(Appointment appointment);
     Boolean isCanEditByDoctor(User user, Appointment appointment);
     Boolean isCanCancel(User user, Appointment appointment);
+    Appointment findAppointment(Long id);
 }
