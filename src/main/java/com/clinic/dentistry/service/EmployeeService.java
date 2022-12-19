@@ -8,5 +8,6 @@ public interface EmployeeService {
         List<Employee> findAllEmployees();
         void saveEmployee(Employee employee);
         void editEmployee(Employee employee, Employee employee_new);
+        Employee findEmployee(Long id);
 
 }
