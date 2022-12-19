@@ -116,13 +116,20 @@ public class RegistrationServiceImpl implements RegistrationService {
         }
 
         if (form.get("USER") != null && form.get("USER").equals("on")){
-
-            outpatientCard.setEmail(form.get("email"));
-            if (form.get("MALE") != null){
-                outpatientCard.setGender(Gender.MALE);
+            if (user.getOutpatientCard()!= null){
+                outpatientCard.setId(user.getOutpatientCard().getId());
+                outpatientCard.setFullName(user.getOutpatientCard().getFullName());
+                outpatientCard.setEmail(user.getOutpatientCard().getEmail());
+                outpatientCard.setGender(user.getOutpatientCard().getGender());
             }
-            if (form.get("FEMALE") != null) {
-                outpatientCard.setGender(Gender.FEMALE);
+            else {
+                outpatientCard.setEmail(form.get("email"));
+                if (form.get("MALE") != null) {
+                    outpatientCard.setGender(Gender.MALE);
+                }
+                if (form.get("FEMALE") != null) {
+                    outpatientCard.setGender(Gender.FEMALE);
+                }
             }
             outpatientCardRepository.save(outpatientCard);
             user.setOutpatientCard(outpatientCard);
