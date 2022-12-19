@@ -32,4 +32,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setDurationApp(employee_new.getDurationApp());
         employeeRepository.save(employee);
     }
+
+    @Override
+    public Employee findEmployee(Long id) {
+        return employeeRepository.findEmployeeById(id);
+    }
 }
