@@ -15,19 +15,7 @@
             <div th:text="${message}"></div>
         </div>
         <form action="/user/me" method="post">
-            <div class="row col-12">
-                <div class="col-6">
-                    <label for="fullName" class="form-label">ФИО</label>
-                    <input type="text" name="fullName" class="form-control" id="fullName" required th:value="${user.fullName}">
-                </div>
-            </div>
-            <input type="checkbox" name="changePassword" id="changePassword">
-            <label for="changePassword" class="form-label">Сменить пароль</label>
-            <div class="col-6" id="forChangePassword" style="display: none">
-                <label for="password" class="form-label">Новый пароль</label>
-                <input type="password" name="password" id="password" class="form-control">
 
-            </div>
 
             <div class="row">
                 <div class="row col-12">
@@ -36,7 +24,22 @@
                         <input type="text"   name="username" class="form-control" id="username" required th:value="${user.username}">
                     </div>
                 </div>
-            <div class="row">
+                <div class="col-12">
+                <input type="checkbox" name="changePassword" id="changePassword">
+                <label for="changePassword" class="form-label">Сменить пароль</label>
+                <div class="col-6" id="forChangePassword" style="display: none">
+                    <label for="password" class="form-label">Новый пароль</label>
+                    <input type="password" name="password" id="password" class="form-control">
+                </div>
+                </div>
+                <div class="row col-12">
+                    <div class="col-6">
+                        <label for="fullName" class="form-label">ФИО</label>
+                        <input type="text" name="fullName" class="form-control" id="fullName" required th:value="${user.outpatientCard.fullName}">
+                    </div>
+                </div>
+
+                <div class="row">
                 <div class="row col-12">
                     <div class="col-6">
                         <label for="email" class="form-label">Email</label>
