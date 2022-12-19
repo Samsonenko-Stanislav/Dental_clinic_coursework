@@ -40,4 +40,9 @@ public class GoodServiceImpl implements GoodService {
        }
        goodRepository.save(good);
    }
+
+   @Override
+    public Good findGood(Long id){
+        return goodRepository.findGoodById(id);
+   }
 }
