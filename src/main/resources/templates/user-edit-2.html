@@ -59,6 +59,9 @@
 <div th:insert="blocks/footer :: footer"></div>
 </body>
 <script>
+    if (document.getElementById('DOCTOR').checked){
+        document.getElementById('forEmpl').style.display = 'block'
+    }
     function togglePassword() {
         var div = document.getElementById('forChangePassword');
         if(this.checked)
