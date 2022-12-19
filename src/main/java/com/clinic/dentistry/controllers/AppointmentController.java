@@ -6,11 +6,13 @@ import com.clinic.dentistry.service.AppointmentService;
 import com.clinic.dentistry.service.CheckService;
 import com.clinic.dentistry.service.GoodService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -29,7 +31,7 @@ public class AppointmentController {
     @Autowired
     private GoodService goodService;
 
-    @GetMapping("/")
+    @GetMapping()
     public String appointmentsMain(
             @AuthenticationPrincipal User user,
             @RequestParam(value = "withArchived", required = false) String withArchived,
@@ -112,12 +114,17 @@ public class AppointmentController {
         return "redirect:/appointments/" + appointment.getId().toString() + "/edit";
     }
 
-    @GetMapping("/{appointment}/cancel")
+    @GetMapping("/{appointmentId}/cancel")
     @PreAuthorize("hasAuthority('USER')")
     public String appointmentsCancel(@AuthenticationPrincipal User user,
-                                     @PathVariable Appointment appointment
+                                     @PathVariable("appointmentId") Appointment appointment
     ){
-        appointmentService.cancelAppointment(appointment);
-        return "redirect:/appointments/";
+        if (appointmentService.isCanCancel(user, appointment)){
+            appointmentService.cancelAppointment(appointment);
+            return "redirect:/appointments/";
+        }
+        throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST
+        );
     }
 }
