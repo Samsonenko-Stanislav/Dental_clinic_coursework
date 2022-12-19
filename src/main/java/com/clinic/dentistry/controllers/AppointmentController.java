@@ -67,51 +67,62 @@ public class AppointmentController {
 
     @PostMapping("/add")
     @PreAuthorize("hasAuthority('USER')")
-    public String appointmentsAdd(@AuthenticationPrincipal User user, @RequestParam User doctor,
-                                  @RequestParam String dateStr, Model model){
+    public String appointmentsAdd(@AuthenticationPrincipal User user, @RequestParam("doctorId") User doctor,
+                                  @RequestParam("dateStr") String dateStr, Model model){
         appointmentService.addAppointment(dateStr, doctor, user);
         return "redirect:/appointments/";
     }
 
-    @GetMapping("/{appointment}/edit")
+    @GetMapping("/{appointmentId}/edit")
     public String appointmentsEdit(@AuthenticationPrincipal User user,
-                                   @PathVariable Appointment appointment,
+                                   @PathVariable("appointmentId") Long appointmentId,
                                    Model model
     ){
-        Boolean readOnly = Boolean.TRUE;
-        Boolean canCancel = Boolean.FALSE;
-        if (appointmentService.isCanEditByDoctor(user, appointment)){
-            readOnly = Boolean.FALSE;
-            Iterable<Good> goods = goodService.findActiveGoods();
-            model.addAttribute("goods", goods);
-        }
+        Appointment appointment = appointmentService.findAppointment(appointmentId);
+        if (appointment != null) {
+            Boolean readOnly = Boolean.TRUE;
+            Boolean canCancel = Boolean.FALSE;
+            if (appointmentService.isCanEditByDoctor(user, appointment)) {
+                readOnly = Boolean.FALSE;
+                Iterable<Good> goods = goodService.findActiveGoods();
+                model.addAttribute("goods", goods);
+            }
 
-        Optional<Check> check = checkService.findCheck(appointment);
-        if (check.isPresent()){
-            Iterable<CheckLine> checkLines = checkService.findCheckLines(check);
-            model.addAttribute("checkLines", checkLines);
-        }
+            Optional<Check> check = checkService.findCheck(appointment);
+            if (check.isPresent()) {
+                Iterable<CheckLine> checkLines = checkService.findCheckLines(check);
+                model.addAttribute("checkLines", checkLines);
+            }
 
-        if (appointmentService.isCanCancel(user, appointment)){
-            canCancel = Boolean.TRUE;
-        }
+            if (appointmentService.isCanCancel(user, appointment)) {
+                canCancel = Boolean.TRUE;
+            }
 
-        model.addAttribute("appointment", appointment);
-        model.addAttribute("readOnly", readOnly);
-        model.addAttribute("canCancel", canCancel);
-        return "appointments-edit";
+            model.addAttribute("appointment", appointment);
+            model.addAttribute("readOnly", readOnly);
+            model.addAttribute("canCancel", canCancel);
+            return "appointments-edit";
+        }
+        throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND
+        );
     }
 
-    @PostMapping("/{appointment}/edit")
+    @PostMapping("/{appointmentId}/edit")
     @PreAuthorize("hasAuthority('DOCTOR')")
     public String appointmentsEdit(@AuthenticationPrincipal User user,
-                                   @PathVariable Appointment appointment,
+                                   @PathVariable("appointmentId") Long appointmentId,
                                    @RequestParam Map<String, String> form
     ){
-
+        Appointment appointment = appointmentService.findAppointment(appointmentId);
+        if (appointment != null){
         checkService.addConclusion(appointment, form);
         checkService.createCheckFromJson(form, appointment);
         return "redirect:/appointments/" + appointment.getId().toString() + "/edit";
+        }
+        throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND
+        );
     }
 
     @GetMapping("/{appointmentId}/cancel")

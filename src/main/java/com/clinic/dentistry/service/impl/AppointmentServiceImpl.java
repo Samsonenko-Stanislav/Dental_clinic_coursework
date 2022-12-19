@@ -1,6 +1,7 @@
 package com.clinic.dentistry.service.impl;
 
 import com.clinic.dentistry.models.Appointment;
+import com.clinic.dentistry.models.Employee;
 import com.clinic.dentistry.models.Role;
 import com.clinic.dentistry.models.User;
 import com.clinic.dentistry.repo.AppointmentRepository;
@@ -125,11 +126,15 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-
     public Boolean isCanCancel(User user, Appointment appointment){
         return appointment.getClient() != null && user.getOutpatientCard() != null
                 && appointment.getClient().getId().equals(user.getOutpatientCard().getId())
                 && now.isBefore(appointment.getDate());
+    }
+
+    @Override
+    public Appointment findAppointment(Long id){
+        return appointmentRepository.findAppointmentById(id);
     }
 
 }
