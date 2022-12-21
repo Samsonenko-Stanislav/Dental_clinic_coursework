@@ -115,7 +115,9 @@
         if (!document.getElementById('USER').checked && document.getElementById('DOCTOR').checked){
             document.getElementById('forUser').remove()
         }
-        if (document.getElementById('ADMIN').checked && !(document.getElementById('DOCTOR').checked || document.getElementById('USER').checked)){
+        if (document.getElementById('ADMIN').checked &&
+            !(document.getElementById('DOCTOR').checked
+            || document.getElementById('USER').checked)){
             document.getElementById('forEmpl').remove()
             document.getElementById('forUser').remove()
             document.getElementById('forNotAdmin').remove()
