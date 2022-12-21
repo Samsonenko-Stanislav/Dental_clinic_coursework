@@ -88,7 +88,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     public void editUser(User user, String username, String active, Employee employee,
                          OutpatientCard outpatientCard, Map<String, String> form){
         user.setUsername(username);
-        if (active.equals("on")){
+        if (active != null){
             user.setActive(true);
         } else {
             user.setActive(false);
