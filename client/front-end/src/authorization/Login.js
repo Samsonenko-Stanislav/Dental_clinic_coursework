@@ -1,5 +1,6 @@
 import React from 'react';
 import '../App.css';
+import './Login.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
@@ -8,7 +9,7 @@ function Login() {
         return (
             <div className="text-center">
                     <form action="/login" method="post">
-                            <img className="mb-4" src="/static/img/tooth.svg" alt="" width="72" height="57" />
+                            <img className="mb-4" src="../tooth.svg" alt="" width="72" height="57" />
                             <br />
                             <a href="/">Вернуться на главную</a>
                             <h1 className="h3 mb-3 fw-normal">Пожалуйста, войдите</h1>
