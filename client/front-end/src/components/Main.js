@@ -1,7 +1,7 @@
 import React from 'react';
 import Main_pict from "../main.jpg";
 import '../App.css';
-
+import 'bootstrap/dist/css/bootstrap.min.css';
 class Main_page extends React.Component {
     render() {
         return (
