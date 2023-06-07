@@ -9,6 +9,6 @@ import java.util.Map;
 public interface OutpatientCardService {
 
     List<OutpatientCard> findAllCards();
-    void userMeEdit(User user, Map<String, String> form);
+    void userMeEdit(User user, User updateUser, Boolean changePassword);
 
 }
