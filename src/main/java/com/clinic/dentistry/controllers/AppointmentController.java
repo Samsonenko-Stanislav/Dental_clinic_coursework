@@ -62,7 +62,7 @@ public class AppointmentController {
     public HttpStatus appointmentsAdd(@AuthenticationPrincipal User user, @RequestParam("doctorId") User doctor,
                                       @RequestParam("dateStr") String dateStr){
         appointmentService.addAppointment(dateStr, doctor, user);
-        return HttpStatus.OK;
+        return HttpStatus.CREATED;
     }
 
     @GetMapping("/{appointmentId}/edit")
