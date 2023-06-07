@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 
 @Controller
 public class MainController {
@@ -17,16 +18,16 @@ public class MainController {
     private GoodService goodService;
 
     @GetMapping("/")
-    public String home(HttpSession session,
-                       @AuthenticationPrincipal User user,
-                       Model model) {
-        model.addAttribute("title", "Главная страница");
-        return "home";
+    public HashMap<String, Object> home(@AuthenticationPrincipal User user) {
+        HashMap<String, Object> model = new HashMap<>();
+        model.put("title", "Главная страница");
+        return model;
     }
     @GetMapping("/price")
-    public String price( Model model) {
+    public HashMap<String, Object> price() {
+        HashMap<String, Object> model = new HashMap<>();
         Iterable<Good> goods = goodService.findActiveGoods();
-        model.addAttribute("goods", goods);
-        return "price-list";
+        model.put("goods", goods);
+        return model;
     }
 }
