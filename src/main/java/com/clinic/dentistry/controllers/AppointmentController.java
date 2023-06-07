@@ -1,83 +1,76 @@
 package com.clinic.dentistry.controllers;
 
 import com.clinic.dentistry.models.*;
-import com.clinic.dentistry.repo.*;
-import com.clinic.dentistry.service.AppointmentService;
-import com.clinic.dentistry.service.CheckService;
-import com.clinic.dentistry.service.GoodService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import com.clinic.dentistry.service.*;
+import lombok.*;
+import org.springframework.http.*;
+import org.springframework.security.access.prepost.*;
+import org.springframework.security.core.annotation.*;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.server.*;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
-@Controller
+@RestController
+@RequiredArgsConstructor
 @RequestMapping("/appointments")
 @PreAuthorize("hasAuthority('USER') or hasAuthority('DOCTOR')")
 public class AppointmentController {
-    @Autowired
-    private AppointmentService appointmentService;
-
-    @Autowired
-    private CheckService checkService;
-    @Autowired
-    private GoodService goodService;
+    private final AppointmentService appointmentService;
+    private final CheckService checkService;
+    private final GoodService goodService;
 
     @GetMapping()
-    public String appointmentsMain(
+    public Map<String, Object> appointmentsMain(
             @AuthenticationPrincipal User user,
-            @RequestParam(value = "withArchived", required = false) String withArchived,
-            Model model
+            @RequestParam(value = "withArchived", required = false) String withArchived
     ){
+        Map<String, Object> model = new HashMap<>();
+
         Iterable<Appointment> appointmentsClient;
         Iterable<Appointment> appointmentsDoctor;
         if (withArchived != null){
             appointmentsClient = appointmentService.getArchiveAppointmentsForClient(user);
             appointmentsDoctor = appointmentService.getArchiveAppointmentsForDoctor(user);
-            model.addAttribute("withArchived", true);
+            model.put("withArchived", true);
         } else {
             appointmentsClient = appointmentService.getActiveAppointmentsForClient(user);
             appointmentsDoctor = appointmentService.getActiveAppointmentsForDoctor(user);
-            model.addAttribute("withArchived", false);
+            model.put("withArchived", false);
         }
 
 
-        model.addAttribute("appointmentsClient", appointmentsClient);
-        model.addAttribute("appointmentsDoctor", appointmentsDoctor);
-        return "appointments-main";
+        model.put("appointmentsClient", appointmentsClient);
+        model.put("appointmentsDoctor", appointmentsDoctor);
+        return model;
 
     }
 
     @GetMapping("/add")
     @PreAuthorize("hasAuthority('USER')")
-    public String appointmentsAddForm(Model model){
+    public Map<String, Object> appointmentsAddForm(){
+        Map<String, Object> model = new HashMap<>();
+
         Iterable<User> doctors = appointmentService.getActiveDoctors();
         Map<User, Map<String, ArrayList<String>>> availableDatesByDoctor = appointmentService.getAvailableDatesByDoctors(doctors);
-        model.addAttribute("doctors", availableDatesByDoctor);
-        return "appointments-add";
+        model.put("doctors", availableDatesByDoctor);
+        return model;
     }
 
     @PostMapping("/add")
     @PreAuthorize("hasAuthority('USER')")
-    public String appointmentsAdd(@AuthenticationPrincipal User user, @RequestParam("doctorId") User doctor,
-                                  @RequestParam("dateStr") String dateStr, Model model){
+    public HttpStatus appointmentsAdd(@AuthenticationPrincipal User user, @RequestParam("doctorId") User doctor,
+                                  @RequestParam("dateStr") String dateStr){
         appointmentService.addAppointment(dateStr, doctor, user);
-        return "redirect:/appointments/";
+        return HttpStatus.OK;
     }
 
     @GetMapping("/{appointmentId}/edit")
-    public String appointmentsEdit(@AuthenticationPrincipal User user,
-                                   @PathVariable("appointmentId") Long appointmentId,
-                                   Model model
+    public Map<String, Object> appointmentsEdit(@AuthenticationPrincipal User user,
+                                   @PathVariable("appointmentId") Long appointmentId
     ){
+        Map<String, Object> model = new HashMap<>();
+
         Appointment appointment = appointmentService.findAppointment(appointmentId);
         if (appointment != null) {
             Boolean readOnly = Boolean.TRUE;
@@ -85,23 +78,23 @@ public class AppointmentController {
             if (appointmentService.isCanEditByDoctor(user, appointment)) {
                 readOnly = Boolean.FALSE;
                 Iterable<Good> goods = goodService.findActiveGoods();
-                model.addAttribute("goods", goods);
+                model.put("goods", goods);
             }
 
             Optional<Check> check = checkService.findCheck(appointment);
             if (check.isPresent()) {
                 Iterable<CheckLine> checkLines = checkService.findCheckLines(check);
-                model.addAttribute("checkLines", checkLines);
+                model.put("checkLines", checkLines);
             }
 
             if (appointmentService.isCanCancel(user, appointment)) {
                 canCancel = Boolean.TRUE;
             }
 
-            model.addAttribute("appointment", appointment);
-            model.addAttribute("readOnly", readOnly);
-            model.addAttribute("canCancel", canCancel);
-            return "appointments-edit";
+            model.put("appointment", appointment);
+            model.put("readOnly", readOnly);
+            model.put("canCancel", canCancel);
+            return model;
         }
         throw new ResponseStatusException(
                 HttpStatus.NOT_FOUND
@@ -110,15 +103,14 @@ public class AppointmentController {
 
     @PostMapping("/{appointmentId}/edit")
     @PreAuthorize("hasAuthority('DOCTOR')")
-    public String appointmentsEdit(@AuthenticationPrincipal User user,
-                                   @PathVariable("appointmentId") Long appointmentId,
-                                   @RequestParam Map<String, String> form
+    public HttpStatus appointmentsEdit(@PathVariable("appointmentId") Long appointmentId,
+                                       @RequestParam Map<String, String> form
     ){
         Appointment appointment = appointmentService.findAppointment(appointmentId);
         if (appointment != null){
         checkService.addConclusion(appointment, form);
         checkService.createCheckFromJson(form, appointment);
-        return "redirect:/appointments/" + appointment.getId().toString() + "/edit";
+        return HttpStatus.OK;
         }
         throw new ResponseStatusException(
                 HttpStatus.NOT_FOUND
@@ -127,12 +119,12 @@ public class AppointmentController {
 
     @GetMapping("/{appointmentId}/cancel")
     @PreAuthorize("hasAuthority('USER')")
-    public String appointmentsCancel(@AuthenticationPrincipal User user,
+    public HttpStatus appointmentsCancel(@AuthenticationPrincipal User user,
                                      @PathVariable("appointmentId") Appointment appointment
     ){
         if (appointmentService.isCanCancel(user, appointment)){
             appointmentService.cancelAppointment(appointment);
-            return "redirect:/appointments/";
+            return HttpStatus.OK;
         }
         throw new ResponseStatusException(
                 HttpStatus.BAD_REQUEST
