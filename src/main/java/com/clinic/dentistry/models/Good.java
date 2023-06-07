@@ -19,4 +19,5 @@ public class Good {
     private String name;
 
     private float price;
+
 }

@@ -30,14 +30,11 @@ public class GoodServiceImpl implements GoodService {
    }
 
    @Override
-    public void goodEdit(Good good, Good good_new, Map<String,String> form){
+    public void goodEdit(Good good, Good good_new)
+   {
        good.setName(good_new.getName());
        good.setPrice(good_new.getPrice());
-       if (form.get("active") != null && form.get("active").equals("on")){
-           good.setActive(true);
-       } else {
-           good.setActive(false);
-       }
+       good.setActive(good_new.isActive());
        goodRepository.save(good);
    }
 

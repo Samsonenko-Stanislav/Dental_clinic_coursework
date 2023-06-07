@@ -8,6 +8,6 @@ public interface GoodService {
     Iterable<Good> findActiveGoods();
     Iterable<Good> findAllGoods();
     void goodSave(Good good);
-    void goodEdit(Good good, Good good_new, Map<String, String> form);
+    void goodEdit(Good good, Good good_new);
     Good findGood(Long id);
 }
