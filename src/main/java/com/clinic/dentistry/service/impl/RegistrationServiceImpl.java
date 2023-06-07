@@ -44,24 +44,20 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
-    public void createUser(Map<String, String> form,
+    public void createUser(
                            User user,
                            OutpatientCard outpatientCard,
                            Employee employee){
-        if (form.get("USER") != null &&
-                form.get("USER").equals("on")){
-            outpatientCard.setEmail(form.get("email"));
-            if (form.get("MALE") != null){
-                outpatientCard.setGender(Gender.MALE);
+            if (user.getOutpatientCard() != null){
+                outpatientCard.setEmail(outpatientCard.getEmail());
             }
-            if (form.get("FEMALE") != null) {
-                outpatientCard.setGender(Gender.FEMALE);
-            }
+
+            outpatientCard.setGender(outpatientCard.getGender());
             outpatientCardRepository.save(outpatientCard);
             user.setOutpatientCard(outpatientCard);
-        }
 
-        if (form.get("DOCTOR") != null && form.get("DOCTOR").equals("on")){
+
+        if (user.getEmployee() != null){
             employeeRepository.save(employee);
             user.setEmployee(employee);
         }
@@ -73,41 +69,19 @@ public class RegistrationServiceImpl implements RegistrationService {
                 .map(Role::name)
                 .collect(Collectors.toSet());
 
-        Set<Role> user_roles = new HashSet<>();
-        for (String key : form.keySet()) {
-            if (roles.contains(key)){
-                user_roles.add(Role.valueOf(key));
-            }
-        }
-        user.setRoles(user_roles);
-
+        user.setRoles(user.getRoles());
         userRepository.save(user);
     }
 
     @Override
-    public void editUser(User user, String username, String active, Employee employee,
-                         OutpatientCard outpatientCard, Map<String, String> form){
-        user.setUsername(username);
-        if (active != null){
-            user.setActive(true);
-        } else {
-            user.setActive(false);
-        }
-        if (form.get("changePassword") != null && form.get("changePassword").equals("on")){
-            user.setPassword(passwordEncoder.encode(form.get("password")));
+    public void editUser(User user,  Employee employee, OutpatientCard outpatientCard, Boolean changePassword){
+        user.setUsername(user.getUsername());
+        user.setActive(user.isActive());
+        if (changePassword){
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
 
-        Set<String> roles = Arrays.stream(Role.values())
-                .map(Role::name)
-                .collect(Collectors.toSet());
-
-        user.getRoles().clear();
-
-        for (String key : form.keySet()) {
-            if (roles.contains(key)){
-                user.getRoles().add(Role.valueOf(key));
-            }
-        }
+        user.setRoles(user.getRoles());
 
         if (employee != null && employee.getId() != null){
             user.setEmployee(employee);
@@ -115,22 +89,11 @@ public class RegistrationServiceImpl implements RegistrationService {
             user.setEmployee(null);
         }
 
-        if (form.get("USER") != null && form.get("USER").equals("on")){
-            if (user.getOutpatientCard()!= null){
-                outpatientCard.setId(user.getOutpatientCard().getId());
-                outpatientCard.setFullName(user.getOutpatientCard().getFullName());
-                outpatientCard.setEmail(user.getOutpatientCard().getEmail());
-                outpatientCard.setGender(user.getOutpatientCard().getGender());
-            }
-            else {
-                outpatientCard.setEmail(form.get("email"));
-                if (form.get("MALE") != null) {
-                    outpatientCard.setGender(Gender.MALE);
-                }
-                if (form.get("FEMALE") != null) {
-                    outpatientCard.setGender(Gender.FEMALE);
-                }
-            }
+        if (user.getOutpatientCard() != null){
+            outpatientCard.setId(user.getOutpatientCard().getId());
+            outpatientCard.setFullName(user.getOutpatientCard().getFullName());
+            outpatientCard.setEmail(user.getOutpatientCard().getEmail());
+            outpatientCard.setGender(user.getOutpatientCard().getGender());
             outpatientCardRepository.save(outpatientCard);
             user.setOutpatientCard(outpatientCard);
         }
@@ -138,15 +101,9 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
-    public boolean isUsernameVacant(Map<String, String> form){
-        User user = userRepository.findUserById(Long.valueOf(form.get("userId")));
-        String newUsername = form.get("username");
-        User userWithNewUsername = userRepository.findFirstByUsername(newUsername);
-        if (userWithNewUsername == null || user.getId().equals(userWithNewUsername.getId())){
-            return true;
-        }
-        else
-            return false;
+    public boolean isUsernameVacant(String username){
+        User user = userRepository.findUserByUsername(username);
+        return user == null;
     }
 
 }

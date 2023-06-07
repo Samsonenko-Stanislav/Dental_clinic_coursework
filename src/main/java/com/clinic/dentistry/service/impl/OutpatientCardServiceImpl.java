@@ -30,21 +30,15 @@ public class OutpatientCardServiceImpl implements OutpatientCardService {
     }
 
     @Override
-    public void userMeEdit(User user, Map<String, String> form){
-        user.getOutpatientCard().setFullName(form.get("fullName"));
-        user.getOutpatientCard().setEmail(form.get("email"));
-        user.setUsername(form.get("username"));
-        if (form.get("changePassword") != null && form.get("changePassword").equals("on")){
-            user.setPassword(passwordEncoder.encode(form.get("password")));
+    public void userMeEdit(User user, User updateUser, Boolean changePassword){
+        user.getOutpatientCard().setFullName(updateUser.getFullName());
+        user.getOutpatientCard().setEmail(updateUser.getOutpatientCard().getEmail());
+        user.setUsername(updateUser.getUsername());
+        if (changePassword){
+            user.setPassword(passwordEncoder.encode(updateUser.getPassword()));
         }
-        //TODO Понять почему не меняется пол, а точнее почему не находит MALE и FEMALE
-        if (form.get("MALE") != null){
-            user.getOutpatientCard().setGender(Gender.MALE);
-        }
-        if (form.get("FEMALE") != null) {
-            user.getOutpatientCard().setGender(Gender.FEMALE);
-        }
-        outpatientCardRepository.save(user.getOutpatientCard());
+        user.getOutpatientCard().setGender(updateUser.getOutpatientCard().getGender());
+        outpatientCardRepository.save(updateUser.getOutpatientCard());
         usesRepositotory.save(user);
     }
 }

@@ -8,6 +8,7 @@ import com.clinic.dentistry.service.EmployeeService;
 import com.clinic.dentistry.service.OutpatientCardService;
 import com.clinic.dentistry.service.RegistrationService;
 import com.clinic.dentistry.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,9 +19,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.HashMap;
 import java.util.Map;
 
-@Controller
+@RestController
+@RequiredArgsConstructor
 @RequestMapping("/user")
 public class UserController {
     @Autowired
@@ -34,31 +37,31 @@ public class UserController {
 
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    public String userList(Model model,
+    public HashMap<String, Object> userList(
                            @RequestParam(value = "withArchived", required = false) String withArchived
                            ) {
+        HashMap<String, Object> model = new HashMap<>();
         if (withArchived != null){
-            model.addAttribute("users", userService.findAllUsers());
-            model.addAttribute("withArchived", true);
+            model.put("users", userService.findAllUsers());
+            model.put("withArchived", true);
         } else {
-            model.addAttribute("users", userService.findAllActiveUsers());
-            model.addAttribute("withArchived", false);
+            model.put("users", userService.findAllActiveUsers());
+            model.put("withArchived", false);
         }
-        return "user-list";
+        return model;
     }
 
     @GetMapping("{userId}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Object userEditForm(@PathVariable("userId") Long userId, Model model) {
+    public HashMap<String, Object> userEditForm(@PathVariable("userId") Long userId) {
+        HashMap<String, Object> model = new HashMap<>();
         User user = userService.findUser(userId);
         if (user != null) {
-            model.addAttribute("user", user);
-            model.addAttribute("roles", Role.values());
-            model.addAttribute("employees", employeeService.findAllEmployees());
-            model.addAttribute("users", outpatientCardService.findAllCards());
-            if (user.getRoles().contains(Role.USER))
-                return "user-edit";
-            return "user-edit-2";
+            model.put("user", user);
+            model.put("roles", Role.values());
+            model.put("employees", employeeService.findAllEmployees());
+            model.put("users", outpatientCardService.findAllCards());
+            return model;
         }
         throw new ResponseStatusException(
                 HttpStatus.NOT_FOUND
@@ -67,26 +70,29 @@ public class UserController {
 
     @GetMapping("/me")
     @PreAuthorize("hasAuthority('USER')")
-    public String userMeEditForm(@AuthenticationPrincipal User user, Model model) {
-        model.addAttribute("user", user);
-        return "user-me";
+    public HashMap<String, Object> userMeEditForm(@AuthenticationPrincipal User user) {
+        HashMap<String, Object> model = new HashMap<>();
+        model.put("user", user);
+        return model;
     }
 
     @PostMapping("/me")
     @PreAuthorize("hasAuthority('USER')")
-    public String userMeEdit(@AuthenticationPrincipal User user,
-                             @RequestParam Map<String, String> form,
-                             Model model) {
-        if (registrationService.isUsernameVacant(form)){
-            model.addAttribute("message", "Данные успешно обновлены!");
-            outpatientCardService.userMeEdit(user, form);
-            model.addAttribute("user", user);
-            return "user-me";
+    public <changePassword> HashMap<String, Object> userMeEdit(@AuthenticationPrincipal User user,
+     @RequestParam ("updateUser") User updateUser,
+     @RequestParam(value = "changePassword", required = false) Boolean changePassword
+    ){
+        HashMap<String, Object> model = new HashMap<>();
+        if (registrationService.isUsernameVacant(updateUser.getUsername())){
+            model.put("message", "Данные успешно обновлены!");
+            outpatientCardService.userMeEdit(user, updateUser, changePassword);
+            model.put("user", user);
+            return model;
         }
         else {
-            model.addAttribute("message", "Пользователь с таким логином уже существует!");
-            model.addAttribute("user", user);
-            return "user-me";
+            model.put("message", "Пользователь с таким логином уже существует!");
+            model.put("user", user);
+            return model;
         }
 
 
@@ -94,54 +100,39 @@ public class UserController {
 
     @GetMapping("/new")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public String userNewForm(Model model) {
-        model.addAttribute("roles", Role.values());
-        return "user-new";
+    public HashMap<String, Object> userNewForm() {
+        HashMap<String, Object> model = new HashMap<>();
+        model.put("roles", Role.values());
+        return model;
     }
 
     @PostMapping("/new")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public String userNewForm(
-            @RequestParam Map<String, String> form,
-            User user,
-            OutpatientCard outpatientCard,
-            Employee employee,
-            Map<String, Object> model
+    public HttpStatus userNewForm(
+           @RequestParam("user") User user,
+           @RequestParam("outpatientCard") OutpatientCard outpatientCard,
+           @RequestParam("employee") Employee employee
     ) {
+        HashMap<String, Object> model = new HashMap<>();
         if (registrationService.isUserInDB(user)) {
             model.put("message", "Пользователь с таким логином уже существует!");
-            return "user-new";
-
-
+            return HttpStatus.BAD_REQUEST;
         }
-        registrationService.createUser(form, user, outpatientCard, employee);
-        return "redirect:/user";
+        registrationService.createUser(user, outpatientCard, employee);
+        return HttpStatus.CREATED;
 
     }
 
 
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    public String userEdit(
-            @RequestParam("userId") User user,
-            @RequestParam Map<String, String> form,
-            @RequestParam String username,
-            @RequestParam(value = "active", required = false) String active,
-            Employee employee,
-            OutpatientCard outpatientCard
+    public HttpStatus userEdit(
+            @RequestParam("user") User user,
+            @RequestParam("employee") Employee employee,
+            @RequestParam("outpatientCard") OutpatientCard outpatientCard,
+            @RequestParam(value = "changePassword", required = false) Boolean changePassword
             ) {
-        Boolean flag;
-        if (user.getRoles().contains(Role.USER)) {
-            flag = true;
-        }
-        else flag = false;
-        registrationService.editUser(user, username, active, employee, outpatientCard, form);
-        if (flag && user.getRoles().contains(Role.USER)) {
-            return "redirect:/user";
-        } else if (!flag && user.getRoles().contains(Role.USER)) {
-            return "redirect:/user/" + user.getId().toString();
-
-        }
-        return "redirect:/user";
+        registrationService.editUser(user, employee, outpatientCard, changePassword);
+        return HttpStatus.OK;
     }
 }
