@@ -1,20 +1,15 @@
 package com.clinic.dentistry.controllers;
 
 import com.clinic.dentistry.models.Employee;
-import com.clinic.dentistry.repo.EmployeeRepository;
 import com.clinic.dentistry.service.EmployeeService;
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
