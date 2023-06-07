@@ -5,10 +5,13 @@ import com.clinic.dentistry.models.User;
 import com.clinic.dentistry.repo.UserRepository;
 import com.clinic.dentistry.service.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Controller
@@ -17,19 +20,22 @@ public class RegistrationController {
     private RegistrationService registrationService;
 
     @GetMapping("/sign_up")
-    public String signUp(){
-        return "sign-up";
+    public HttpStatus signUp(){
+        return HttpStatus.OK;
     }
 
     @PostMapping("/sign_up")
-    public String signUp(User user, OutpatientCard outpatientCard, Map<String, Object> model){
+    public HashMap<String, Object> signUp(@RequestParam("user") User user,
+                                          @RequestParam("outpatientCard") OutpatientCard outpatientCard
+                                            ){
+        HashMap<String, Object> model = new HashMap<>();
         if (registrationService.isUserInDB(user)) {
             model.put("message", "Пользователь с таким логином уже существует!");
-            return "sign-up";
+            return model;
         }
 
         registrationService.userRegistration(user, outpatientCard);
 
-        return "redirect:/login";
+        return model;
     }
 }
