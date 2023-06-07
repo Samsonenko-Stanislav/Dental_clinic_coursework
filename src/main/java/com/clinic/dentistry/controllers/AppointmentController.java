@@ -60,14 +60,14 @@ public class AppointmentController {
     @PostMapping("/add")
     @PreAuthorize("hasAuthority('USER')")
     public HttpStatus appointmentsAdd(@AuthenticationPrincipal User user, @RequestParam("doctorId") User doctor,
-                                  @RequestParam("dateStr") String dateStr){
+                                      @RequestParam("dateStr") String dateStr){
         appointmentService.addAppointment(dateStr, doctor, user);
         return HttpStatus.OK;
     }
 
     @GetMapping("/{appointmentId}/edit")
     public Map<String, Object> appointmentsEdit(@AuthenticationPrincipal User user,
-                                   @PathVariable("appointmentId") Long appointmentId
+                                                @PathVariable("appointmentId") Long appointmentId
     ){
         Map<String, Object> model = new HashMap<>();
 
@@ -108,9 +108,9 @@ public class AppointmentController {
     ){
         Appointment appointment = appointmentService.findAppointment(appointmentId);
         if (appointment != null){
-        checkService.addConclusion(appointment, form);
-        checkService.createCheckFromJson(form, appointment);
-        return HttpStatus.OK;
+            checkService.addConclusion(appointment, form);
+            checkService.createCheckFromJson(form, appointment);
+            return HttpStatus.OK;
         }
         throw new ResponseStatusException(
                 HttpStatus.NOT_FOUND
@@ -120,7 +120,7 @@ public class AppointmentController {
     @GetMapping("/{appointmentId}/cancel")
     @PreAuthorize("hasAuthority('USER')")
     public HttpStatus appointmentsCancel(@AuthenticationPrincipal User user,
-                                     @PathVariable("appointmentId") Appointment appointment
+                                         @PathVariable("appointmentId") Appointment appointment
     ){
         if (appointmentService.isCanCancel(user, appointment)){
             appointmentService.cancelAppointment(appointment);
