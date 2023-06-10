@@ -10,6 +10,8 @@ import Header from './components/Header';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Price from './pages/Price';
+import Appointments from './pages/Appointments';
+import Employee from './pages/Employee';
 
 const App = () => {
 
@@ -25,6 +27,8 @@ const App = () => {
             <Route path="/profile-edit" element={<EditProfile />} />
             <Route path="/price" element={<Price />} />
             <Route path="/sign-up" element={<SignUp />} />
+            <Route path="/appointments" element={<Appointments />} />
+            <Route path="/employee" element={<Employee />} />
           </Routes>
           <Footer/>
         </BrowserRouter>
