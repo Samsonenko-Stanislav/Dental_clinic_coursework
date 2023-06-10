@@ -20,7 +20,6 @@ const Employee = () => {
 
   return (
     <>
-      <div className=' my-4 container' >
         {employees.map((employee) => (
           <div className='col-md-12' key={employee.id}>
             <div
@@ -36,7 +35,6 @@ const Employee = () => {
             </div>
           </div>
         ))}
-      </div>
 
       <Link to='/employee/new' className='btn btn-primary'>Создать нового</Link>
     </>

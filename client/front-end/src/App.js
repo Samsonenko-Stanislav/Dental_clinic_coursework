@@ -12,6 +12,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Price from './pages/Price';
 import Appointments from './pages/Appointments';
 import Employee from './pages/Employee';
+import Users from './pages/Users';
+import AppointmentsAdd from './pages/AppoimentsAdd';
 
 const App = () => {
 
@@ -20,16 +22,21 @@ const App = () => {
         <BrowserRouter>
           <Header/>
 
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/profile-edit" element={<EditProfile />} />
-            <Route path="/price" element={<Price />} />
-            <Route path="/sign-up" element={<SignUp />} />
-            <Route path="/appointments" element={<Appointments />} />
-            <Route path="/employee" element={<Employee />} />
-          </Routes>
+<div className="container my-4">
+  <Routes>
+    <Route path="/" element={<Home />} />
+    <Route path="/login" element={<Login />} />
+    <Route path="/profile" element={<Profile />} />
+    <Route path="/profile-edit" element={<EditProfile />} />
+    <Route path="/price" element={<Price />} />
+    <Route path="/sign-up" element={<SignUp />} />
+    <Route path="/appointments" element={<Appointments />} />
+    <Route path="/appointments/add" element={<AppointmentsAdd />} />
+
+    <Route path="/employee" element={<Employee />} />
+    <Route path="/user" element={<Users />} />
+  </Routes>
+</div>
           <Footer/>
         </BrowserRouter>
       </>
