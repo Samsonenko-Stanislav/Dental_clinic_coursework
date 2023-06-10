@@ -2,13 +2,26 @@ import React from 'react';
 import '../App.css';
 import './Login.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import axios from "axios";
 
 
 
 function Login() {
+
+        const submitHandler = async (e)=>{
+                e.preventDefault()
+                try {
+                        const response = await  axios.get('http://localhost:8086/price')
+                        console.log(response);
+                }catch (e) {
+                        console.log(e);
+                }
+        }
+
+
         return (
             <div className="text-center">
-                    <form action="/login" method="post">
+                    <form  onSubmit={submitHandler}>
                             <img className="mb-4" src="../tooth.svg" alt="" width="72" height="57" />
                             <br />
                             <a href="/">Вернуться на главную</a>
@@ -38,4 +51,3 @@ function Login() {
 }
 
 export default Login;
-

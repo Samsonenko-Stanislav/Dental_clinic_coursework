@@ -32,8 +32,3 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-  frontend:
-    build: ./client/front-end
-    container_name: frontend
-    ports:
-      - '3001:3000'
