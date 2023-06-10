@@ -24,8 +24,6 @@ const Appointments = () => {
 
   return (
     <div>
-      <header>...</header>
-
       {appointmentsDoctor.length > 0 && (
         <div className='row mb-2'>
           <div className='col-12'>
@@ -74,8 +72,6 @@ const Appointments = () => {
       ) : (
         <Link to='/appointments/' className='btn btn-primary'>Показать текущие записи</Link>
       )}
-
-      <footer>...</footer>
     </div>
   );
 };

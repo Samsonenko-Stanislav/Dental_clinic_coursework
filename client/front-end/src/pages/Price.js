@@ -18,7 +18,7 @@ const Price = () => {
   }, []);
 
   return (
-      <div className='container my-4'>
+      <>
         {goods.map((good) => (
           <div className='col-md-12' key={good.id}>
             <div
@@ -30,7 +30,7 @@ const Price = () => {
             </div>
           </div>
         ))}
-      </div>
+      </>
   );
 };
 

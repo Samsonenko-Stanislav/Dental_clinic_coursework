@@ -4,7 +4,7 @@ import Tooth from '../tooth.svg'
 
 const SignUp = () => {
     return (
-      <div className="text-center container my-2">
+      <div className="text-center">
         <main className="form-signup w-100 m-auto">
           <form >
             <img className="mb-4" src={Tooth} alt="" width="72" height="57" />
