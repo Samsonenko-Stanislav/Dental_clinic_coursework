@@ -14,34 +14,34 @@ import Appointments from './pages/Appointments';
 import Employee from './pages/Employee';
 import Users from './pages/Users';
 import AppointmentsAdd from './pages/AppoimentsAdd';
+import Goods from './pages/Goods';
 
 const App = () => {
 
   return (
-      <>
-        <BrowserRouter>
-          <Header/>
+    <>
+      <BrowserRouter>
+        <Header />
 
-<div className="container my-4">
-  <Routes>
-    <Route path="/" element={<Home />} />
-    <Route path="/login" element={<Login />} />
-    <Route path="/profile" element={<Profile />} />
-    <Route path="/profile-edit" element={<EditProfile />} />
-    <Route path="/price" element={<Price />} />
-    <Route path="/sign-up" element={<SignUp />} />
-    <Route path="/appointments" element={<Appointments />} />
-    <Route path="/appointments/add" element={<AppointmentsAdd />} />
-
-    <Route path="/employee" element={<Employee />} />
-    <Route path="/user" element={<Users />} />
-  </Routes>
-</div>
-          <Footer/>
-        </BrowserRouter>
-      </>
+        <div className='container my-4'>
+          <Routes>
+            <Route path='/' element={<Home />} />
+            <Route path='/login' element={<Login />} />
+            <Route path='/profile' element={<Profile />} />
+            <Route path='/profile-edit' element={<EditProfile />} />
+            <Route path='/price' element={<Price />} />
+            <Route path='/sign-up' element={<SignUp />} />
+            <Route path='/appointments' element={<Appointments />} />
+            <Route path='/appointments/add' element={<AppointmentsAdd />} />
+            <Route path='/employee' element={<Employee />} />
+            <Route path='/user' element={<Users />} /> <Route path='/good' element={<Goods />} />
+          </Routes>
+        </div>
+        <Footer />
+      </BrowserRouter>
+    </>
 
   );
-}
+};
 
 export default App;
