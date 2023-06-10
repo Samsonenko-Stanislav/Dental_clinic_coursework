@@ -36,7 +36,7 @@ function Header({ isAuthenticated=false, userFullName='' }) {
           {!isAuthenticated ? (
             <div className="text-end">
               <Link to="/login" className="btn btn-outline-light me-2">Войти</Link>
-              <Link to="/sign_up" className="btn btn-warning">Зарегистироваться</Link>
+              <Link to="/sign-up" className="btn btn-warning">Зарегистироваться</Link>
             </div>
           ) : (
             <div className="dropdown text-end">

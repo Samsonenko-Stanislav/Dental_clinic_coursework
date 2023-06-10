@@ -9,6 +9,7 @@ import SignUp from './pages/SignUp';
 import Header from './components/Header';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Price from './pages/Price';
 
 const App = () => {
 
@@ -22,6 +23,7 @@ const App = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/profile-edit" element={<EditProfile />} />
+            <Route path="/price" element={<Price />} />
             <Route path="/sign-up" element={<SignUp />} />
           </Routes>
           <Footer/>
