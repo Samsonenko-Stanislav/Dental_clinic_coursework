@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-const EditEmployee = (props) => {
+const EditEmployee = () => {
   const params = useParams()
   const [employee, setEmployee]= useState({})
 
