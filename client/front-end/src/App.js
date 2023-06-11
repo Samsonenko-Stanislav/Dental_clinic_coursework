@@ -16,6 +16,8 @@ import Goods from './pages/Goods';
 import { UserContextContextProvider } from './UserContext';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import AddNewUser from './pages/AddNewUser';
+import AddEmployee from './pages/AddEmployee';
 
 const App = () => {
   return (
@@ -33,7 +35,10 @@ const App = () => {
             <Route path='/appointments' element={<Appointments />} />
             <Route path='/appointments/add' element={<AppointmentsAdd />} />
             <Route path='/employee' element={<Employee />} />
-            <Route path='/user' element={<Users />} /> <Route path='/good' element={<Goods />} />
+            <Route path='/employee/new' element={<AddEmployee />} />
+            <Route path='/user' element={<Users />} />
+            <Route path='/user/new' element={<AddNewUser />} />
+            <Route path='/good' element={<Goods />} />
           </Routes>
         </div>
         <Footer />
