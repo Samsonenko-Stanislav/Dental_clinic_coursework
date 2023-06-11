@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Footer from "./components/Footer.js";
 import Home from "./pages/Home";
@@ -19,11 +19,12 @@ import AddEmployee from "./pages/AddEmployee";
 import EditEmployee from "./pages/EditEmployee";
 import GoodEdit from "./pages/GoodEdit";
 import GoodNew from "./pages/GoodNew";
+import AppointmentsEdit from "./pages/AppoimentEdit";
+import { loadFromLocalStorage } from "./utils/localStorage";
+import { RequireAuth } from "./components/AuthRoute";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import AppointmentsEdit from "./pages/AppoimentEdit";
-import { loadFromLocalStorage, saveToLocalStorage } from "./utils/localStorage";
-import { RequireAuth } from "./components/AuthRoute";
+import EditUsers from './pages/EditUsers';
 
 const App = () => {
   const userLocal = loadFromLocalStorage("user") || null;
@@ -32,7 +33,6 @@ const App = () => {
   const isUser = user ? user?.role === "user" : null;
   const isAdmin = user ? user?.role === "admin" : null;
   const isDoctor = user ? user?.role === "doctor" : null;
-
 
   return (
     <UserContextContextProvider user={user} role={user?.role} setUser={setUser}>
@@ -49,8 +49,7 @@ const App = () => {
               path="/user/me"
               element={
                 <RequireAuth access={isUser}>
-                  {" "}
-                  <Profile />{" "}
+                  <Profile />
                 </RequireAuth>
               }
             />
@@ -58,8 +57,7 @@ const App = () => {
               path="/profile-edit"
               element={
                 <RequireAuth access={isUser}>
-                  {" "}
-                  <EditProfile />{" "}
+                  <EditProfile />
                 </RequireAuth>
               }
             />
@@ -68,7 +66,7 @@ const App = () => {
               element={
                 <RequireAuth access={isUser}>
                   {" "}
-                  <AppointmentsAdd />{" "}
+                  <AppointmentsAdd />
                 </RequireAuth>
               }
             />
@@ -77,8 +75,7 @@ const App = () => {
               path="/appointments"
               element={
                 <RequireAuth access={isUser || isDoctor}>
-                  {" "}
-                  <Appointments />{" "}
+                  <Appointments />
                 </RequireAuth>
               }
             />
@@ -86,8 +83,7 @@ const App = () => {
               path="/appointments/edit/:id"
               element={
                 <RequireAuth access={isUser || isDoctor}>
-                  {" "}
-                  <AppointmentsEdit />{" "}
+                  <AppointmentsEdit />
                 </RequireAuth>
               }
             />
@@ -96,8 +92,7 @@ const App = () => {
               path="/user"
               element={
                 <RequireAuth access={isAdmin}>
-                  {" "}
-                  <Users />{" "}
+                  <Users />
                 </RequireAuth>
               }
             />
@@ -105,17 +100,25 @@ const App = () => {
               path="/user/new"
               element={
                 <RequireAuth access={isAdmin}>
-                  {" "}
-                  <AddNewUser />{" "}
+                  <AddNewUser />
                 </RequireAuth>
               }
             />
+
+            <Route
+              path="/user/edit/:id"
+              element={
+                <RequireAuth access={isAdmin}>
+                  <EditUsers />
+                </RequireAuth>
+              }
+            />
+
             <Route
               path="/employee"
               element={
                 <RequireAuth access={isAdmin}>
-                  {" "}
-                  <Employee />{" "}
+                  <Employee />
                 </RequireAuth>
               }
             />
@@ -123,8 +126,7 @@ const App = () => {
               path="/employee/new"
               element={
                 <RequireAuth access={isAdmin}>
-                  {" "}
-                  <AddEmployee />{" "}
+                  <AddEmployee />
                 </RequireAuth>
               }
             />
@@ -132,8 +134,7 @@ const App = () => {
               path="/employee/edit/:id"
               element={
                 <RequireAuth access={isAdmin}>
-                  {" "}
-                  <EditEmployee />{" "}
+                  <EditEmployee />
                 </RequireAuth>
               }
             />
@@ -141,8 +142,7 @@ const App = () => {
               path="/good"
               element={
                 <RequireAuth access={isAdmin}>
-                  {" "}
-                  <Goods />{" "}
+                  <Goods />
                 </RequireAuth>
               }
             />
@@ -150,8 +150,7 @@ const App = () => {
               path="/good/new"
               element={
                 <RequireAuth access={isAdmin}>
-                  {" "}
-                  <GoodNew />{" "}
+                  <GoodNew />
                 </RequireAuth>
               }
             />
@@ -159,8 +158,7 @@ const App = () => {
               path="/good/edit/:id"
               element={
                 <RequireAuth access={isAdmin}>
-                  {" "}
-                  <GoodEdit />{" "}
+                  <GoodEdit />
                 </RequireAuth>
               }
             />

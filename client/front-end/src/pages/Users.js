@@ -43,7 +43,7 @@ const Users = () => {
                       {/*))}*/}
                     </td>
                     <td>
-                      <Link to={`/user/${user.id}`}>Редактировать</Link>
+                      <Link to={`/user/edit/${user.id}`}>Редактировать</Link>
                     </td>
                   </tr>
                 ))
