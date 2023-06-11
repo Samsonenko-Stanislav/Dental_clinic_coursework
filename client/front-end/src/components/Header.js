@@ -1,10 +1,20 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { UserContext } from "../UserContext";
 import { removeFromLocalStorage } from "../utils/localStorage";
+import { useOnClickOutside } from "../utils/useOnClickOutside";
 
 function Header({ userFullName = "" }) {
-  const { user, role } = useContext(UserContext);
+  const [menu, setMenu] = useState(false);
+  const ref = useRef();
+
+  const { user, role, setUser } = useContext(UserContext);
+  useOnClickOutside(ref, () => setMenu(false));
+
+  const logoutHandler = () => {
+    removeFromLocalStorage("user");
+    setUser(null);
+  };
 
   return (
     <header className="p-3 bg-dark text-white">
@@ -85,7 +95,14 @@ function Header({ userFullName = "" }) {
               </Link>
             </div>
           ) : (
-            <div className="dropdown text-end">
+            <div
+              className="dropdown text-end"
+              ref={ref}
+              onClick={(e) => {
+                e.stopPropagation();
+                setMenu(!menu);
+              }}
+            >
               <button
                 className="btn dropdown-toggle"
                 type={"button"}
@@ -101,33 +118,28 @@ function Header({ userFullName = "" }) {
                 />
               </button>
 
-              <ul className="dropdown-menu text-small">
-                <li>
-                  <div className="dropdown-item">
-                    <span>Добрый день, </span>
-                    <span>{userFullName}</span>
-                  </div>
-                </li>
-                <li>
-                  <hr className="dropdown-divider" />
-                </li>
-                <li>
-                  <Link to="/user/me" className="dropdown-item">
-                    Профиль
-                  </Link>
-                </li>
-                <li>
-                  <hr className="dropdown-divider" />
-                </li>
-                <li>
-                  <button
-                    onClick={() => removeFromLocalStorage("user")}
-                    className="dropdown-item"
-                  >
-                    Выйти
-                  </button>
-                </li>
-              </ul>
+              {menu && (
+                <ul className="menu text-small">
+                  <li>
+                    <div className="dropdown-item">
+                      <span>Добрый день, </span>
+                      <span>{userFullName}</span>
+                    </div>
+                  </li>
+
+                  <li>
+                    <Link to="/user/me" className="dropdown-item">
+                      Профиль
+                    </Link>
+                  </li>
+
+                  <li>
+                    <button onClick={logoutHandler} className="dropdown-item">
+                      Выйти
+                    </button>
+                  </li>
+                </ul>
+              )}
             </div>
           )}
         </div>
