@@ -30,7 +30,7 @@ const Employee = () => {
                 </strong>
                 <h3 className='mb-0'>{employee.email}</h3>
                 <div className='mb-1 text-muted'>{`${employee.workStart}-${employee.workEnd}`}</div>
-                <Link to={`/employee/${employee.id}`} className='stretched-link'>Редактировать</Link>
+                <Link to={`/employee/edit/${employee.id}`} className='stretched-link'>Редактировать</Link>
               </div>
             </div>
           </div>
