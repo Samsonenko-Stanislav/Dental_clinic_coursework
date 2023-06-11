@@ -20,9 +20,9 @@ const EditUsers = () => {
       const rolesResponse = await axiosApi.get("/api/roles");
       const employeesResponse = await axiosApi.get("/api/employees");
 
-      setUser(userResponse.data);
-      setRoles(rolesResponse.data);
-      setEmployees(employeesResponse.data);
+      setUser([]);
+      setRoles([]);
+      setEmployees([]);
     } catch (error) {
       console.log(error);
     }
@@ -120,20 +120,21 @@ const EditUsers = () => {
               )}
             </div>
             <div className="col-12">
-              {roles.map((role) => (
-                <div key={role}>
-                  <input
-                    type="checkbox"
-                    name={role}
-                    id={role}
-                    checked={selectedRoles.includes(role)}
-                    onChange={handleCheckboxChange}
-                  />
-                  <label htmlFor={role} className="form-label">
-                    {role}
-                  </label>
-                </div>
-              ))}
+              {roles &&
+                roles.map((role) => (
+                  <div key={role}>
+                    <input
+                      type="checkbox"
+                      name={role}
+                      id={role}
+                      checked={selectedRoles.includes(role)}
+                      onChange={handleCheckboxChange}
+                    />
+                    <label htmlFor={role} className="form-label">
+                      {role}
+                    </label>
+                  </div>
+                ))}
             </div>
             {selectedRoles.includes("DOCTOR") && (
               <div id="forEmpl">

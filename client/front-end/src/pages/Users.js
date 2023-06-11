@@ -7,22 +7,22 @@ const Users = () => {
   const { setLoading } = useContext(UserContext);
 
   useEffect(() => {
-    fetchUsers();
-  }, []);
+    const fetchUsers = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(
+          "https://jsonplaceholder.typicode.com/users"
+        );
+        const data = await response.json();
+        setUsers(data.map((user) => ({ ...user, roles: "Admin" })));
+      } catch (error) {
+      } finally {
+        setTimeout(() => setLoading(false), 1000);
+      }
+    };
 
-  const fetchUsers = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch(
-        "https://jsonplaceholder.typicode.com/users"
-      );
-      const data = await response.json();
-      setUsers(data.map((user) => ({ ...user, roles: "Admin" })));
-    } catch (error) {
-    } finally {
-      setTimeout(() => setLoading(false), 1000);
-    }
-  };
+    fetchUsers();
+  }, [setLoading]);
 
   return (
     <>

@@ -23,9 +23,10 @@ function Login() {
         password,
       });
       console.log(response);
+      throw "ERROR";
     } catch (e) {
-      setUser({ role: "admin" });
-      saveToLocalStorage("user", { role: "admin" });
+      setUser({ role: "user" });
+      saveToLocalStorage("user", { role: "user" });
       navigate("/");
     } finally {
       setLoading(false);
