@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState, useContext } from "react";
+import { Link } from "react-router-dom";
+import { UserContext } from "../UserContext";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
+  const { setLoading } = useContext(UserContext);
 
   useEffect(() => {
     fetchUsers();
@@ -10,11 +12,15 @@ const Users = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch('https://jsonplaceholder.typicode.com/users');
+      setLoading(true);
+      const response = await fetch(
+        "https://jsonplaceholder.typicode.com/users"
+      );
       const data = await response.json();
-      setUsers(data.map((user) => ({ ...user, roles: 'Admin' })));
+      setUsers(data.map((user) => ({ ...user, roles: "Admin" })));
     } catch (error) {
-      console.error('Error fetching users:', error);
+    } finally {
+      setTimeout(() => setLoading(false), 1000);
     }
   };
 
@@ -35,7 +41,9 @@ const Users = () => {
               ? users.map((user) => (
                   <tr key={user.id}>
                     <td>{user.id}</td>
-                    <td className={user.active ? '' : 'archived'}>{user.username}</td>
+                    <td className={user.active ? "" : "archived"}>
+                      {user.username}
+                    </td>
                     <td>
                       {user.roles}
                       {/*{user.roles.map((role, index) => (*/}
@@ -55,8 +63,12 @@ const Users = () => {
       <Link to="/user/new" className="btn btn-primary mx-2">
         Создать нового
       </Link>
-      <button className="btn btn-primary mx-2">Показать архивных пользователей</button>
-      <button className="btn btn-primary mx-2">Скрыть архивных пользователей</button>
+      <button className="btn btn-primary mx-2">
+        Показать архивных пользователей
+      </button>
+      <button className="btn btn-primary mx-2">
+        Скрыть архивных пользователей
+      </button>
     </>
   );
 };
