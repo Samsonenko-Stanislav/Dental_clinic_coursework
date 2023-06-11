@@ -16,6 +16,7 @@ const Price = () => {
 
     fetchGoods();
   }, []);
+
   return (
       <>
         {goods.map((good) => (
