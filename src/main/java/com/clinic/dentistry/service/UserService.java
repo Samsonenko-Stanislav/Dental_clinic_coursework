@@ -36,4 +36,7 @@ public class UserService implements UserDetailsService{
         return userRepository.findByActiveTrue();
     }
 
+    public User getByLogin(String username) {
+        return userRepository.findUserByUsername(username);
+    }
 }

@@ -17,8 +17,13 @@ public class  User implements UserDetails {
     private Long id;
     private String username;
     private String password;
+
     private boolean active;
 
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "employee_id")
