@@ -1,0 +1,12 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\controllers",
+    "\\models",
+    "\\repo",
+    "\\service",
+    "\\service\\impl"
+  ],
+  "SelectedNode": "\\service\\impl\\RegistrationServiceImpl.java",
+  "PreviewInSolutionExplorer": false
+}

@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Список записей</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+</head>
+<body>
+<header th:insert="blocks/header :: header"></header>
+
+<div class="row mb-2" th:if="${not #lists.isEmpty(appointmentsDoctor)}">
+    <div th:if="!${withArchived}"class="col-12"> <h3> Ближайшие записи к вам:</h3></div>
+    <div th:if="${withArchived}"class="col-12"> <h3>Предыдущие записи к вам:</h3></div>
+    <div class="col-md-4" th:each="appointment : ${appointmentsDoctor}">
+        <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+            <div class="col p-4 d-flex flex-column position-static" >
+                <strong class="d-inline-block mb-2 text-primary" th:text="${appointment.client.fullName}"></strong>
+                <div class="mb-1 text-muted" th:text="${appointment.date}">Nov 12</div>
+                <a th:href="|/appointments/${appointment.id}/edit|" class="stretched-link">Подробнее</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-2" th:if="${not #lists.isEmpty(appointmentsClient)}">
+    <div th:if="!${withArchived}"class="col-12"> <h3> Вы записаны к врачам:</h3></div>
+    <div th:if="${withArchived}"class="col-12"> <h3>Вы были у врачей: </h3></div>
+    <div class="col-md-4" th:each="appointment : ${appointmentsClient}">
+        <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+            <div class="col p-4 d-flex flex-column position-static">
+                <strong class="d-inline-block mb-2 text-primary" th:text="${appointment.doctor.fullName}"></strong>
+                <h3 class="mb-0" th:text="${appointment.doctor.getJobTitle()}">Doctor profession</h3>
+                <div class="mb-1 text-muted" th:text="${appointment.date}">Nov 12</div>
+                <a th:href="|/appointments/${appointment.id}/edit|" class="stretched-link">Подробнее</a>
+            </div>
+        </div>
+    </div>
+</div>
+<a href="/appointments/add" sec:authorize= "hasAuthority('USER')" class="btn btn-primary">Записаться</a>
+<a th:if="!${withArchived}" href="/appointments/?withArchived" class="btn btn-primary">Показать предыдущие записи</a>
+<a th:if="${withArchived}" href="/appointments/" class="btn btn-primary">Показать текущие записи</a>
+
+
+<div th:insert="blocks/footer :: footer"></div>
+</body>
+</html>
