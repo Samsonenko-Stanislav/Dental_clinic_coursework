@@ -192,3 +192,7 @@ body {
 .archived {
     text-decoration: line-through;
 }
+
+h1{
+    font-size: 20px !important;
+}

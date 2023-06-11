@@ -52,9 +52,9 @@ const Users = () => {
         </table>
       </div>
 
-      <Link to='/user/new' className='btn btn-primary'>Создать нового</Link>
-      <Link to='/user?withArchived' className='btn btn-primary'>Показать архивных пользователей</Link>
-      <Link to='/user' className='btn btn-primary'>Скрыть архивных пользователей</Link>
+      <Link to='/user/new' className='btn btn-primary mx-2'>Создать нового</Link>
+      <button className='btn btn-primary mx-2'>Показать архивных пользователей</button>
+      <button className='btn btn-primary mx-2'>Скрыть архивных пользователей</button>
     </>
   );
 };
