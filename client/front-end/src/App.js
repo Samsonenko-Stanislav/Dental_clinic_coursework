@@ -25,7 +25,7 @@ import AppointmentsEdit from './pages/AppoimentEdit';
 
 const App = () => {
   return (
-    <UserContextContextProvider user={true} role={'user'} >
+    <UserContextContextProvider user={false} role={''} >
       <BrowserRouter>
         <Header />
         <div className='container my-4'>
