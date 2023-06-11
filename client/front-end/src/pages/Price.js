@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import axiosApi from "../axiosApi";
 
 const Price = () => {
   const [goods, setGoods] = useState([]);
@@ -6,9 +7,8 @@ const Price = () => {
   useEffect(() => {
     const fetchGoods = async () => {
       try {
-        const response = await fetch('https://jsonplaceholder.typicode.com/comments');
-        const data = await response.json();
-        setGoods(data);
+        const response = await axiosApi.get('/price');
+        setGoods(response.data?.goods);
       } catch (error) {
         console.error('Ошибка при загрузке товаров:', error);
       }
@@ -16,7 +16,6 @@ const Price = () => {
 
     fetchGoods();
   }, []);
-
   return (
       <>
         {goods.map((good) => (
