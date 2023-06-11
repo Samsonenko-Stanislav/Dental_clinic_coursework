@@ -14,7 +14,6 @@ const SignUp = () => {
     e.preventDefault();
     try {
       const response = await axiosApi.post('/sign_up', { fullName, username, password, email, gender });
-
       console.log(response.data);
     } catch (e) {
       console.log(e);
