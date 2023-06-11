@@ -14,11 +14,13 @@ import Users from './pages/Users';
 import AppointmentsAdd from './pages/AppoimentsAdd';
 import Goods from './pages/Goods';
 import { UserContextContextProvider } from './UserContext';
-import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import AddNewUser from './pages/AddNewUser';
 import AddEmployee from './pages/AddEmployee';
 import EditEmployee from './pages/EditEmployee';
+import GoodEdit from './pages/GoodEdit';
+import GoodNew from './pages/GoodNew';
+import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const App = () => {
   return (
@@ -41,6 +43,8 @@ const App = () => {
             <Route path='/user' element={<Users />} />
             <Route path='/user/new' element={<AddNewUser />} />
             <Route path='/good' element={<Goods />} />
+            <Route path='/good/new' element={<GoodNew />} />
+            <Route path='/good/edit/:id' element={<GoodEdit />} />
           </Routes>
         </div>
         <Footer />

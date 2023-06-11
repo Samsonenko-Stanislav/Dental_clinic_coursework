@@ -39,7 +39,7 @@ const Goods = () => {
                   {good.name}
                 </strong>
                 <div className='mb-1 text-muted'>{good.price}</div>
-                <Link to={`/good/${good.id}`} className='stretched-link'>
+                <Link to={`/good/edit/${good.id}`} className='stretched-link'>
                   Редактировать
                 </Link>
               </div>
