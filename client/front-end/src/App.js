@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Footer from "./components/Footer.js";
 import Home from "./pages/Home";
@@ -22,20 +22,30 @@ import GoodNew from "./pages/GoodNew";
 import AppointmentsEdit from "./pages/AppoimentEdit";
 import { loadFromLocalStorage } from "./utils/localStorage";
 import { RequireAuth } from "./components/AuthRoute";
+import EditUsers from "./pages/EditUsers";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import EditUsers from './pages/EditUsers';
+import Spinner from "./components/Spinner";
 
 const App = () => {
   const userLocal = loadFromLocalStorage("user") || null;
   const [user, setUser] = useState(userLocal);
+  const [loading, setLoading] = useState(false);
 
-  const isUser = user ? user?.role === "user" : null;
-  const isAdmin = user ? user?.role === "admin" : null;
-  const isDoctor = user ? user?.role === "doctor" : null;
+  const isUser = useMemo(() => (user ? user?.role === "user" : null), [user]);
+  const isAdmin = useMemo(() => (user ? user?.role === "admin" : null), [user]);
+  const isDoctor = useMemo(
+    () => (user ? user?.role === "doctor" : null),
+    [user]
+  );
 
   return (
-    <UserContextContextProvider user={user} role={user?.role} setUser={setUser}>
+    <UserContextContextProvider
+      user={user}
+      role={user?.role}
+      setUser={setUser}
+      setLoading={setLoading}
+    >
       <BrowserRouter>
         <Header />
         <div className="container my-4">
@@ -164,6 +174,7 @@ const App = () => {
             />
           </Routes>
         </div>
+        {loading && <Spinner />}
         <Footer />
       </BrowserRouter>
     </UserContextContextProvider>
