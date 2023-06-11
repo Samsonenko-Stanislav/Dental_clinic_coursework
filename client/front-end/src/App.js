@@ -7,22 +7,21 @@ import Profile from './pages/Profile';
 import EditProfile from './pages/EditProfile';
 import SignUp from './pages/SignUp';
 import Header from './components/Header';
-import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import Price from './pages/Price';
 import Appointments from './pages/Appointments';
 import Employee from './pages/Employee';
 import Users from './pages/Users';
 import AppointmentsAdd from './pages/AppoimentsAdd';
 import Goods from './pages/Goods';
+import { UserContextContextProvider } from './UserContext';
+import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const App = () => {
-
   return (
-    <>
+    <UserContextContextProvider user={true} role={'admin'} >
       <BrowserRouter>
         <Header />
-
         <div className='container my-4'>
           <Routes>
             <Route path='/' element={<Home />} />
@@ -39,7 +38,7 @@ const App = () => {
         </div>
         <Footer />
       </BrowserRouter>
-    </>
+    </UserContextContextProvider>
 
   );
 };
