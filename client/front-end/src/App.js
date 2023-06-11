@@ -18,6 +18,7 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import AddNewUser from './pages/AddNewUser';
 import AddEmployee from './pages/AddEmployee';
+import EditEmployee from './pages/EditEmployee';
 
 const App = () => {
   return (
@@ -36,6 +37,7 @@ const App = () => {
             <Route path='/appointments/add' element={<AppointmentsAdd />} />
             <Route path='/employee' element={<Employee />} />
             <Route path='/employee/new' element={<AddEmployee />} />
+            <Route path='/employee/edit/:id' element={<EditEmployee />} />
             <Route path='/user' element={<Users />} />
             <Route path='/user/new' element={<AddNewUser />} />
             <Route path='/good' element={<Goods />} />
