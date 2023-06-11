@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 const AppointmentsAdd = () => {
   const [selectedDoctorId, setSelectedDoctorId] = useState("");
   const [selectedAppointmentDate, setSelectedAppointmentDate] = useState("");
-const [doctors,setDoctors]= useState([])
+  const [doctors,setDoctors]= useState([])
+
   const handleSetDoctor = (doctorId, date, time, button) => {
     document.querySelectorAll("button").forEach(function (element) {
       element.disabled = false;

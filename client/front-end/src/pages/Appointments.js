@@ -6,12 +6,11 @@ const Appointments = () => {
   const [appointmentsClient, setAppointmentsClient] = useState([]);
   const [withArchived, setWithArchived] = useState(false);
 
+
   useEffect(() => {
     const effect = async () => {
-      const response = await fetch('https://jsonplaceholder.typicode.com/comments');
+      const response = await fetch('https://jsonplaceholder.typicode.com/photos?_start=0&_limit=5');
       const data = await response.json();
-      setAppointmentsDoctor(data);
-      setWithArchived(data);
       setAppointmentsClient(data);
     };
 
@@ -21,6 +20,7 @@ const Appointments = () => {
     // fetchAppointmentsDoctor().then((data) => setAppointmentsDoctor(data));
     // fetchAppointmentsClient().then((data) => setAppointmentsClient(data));
   }, []);
+
 
   return (
     <div>
@@ -57,7 +57,7 @@ const Appointments = () => {
                   <strong className='d-inline-block mb-2 text-primary'>{appointment.name}</strong>
                   <h3 className='mb-0'>{appointment.name}</h3>
                   <div className='mb-1 text-muted'>{appointment.name}</div>
-                  <Link to={`/appointments/${appointment.id}/edit`} className='stretched-link'>Подробнее</Link>
+                  <Link to={`/appointments/edit/${appointment.id}`} className='stretched-link'>Подробнее</Link>
                 </div>
               </div>
             </div>
@@ -68,9 +68,9 @@ const Appointments = () => {
       <Link to='/appointments/add' className='btn btn-primary'>Записаться</Link>
 
       {!withArchived ? (
-        <Link to='/appointments/?withArchived' className='btn btn-primary'>Показать предыдущие записи</Link>
+        <button className='btn btn-primary mx-4' onClick={()=>setWithArchived(true)}>Показать предыдущие записи</button>
       ) : (
-        <Link to='/appointments/' className='btn btn-primary'>Показать текущие записи</Link>
+        <button onClick={()=>setWithArchived(false)} className='btn btn-primary  mx-4'>Показать текущие записи</button>
       )}
     </div>
   );

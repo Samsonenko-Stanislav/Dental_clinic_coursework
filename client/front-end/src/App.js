@@ -21,10 +21,11 @@ import GoodEdit from './pages/GoodEdit';
 import GoodNew from './pages/GoodNew';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import AppointmentsEdit from './pages/AppoimentEdit';
 
 const App = () => {
   return (
-    <UserContextContextProvider user={true} role={'admin'} >
+    <UserContextContextProvider user={true} role={'user'} >
       <BrowserRouter>
         <Header />
         <div className='container my-4'>
@@ -37,6 +38,7 @@ const App = () => {
             <Route path='/sign-up' element={<SignUp />} />
             <Route path='/appointments' element={<Appointments />} />
             <Route path='/appointments/add' element={<AppointmentsAdd />} />
+            <Route path='/appointments/edit/:id' element={<AppointmentsEdit />} />
             <Route path='/employee' element={<Employee />} />
             <Route path='/employee/new' element={<AddEmployee />} />
             <Route path='/employee/edit/:id' element={<EditEmployee />} />
