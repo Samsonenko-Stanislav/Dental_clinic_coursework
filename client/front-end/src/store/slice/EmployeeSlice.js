@@ -5,6 +5,10 @@ export const requestEmployee = createAsyncThunk('userData/requestEmployee', asyn
   return await axiosApi.post('/employee', newData);
 });
 
+export const requestSoloEmployee = createAsyncThunk('userData/requestEmployee', async ({ newData, catchFunction }) => {
+  return await axiosApi.get('/employee', newData);
+});
+
 export const editEmployee = createAsyncThunk('userData/editEmployee', async ({ newData, catchFunction }) => {
   return await axiosApi.post('/employee', newData);
 });
@@ -17,6 +21,7 @@ const initialState = {
   loading: false,
   error: null,
   employees: [],
+  employee:{}
 };
 
 const employeeSlice = createSlice({
