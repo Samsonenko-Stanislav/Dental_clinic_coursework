@@ -57,7 +57,10 @@ const appointmentsSlice = createSlice({
 
     [requestAppointmentsDoctors.fulfilled]: (state, action) => {
       const response = action.payload;
-      console.log(response);
+
+      console.log( response.data.appointmentsDoctor, response.data.appointmentsClient);
+      state.appointmentsDoctor = response.data.appointmentsDoctor;
+      state.appointmentsClient = response.data.appointmentsClient;
       state.loading = false;
       state.error = null;
     },

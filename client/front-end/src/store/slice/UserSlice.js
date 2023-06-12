@@ -78,8 +78,6 @@ const userSlice = createSlice({
     },
 
     [requestRegister.fulfilled]: (state, action) => {
-      const response = action.payload;
-      console.log(response);
       state.loading = false;
       state.error = null;
     },

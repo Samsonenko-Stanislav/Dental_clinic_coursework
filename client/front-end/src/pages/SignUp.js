@@ -2,7 +2,6 @@ import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Tooth from '../assets/tooth.svg';
 import { UserContext } from '../context/UserContext';
-import { saveToLocalStorage } from '../utils/localStorage';
 import { useDispatch } from 'react-redux';
 import { requestRegister } from '../store/slice/UserSlice';
 
@@ -19,24 +18,22 @@ const SignUp = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     setLoading(true);
-    try {
-      dispatch(
-        requestRegister({
-          newData: {
-            fullName,
-            username,
-            password,
-            email,
-            gender,
-          },
-        })
-      );
-    } catch (e) {
-      saveToLocalStorage('user', { role: 'admin' });
-      navigate('/');
-    } finally {
-      setLoading(false);
-    }
+
+    dispatch(
+      requestRegister({
+        newData: {
+          fullName,
+          username,
+          password,
+          email,
+          gender,
+        },
+      })
+    );
+
+    navigate('/login');
+
+    setLoading(false);
   };
 
   return (
@@ -95,11 +92,11 @@ const SignUp = () => {
             <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" className="form-control" id="EMAIL" placeholder="e-mail" name="email" />
           </div>
           <div>
-            <input type="radio" id="MALE" name="gender" value={gender} onChange={(e) => setGender('MALE')} />
+            <input type="radio" id="MALE" name="gender" value={gender} onChange={(e) => setGender('male')} />
             <label htmlFor="MALE">Мужской</label>
           </div>
           <div>
-            <input value={gender} onChange={(e) => setGender('FEMALE')} type="radio" id="FEMALE" name="gender" />
+            <input value={gender} onChange={(e) => setGender('female')} type="radio" id="FEMALE" name="gender" />
             <label htmlFor="FEMALE">Женский</label>
           </div>
           <button className="w-100 btn btn-lg btn-primary" type="submit">

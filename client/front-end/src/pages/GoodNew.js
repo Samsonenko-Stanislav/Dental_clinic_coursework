@@ -9,7 +9,7 @@ const GoodNew = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(addGoods({ newData: { price: parseInt(price), name } }));
+    dispatch(addGoods({ newData: { price: parseInt(price), name, active: true } }));
   };
 
   return (
@@ -29,7 +29,7 @@ const GoodNew = () => {
                 <label htmlFor="price" className="form-label">
                   Цена
                 </label>
-                <input type="number" step="0.01" name="price" className="form-control" id="price" required value={price} onChange={(e) => setPrice(e.target.value)} />
+                <input type="number" min={0.01} step="0.01" name="price" className="form-control" id="price" required value={price} onChange={(e) => setPrice(e.target.value)} />
               </div>
             </div>
             <button className="w-100 btn btn-primary btn-lg my-4" type="submit">

@@ -9,6 +9,9 @@ const AddNewUser = () => {
   const [isUser, setIsUser] = useState(false);
   const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [gender, setGender] = useState('male');
+  const [fullName, setFullName] = useState('');
 
   const handleAdminChange = (event) => {
     setIsAdmin(event.target.checked);
@@ -23,12 +26,21 @@ const AddNewUser = () => {
   };
 
   const handleSubmit = async (e) => {
+    const roles = [];
+    if (isUser) roles.push('USER');
+    if (isDoctor) roles.push('DOCTOR');
+    if (isAdmin) roles.push('ADMIN');
+
     e.preventDefault();
     dispatch(
       updateUser({
         newData: {
           password,
           username,
+          email,
+          gender,
+          fullName,
+          roles,
         },
       })
     );
@@ -81,7 +93,7 @@ const AddNewUser = () => {
                 <label htmlFor="fullName" className="form-label">
                   ФИО
                 </label>
-                <input type="text" name="fullName" className="form-control" required id="fullName" />
+                <input type="text" name="fullName" className="form-control" required id="fullName" value={fullName} onChange={(e) => setFullName(e.target.value)} />
               </div>
             )}
           </div>
@@ -121,15 +133,15 @@ const AddNewUser = () => {
                 <label htmlFor="email" className="form-label">
                   e-mail
                 </label>
-                <input type="email" name="email" className="form-control" id="email" />
+                <input type="email" name="email" className="form-control" id="email" value={email} onChange={(e) => setEmail(e.target.value)} />
               </div>
               <div className="row col-12">
                 <div className="col-6">
-                  <input type="radio" id="MALE" name="gender" value="MALE" />
+                  <input type="radio" id="MALE" name="gender" value="MALE" onChange={() => setGender('male')} />
                   <label htmlFor="MALE">Мужской</label>
                 </div>
                 <div>
-                  <input type="radio" id="FEMALE" name="gender" value="FEMALE" />
+                  <input type="radio" id="FEMALE" name="gender" value="FEMALE" onChange={() => setGender('female')} />
                   <label htmlFor="FEMALE">Женский</label>
                 </div>
               </div>

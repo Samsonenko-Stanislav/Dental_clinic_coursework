@@ -49,15 +49,15 @@ const Users = () => {
                 ))}
               </tbody>
             </table>{' '}
-            <Link to="/user/new" className="btn btn-primary mx-2">
-              Создать нового
-            </Link>
             <button className="btn btn-primary mx-2">Показать архивных пользователей</button>
             <button className="btn btn-primary mx-2">Скрыть архивных пользователей</button>
           </>
         ) : (
           <EmptyComponent />
-        )}
+        )}{' '}
+        <Link to="/user/new" className="btn btn-primary mx-2">
+          Создать нового
+        </Link>
       </div>
     </>
   );
