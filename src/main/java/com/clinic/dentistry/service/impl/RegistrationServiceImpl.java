@@ -66,43 +66,41 @@ public class RegistrationServiceImpl implements RegistrationService {
                     .build();
         }
 
-        Employee employee = Employee.builder()
-                .fullName(request.getFullName())
-                .jobTitle(request.getJobTitle())
-                .workStart(request.getWorkStart())
-                .workEnd(request.getWorkEnd())
-                .durationApp(request.getDurationApp())
-                .build();
-        employeeRepository.save(employee);
-
-        OutpatientCard outpatientCard = OutpatientCard.builder()
-                .email(request.getEmail())
-                .fullName(request.getFullName())
-                .gender(request.getGender().equalsIgnoreCase("male") ? Gender.MALE : Gender.FEMALE)
-                .build();
-        outpatientCardRepository.save(outpatientCard);
-
         User user = User.builder()
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .active(true)
-                .roles(Collections.singleton(Role.USER))
-                .outpatientCard(outpatientCard)
-                .employee(employee)
+                .roles(request.getRoles())
                 .build();
+
+        if (user.getRoles().contains(Role.DOCTOR)) {
+            Employee employee = Employee.builder()
+                    .fullName(request.getFullName())
+                    .jobTitle(request.getJobTitle())
+                    .workStart(request.getWorkStart())
+                    .workEnd(request.getWorkEnd())
+                    .durationApp(request.getDurationApp())
+                    .build();
+            employeeRepository.save(employee);
+            user.setEmployee(employee);
+        }
+
+        if (user.getRoles().contains(Role.USER)) {
+            OutpatientCard outpatientCard = OutpatientCard.builder()
+                    .email(request.getEmail())
+                    .fullName(request.getFullName())
+                    .gender(request.getGender().equalsIgnoreCase("male") ? Gender.MALE : Gender.FEMALE)
+                    .build();
+            outpatientCardRepository.save(outpatientCard);
+            user.setOutpatientCard(outpatientCard);
+        }
+
         userRepository.save(user);
 
         return ApiResponse.builder()
                 .status(200)
                 .message("Регистрация прошла успешно")
                 .build();
-
-//        Set<String> roles = Arrays.stream(Role.values())
-//                .map(Role::name)
-//                .collect(Collectors.toSet());
-//
-//        user.setRoles(user.getRoles());
-//        userRepository.save(user);
     }
 
     @Override

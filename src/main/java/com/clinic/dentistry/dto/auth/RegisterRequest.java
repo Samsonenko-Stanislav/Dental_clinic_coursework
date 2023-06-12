@@ -1,5 +1,6 @@
 package com.clinic.dentistry.dto.auth;
 
+import com.clinic.dentistry.models.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +10,8 @@ import org.springframework.lang.NonNull;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.time.LocalTime;
+import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -29,6 +32,8 @@ public class RegisterRequest {
 
     @Pattern(regexp = "^(male|female)$", message = "Gender must be either 'male' or 'female'.")
     private String gender;
+
+    private Set<Role> roles;
 
     private String jobTitle;
     private LocalTime workStart, workEnd;

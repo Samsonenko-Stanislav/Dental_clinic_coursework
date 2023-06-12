@@ -37,10 +37,10 @@ public class UserController {
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     public HashMap<String, Object> userList(
-                           @RequestParam(value = "withArchived", required = false) String withArchived
-                           ) {
+            @RequestParam(value = "withArchived", required = false) String withArchived
+    ) {
         HashMap<String, Object> model = new HashMap<>();
-        if (withArchived != null){
+        if (withArchived != null) {
             model.put("users", userService.findAllUsers());
             model.put("withArchived", true);
         } else {
@@ -78,17 +78,16 @@ public class UserController {
     @PostMapping("/me")
     @PreAuthorize("hasAuthority('USER')")
     public <changePassword> HashMap<String, Object> userMeEdit(@AuthenticationPrincipal User user,
-     @RequestParam ("updateUser") User updateUser,
-     @RequestParam(value = "changePassword", required = false) Boolean changePassword
-    ){
+                                                               @RequestParam("updateUser") User updateUser,
+                                                               @RequestParam(value = "changePassword", required = false) Boolean changePassword
+    ) {
         HashMap<String, Object> model = new HashMap<>();
-        if (registrationService.isUsernameVacant(updateUser.getUsername())){
+        if (registrationService.isUsernameVacant(updateUser.getUsername())) {
             model.put("message", "Данные успешно обновлены!");
             outpatientCardService.userMeEdit(user, updateUser, changePassword);
             model.put("user", user);
             return model;
-        }
-        else {
+        } else {
             model.put("message", "Пользователь с таким логином уже существует!");
             model.put("user", user);
             return model;
@@ -101,7 +100,7 @@ public class UserController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ApiResponse> userNewForm(@RequestBody RegisterRequest request) {
         ApiResponse response = registrationService.createUser(request);
-        return new ResponseEntity<>(response,HttpStatus.valueOf(response.getStatus()));
+        return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
     }
 
 
@@ -112,7 +111,7 @@ public class UserController {
             @RequestParam("employee") Employee employee,
             @RequestParam("outpatientCard") OutpatientCard outpatientCard,
             @RequestParam(value = "changePassword", required = false) Boolean changePassword
-            ) {
+    ) {
         registrationService.editUser(user, employee, outpatientCard, changePassword);
         return HttpStatus.OK;
     }

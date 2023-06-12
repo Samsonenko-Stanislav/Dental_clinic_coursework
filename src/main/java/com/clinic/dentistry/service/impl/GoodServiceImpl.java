@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class GoodServiceImpl implements GoodService {
@@ -30,11 +31,16 @@ public class GoodServiceImpl implements GoodService {
    }
 
    @Override
-    public void goodEdit(Good good, Good good_new)
+    public void goodEdit(Long goodId, Good newData)
    {
-       good.setName(good_new.getName());
-       good.setPrice(good_new.getPrice());
-       good.setActive(good_new.isActive());
+       Optional<Good> optGood = goodRepository.findById(goodId);
+       if (!optGood.isPresent()){
+           return;
+       }
+       Good good = optGood.get();
+       good.setName(newData.getName());
+       good.setPrice(newData.getPrice());
+       good.setActive(newData.isActive());
        goodRepository.save(good);
    }
 

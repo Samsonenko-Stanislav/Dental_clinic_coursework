@@ -27,7 +27,7 @@ public class GoodController {
             @RequestParam(value = "withArchived", required = false) String withArchived) {
         HashMap<String, Object> model = new HashMap<>();
         Iterable<Good> goods;
-        if (withArchived != null){
+        if (withArchived != null) {
             goods = goodService.findAllGoods();
             model.put("withArchived", true);
         } else {
@@ -58,19 +58,16 @@ public class GoodController {
 
     @PostMapping("/new")
     public HttpStatus goodNewForm(
-            @RequestParam("good") Good good
+            @RequestBody Good good
     ) {
         goodService.goodSave(good);
         return HttpStatus.CREATED;
     }
 
 
-    @PostMapping
-    public HttpStatus goodEdit(
-            @RequestParam("good") Good good,
-            @RequestParam("good_new") Good good_new
-    ) {
-        goodService.goodEdit(good, good_new);
+    @PostMapping("{goodId}")
+    public HttpStatus goodEdit(@PathVariable("goodId") Long goodId, @RequestBody Good newData) {
+        goodService.goodEdit(goodId, newData);
         return HttpStatus.OK;
     }
 
