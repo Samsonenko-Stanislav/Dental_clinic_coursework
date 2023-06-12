@@ -1,11 +1,15 @@
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import { createReducerManager } from './reducerManager';
-import userSlice from './UserSlice';
+import userSlice from './slice/UserSlice';
+import goodsSlice from './slice/GoodsSlice';
+import appointmentsSlice from './slice/AppoimentsSlice';
 
 export function createReduxStore(initialState, asyncReducers) {
   const rootReducers = {
     ...asyncReducers,
     user: userSlice,
+    goods: goodsSlice,
+    appointments: appointmentsSlice,
   };
 
   const reducerManager = createReducerManager(rootReducers);

@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axiosApi from '../axiosApi';
-
+import axiosApi from '../../axiosApi';
 
 export const requestLogin = createAsyncThunk('userData/requestLogin', async ({ newData, catchFunction }) => {
   return await axiosApi.post('/login', newData);
@@ -16,10 +15,13 @@ const initialState = {
   role: null,
   fullName: null,
   token: null,
+  username: null,
+  email: null,
+  gender: null,
 };
 
 const userSlice = createSlice({
-  name: 'categories',
+  name: 'users',
 
   initialState,
 
@@ -45,7 +47,6 @@ const userSlice = createSlice({
       state.error = action.error.message;
     },
 
-
     [requestRegister.pending]: (state) => {
       state.loading = true;
     },
@@ -62,8 +63,7 @@ const userSlice = createSlice({
       state.error = action.error.message;
     },
   },
-
 });
 
 export default userSlice.reducer;
-export const {logoutUser} = userSlice.actions;
+export const { logoutUser } = userSlice.actions;

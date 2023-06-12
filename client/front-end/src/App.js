@@ -30,8 +30,6 @@ const App = () => {
   const user = useSelector((state) => state.user);
   const [loading, setLoading] = useState(false);
 
-  console.log(user);
-
   const isUser = useMemo(() => (user ? user?.role === 'user' : null), [user]);
   const isAdmin = useMemo(() => (user ? user?.role === 'admin' : null), [user]);
   const isDoctor = useMemo(() => (user ? user?.role === 'doctor' : null), [user]);

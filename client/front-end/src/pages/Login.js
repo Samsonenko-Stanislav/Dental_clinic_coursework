@@ -7,7 +7,7 @@ import '../App.css';
 import './Login.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useDispatch } from 'react-redux';
-import { requestLogin } from '../store/UserSlice';
+import { requestLogin } from '../store/slice/UserSlice';
 
 function Login() {
   const dispatch = useDispatch()

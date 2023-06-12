@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { removeFromLocalStorage } from '../utils/localStorage';
 import { useOnClickOutside } from '../utils/useOnClickOutside';
 import { useDispatch, useSelector } from 'react-redux';
-import { logoutUser } from '../store/UserSlice';
+import { logoutUser } from '../store/slice/UserSlice';
 
 function Header() {
   const user = useSelector(state=>state.user.fullName)

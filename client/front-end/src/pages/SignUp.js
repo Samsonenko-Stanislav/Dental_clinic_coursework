@@ -1,36 +1,39 @@
-import React, { useState, useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import Tooth from "../tooth.svg";
-import axiosApi from "../axiosApi";
-import { UserContext } from "../UserContext";
-import { saveToLocalStorage } from "../utils/localStorage";
+import React, { useContext, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import Tooth from '../tooth.svg';
+import { UserContext } from '../UserContext';
+import { saveToLocalStorage } from '../utils/localStorage';
+import { useDispatch } from 'react-redux';
+import { requestRegister } from '../store/slice/UserSlice';
 
 const SignUp = () => {
-  const [fullName, setFullName] = useState("");
-  const [username, setUserName] = useState("");
-  const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
-  const [gender, setGender] = useState("");
+  const dispatch = useDispatch();
+  const [fullName, setFullName] = useState('');
+  const [username, setUserName] = useState('');
+  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [gender, setGender] = useState('');
   const navigate = useNavigate();
-  const { setUser, setLoading } = useContext(UserContext);
+  const { setLoading } = useContext(UserContext);
 
   const submitHandler = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await axiosApi.post("/sign_up", {
-        fullName,
-        username,
-        password,
-        email,
-        gender,
-      });
-
-      console.log(response);
+      dispatch(
+        requestRegister({
+          newData: {
+            fullName,
+            username,
+            password,
+            email,
+            gender,
+          },
+        })
+      );
     } catch (e) {
-      setUser({ role: "admin" });
-      saveToLocalStorage("user", { role: "admin" });
-      navigate("/");
+      saveToLocalStorage('user', { role: 'admin' });
+      navigate('/');
     } finally {
       setLoading(false);
     }
@@ -45,7 +48,7 @@ const SignUp = () => {
           <Link to="/">Вернуться на главную</Link>
           <h1 className="h3 mb-3 fw-normal">Пожалуйста, зарегистрируйтесь</h1>
           <div>
-            {" "}
+            {' '}
             <label htmlFor="floatingName">ФИО</label>
             <input
               value={fullName}
@@ -59,7 +62,7 @@ const SignUp = () => {
             />
           </div>
           <div>
-            {" "}
+            {' '}
             <label htmlFor="floatingInput">Логин</label>
             <input
               value={username}
@@ -73,7 +76,7 @@ const SignUp = () => {
             />
           </div>
           <div>
-            {" "}
+            {' '}
             <label htmlFor="floatingPassword">Пароль</label>
             <input
               value={password}
@@ -87,36 +90,16 @@ const SignUp = () => {
             />
           </div>
           <div>
-            {" "}
+            {' '}
             <label htmlFor="EMAIL">e-mail</label>
-            <input
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              type="email"
-              className="form-control"
-              id="EMAIL"
-              placeholder="e-mail"
-              name="email"
-            />
+            <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" className="form-control" id="EMAIL" placeholder="e-mail" name="email" />
           </div>
           <div>
-            <input
-              type="radio"
-              id="MALE"
-              name="gender"
-              value={gender}
-              onChange={(e) => setGender("MALE")}
-            />
+            <input type="radio" id="MALE" name="gender" value={gender} onChange={(e) => setGender('MALE')} />
             <label htmlFor="MALE">Мужской</label>
           </div>
           <div>
-            <input
-              value={gender}
-              onChange={(e) => setGender("FEMALE")}
-              type="radio"
-              id="FEMALE"
-              name="gender"
-            />
+            <input value={gender} onChange={(e) => setGender('FEMALE')} type="radio" id="FEMALE" name="gender" />
             <label htmlFor="FEMALE">Женский</label>
           </div>
           <button className="w-100 btn btn-lg btn-primary" type="submit">
