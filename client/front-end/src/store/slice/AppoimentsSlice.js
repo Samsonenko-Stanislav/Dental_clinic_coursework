@@ -1,4 +1,17 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import axiosApi from '../../axiosApi';
+
+export const requestAppointments = createAsyncThunk('userData/requestAppointments', async ({ newData, catchFunction }) => {
+  return await axiosApi.post('/appointments', newData);
+});
+
+export const editAppointments = createAsyncThunk('userData/editAppointments', async ({ newData, catchFunction }) => {
+  return await axiosApi.post('/appointments', newData);
+});
+
+export const addAppointments = createAsyncThunk('userData/addAppointments', async ({ newData, catchFunction }) => {
+  return await axiosApi.post('appointments', newData);
+});
 
 const initialState = {
   loading: false,
@@ -12,11 +25,11 @@ const appointmentsSlice = createSlice({
   initialState,
 
   reducers: {
-    nullifyDataGoods(state) {
+    nullifyDataAppointments(state) {
       state = Object.assign(state, initialState);
     },
   },
 });
 
 export default appointmentsSlice.reducer;
-export const { nullifyDataGoods } = appointmentsSlice.actions;
+export const { nullifyDataAppointments } = appointmentsSlice.actions;

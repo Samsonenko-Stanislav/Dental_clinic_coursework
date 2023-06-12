@@ -9,6 +9,14 @@ export const requestRegister = createAsyncThunk('userData/requestRegister', asyn
   return await axiosApi.post('/sign_up', newData);
 });
 
+export const getUser = createAsyncThunk('userData/getUser', async ({ newData, catchFunction }) => {
+  return await axiosApi.get('/user/me');
+});
+
+export const updateUser = createAsyncThunk('userData/updateUser', async ({ newData, catchFunction }) => {
+  return await axiosApi.post('/user/me');
+});
+
 const initialState = {
   loading: false,
   error: null,
@@ -59,6 +67,38 @@ const userSlice = createSlice({
     },
 
     [requestRegister.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    },
+
+    [getUser.pending]: (state) => {
+      state.loading = true;
+    },
+
+    [getUser.fulfilled]: (state, action) => {
+      const response = action.payload;
+      console.log(response);
+      state.loading = false;
+      state.error = null;
+    },
+
+    [getUser.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    },
+
+    [updateUser.pending]: (state) => {
+      state.loading = true;
+    },
+
+    [updateUser.fulfilled]: (state, action) => {
+      const response = action.payload;
+      console.log(response);
+      state.loading = false;
+      state.error = null;
+    },
+
+    [updateUser.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.error.message;
     },
