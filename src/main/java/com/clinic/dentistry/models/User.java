@@ -11,7 +11,7 @@ import java.util.Set;
 @Entity
 @Data
 @Table(name = "usr")
-public class  User implements UserDetails {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -38,6 +38,10 @@ public class  User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
+    public User() {
+
+    }
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -46,6 +50,11 @@ public class  User implements UserDetails {
 
     public String getPassword() {
         return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
     }
 
     @Override
