@@ -130,7 +130,7 @@ insert into outpatient_card (id, full_name, email, gender) VALUES
 
 
 insert into user_role (user_id, roles)
-values (1, 'ADMIN'), (2, 'DOCTOR');
+values (1, 'ADMIN'), (2, 'DOCTOR'), (2, 'USER');
 
 INSERT INTO good (id, active, name, price) VALUES
 (1, true, 'Первичный прием', 2000.0),
