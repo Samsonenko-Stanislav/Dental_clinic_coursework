@@ -2,14 +2,10 @@ import { Navigate } from 'react-router-dom';
 import { loadFromLocalStorage } from '../utils/localStorage';
 import { useSelector } from 'react-redux';
 
-export function RequireAuth({ children, access }) {
+export function NoLoginRoute({ children }) {
   const user = useSelector((state) => state.user.fullName) || loadFromLocalStorage('user');
 
-  if (!access) {
-    return <Navigate to="/" />;
-  }
-
-  if (!user) {
+  if (user) {
     return <Navigate to="/" />;
   }
 

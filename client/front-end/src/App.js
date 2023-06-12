@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, memo } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Footer from './components/Footer.js';
 import Home from './pages/Home';
@@ -24,6 +24,7 @@ import EditUsers from './pages/EditUsers';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Spinner from './components/Spinner';
 import { useSelector } from 'react-redux';
+import { NoLoginRoute } from './components/NoLoginRoute';
 
 const App = () => {
   const user = useSelector((state) => state.user);
@@ -40,10 +41,23 @@ const App = () => {
         <div className="container my-4">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
+            <Route
+              path="/login"
+              element={
+                <NoLoginRoute>
+                  <Login />
+                </NoLoginRoute>
+              }
+            />
             <Route path="/price" element={<Price />} />
-            <Route path="/sign-up" element={<SignUp />} />
-
+            <Route
+              path="/sign-up"
+              element={
+                <NoLoginRoute>
+                  <SignUp />
+                </NoLoginRoute>
+              }
+            />
             <Route
               path="/user/me"
               element={
@@ -162,4 +176,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default memo(App);

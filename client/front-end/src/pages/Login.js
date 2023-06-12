@@ -1,35 +1,29 @@
-import React, { useContext, useState } from 'react';
-import Tooth from '../assets/tooth.svg';
-import { Link, useNavigate } from 'react-router-dom';
-import { UserContext } from '../context/UserContext';
-import { saveToLocalStorage } from '../utils/localStorage';
-import './Login.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { useDispatch } from 'react-redux';
-import { requestLogin } from '../store/slice/UserSlice';
+import React, { useContext, useState } from "react";
+import Tooth from "../assets/tooth.svg";
+import { Link } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
+import { useDispatch } from "react-redux";
+import { requestLogin } from "../store/slice/UserSlice";
+import "./Login.css";
 
 function Login() {
-  const dispatch = useDispatch()
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const { setLoading } = useContext(UserContext);
 
   const submitHandler = async (e) => {
     e.preventDefault();
     setLoading(true);
-    try {
-
-      dispatch(requestLogin({newData:{
+    dispatch(
+      requestLogin({
+        newData: {
           username: email,
           password,
-        }}))
-    } catch (e) {
-      saveToLocalStorage("user", { role: "user" });
-      navigate("/");
-    } finally {
-      setLoading(false);
-    }
+        },
+      })
+    );
+    setLoading(false);
   };
 
   return (
@@ -41,31 +35,11 @@ function Login() {
           <Link to="/">Вернуться на главную</Link>
           <h1 className="h3 mb-3 fw-normal">Пожалуйста, войдите</h1>
 
-          <div
-            className={
-              window.location.search.includes("error") ? "error" : "hidden"
-            }
-          >
-            Неверный логин и/или пароль.
-          </div>
-          <div
-            className={
-              window.location.search.includes("logout") ? "logout" : "hidden"
-            }
-          >
-            Вы вышли.
-          </div>
+          <div className={window.location.search.includes('error') ? 'error' : 'hidden'}>Неверный логин и/или пароль.</div>
+          <div className={window.location.search.includes('logout') ? 'logout' : 'hidden'}>Вы вышли.</div>
 
           <div className="form-floating my-2">
-            <input
-              type="text"
-              className="form-control"
-              id="floatingInput"
-              placeholder="Логин"
-              name="username"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
+            <input type="text" className="form-control" id="floatingInput" placeholder="Логин" name="username" value={email} onChange={(e) => setEmail(e.target.value)} />
             <label htmlFor="floatingInput">Логин</label>
           </div>
           <div className="form-floating my-2">
