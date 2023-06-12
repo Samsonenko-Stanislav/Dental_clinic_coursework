@@ -42,9 +42,6 @@ const Goods = () => {
               </div>
             ))}
 
-            <Link to="/good/new" className="btn btn-primary mx-1">
-              Создать новую
-            </Link>
             {withArchived ? (
               <Link to="/good" className="btn btn-primary mx-1" onClick={toggleArchived}>
                 Скрыть архивные услуги
@@ -58,6 +55,10 @@ const Goods = () => {
         ) : (
           <EmptyComponent />
         )}
+
+        <Link to="/good/new" className="btn btn-primary mx-1 my-4">
+          Создать новую
+        </Link>
       </div>
     </>
   );

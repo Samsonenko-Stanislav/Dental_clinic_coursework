@@ -9,7 +9,7 @@ const GoodNew = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(addGoods({ newData: { price, name } }));
+    dispatch(addGoods({ newData: { price: parseInt(price), name } }));
   };
 
   return (

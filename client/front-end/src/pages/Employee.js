@@ -34,13 +34,13 @@ const Employee = () => {
               </div>
             </div>
           ))}
-          <Link to="/employee/new" className="btn btn-primary">
-            Создать нового
-          </Link>
         </>
       ) : (
         <EmptyComponent />
       )}
+      <Link to="/employee/new" className="btn btn-primary">
+        Создать нового
+      </Link>
     </>
   );
 };
