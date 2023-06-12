@@ -27,9 +27,9 @@ const Profile = () => {
     });
   };
 
-  const togglePassword = () => {
-    setChangePassword(!changePassword);
-  };
+  // const togglePassword = () => {
+  //   setChangePassword(!changePassword);
+  // };
 
   const handleRemoveChangePassword = () => {
     setUser({

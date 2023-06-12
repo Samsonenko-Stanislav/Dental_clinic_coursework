@@ -113,8 +113,8 @@ const userSlice = createSlice({
     },
 
     [getUsers.fulfilled]: (state, action) => {
-      const response = action.payload;
-      state.users = [];
+      const response = [] || action.payload;
+      state.users = response;
       state.loading = false;
       state.error = null;
     },

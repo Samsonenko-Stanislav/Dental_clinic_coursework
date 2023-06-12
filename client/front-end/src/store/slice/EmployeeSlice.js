@@ -1,6 +1,5 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axiosApi from '../../axiosApi';
-import { requestRegister } from './UserSlice';
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axiosApi from "../../axiosApi";
 
 export const requestEmployee = createAsyncThunk('userData/requestEmployee', async ({ newData, catchFunction }) => {
   return await axiosApi.post('/employee', newData);

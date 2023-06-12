@@ -1,26 +1,20 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../UserContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { requestAppointments, requestAppointmentsDoctors } from '../store/slice/AppoimentsSlice';
 
 const Appointments = () => {
-  const { user, role } = useContext(UserContext);
-
-  const [appointmentsDoctor, setAppointmentsDoctor] = useState([]);
-  const [appointmentsClient, setAppointmentsClient] = useState([]);
+  const dispatch = useDispatch();
+  const appointmentsDoctor = useSelector((state) => state.appointments.appointmentsDoctor);
+  const appointmentsClient = useSelector((state) => state.appointments.appointmentsClient);
+  const { role } = useContext(UserContext);
   const [withArchived, setWithArchived] = useState(false);
 
   useEffect(() => {
-    const effect = async () => {
-      const response = await fetch('https://jsonplaceholder.typicode.com/photos?_start=0&_limit=5');
-      const data = await response.json();
-      setAppointmentsClient(data);
-    };
-
-    effect();
-
-    // fetchAppointmentsDoctor().then((data) => setAppointmentsDoctor(data));
-    // fetchAppointmentsClient().then((data) => setAppointmentsClient(data));
-  }, []);
+    dispatch(requestAppointments({}));
+    dispatch(requestAppointmentsDoctors({}));
+  }, [dispatch]);
 
   return (
     <div>
