@@ -121,7 +121,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     public Boolean isCanEditByDoctor(User user, Appointment appointment){
         return appointment.getDoctor() != null && user.getEmployee() != null &&
                 appointment.getDoctor().getId().equals(user.getEmployee().getId())
-                && now.isAfter(appointment.getDate())
+                && now.isAfter(appointment.getDate().toLocalDate().atStartOfDay())
                 && appointment.getActive();
     }
 
