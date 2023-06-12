@@ -1,0 +1,12 @@
+.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10vh auto auto;
+}
+
+.empty img {
+  width: 35vw;
+  height: auto;
+  margin: auto;
+}
