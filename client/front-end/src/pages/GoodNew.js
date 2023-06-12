@@ -1,17 +1,15 @@
-import React from 'react';
-import axiosApi from '../axiosApi';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { addGoods } from '../store/slice/GoodsSlice';
 
 const GoodNew = () => {
+  const dispatch = useDispatch();
+  const [name, setName] = useState('');
+  const [price, setPrice] = useState('');
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await axiosApi.post("/login", {
-
-      });
-      console.log(response);
-    } catch (e) {
-      console.log(e);
-    }
+    dispatch(addGoods({ newData: { price, name } }));
   };
 
   return (
@@ -25,13 +23,13 @@ const GoodNew = () => {
                 <label htmlFor="name" className="form-label">
                   Название
                 </label>
-                <input type="text" name="name" className="form-control" id="name" required />
+                <input type="text" name="name" className="form-control" id="name" required value={name} onChange={(e) => setName(e.target.value)} />
               </div>
               <div className="col-6">
                 <label htmlFor="price" className="form-label">
                   Цена
                 </label>
-                <input type="number" step="0.01" name="price" className="form-control" id="price" required />
+                <input type="number" step="0.01" name="price" className="form-control" id="price" required value={price} onChange={(e) => setPrice(e.target.value)} />
               </div>
             </div>
             <button className="w-100 btn btn-primary btn-lg my-4" type="submit">
@@ -42,6 +40,6 @@ const GoodNew = () => {
       </div>
     </div>
   );
-}
+};
 
 export default GoodNew;
