@@ -1,9 +1,8 @@
 import React, { useContext, useState } from 'react';
-import Tooth from '../tooth.svg';
+import Tooth from '../assets/tooth.svg';
 import { Link, useNavigate } from 'react-router-dom';
-import { UserContext } from '../UserContext';
+import { UserContext } from '../context/UserContext';
 import { saveToLocalStorage } from '../utils/localStorage';
-import '../App.css';
 import './Login.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useDispatch } from 'react-redux';

@@ -9,9 +9,7 @@ import './index.css';
 
 const user = loadFromLocalStorage('user');
 
-export const store = createReduxStore({
-  user,
-});
+export const store = createReduxStore({ user });
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -19,5 +17,5 @@ root.render(
     <Provider store={store}>
       <App />
     </Provider>
-  </React.StrictMode>,
+  </React.StrictMode>
 );

@@ -1,6 +1,6 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Main_pict from "../main.jpg";
+import Main_pict from "../assets/main.jpg";
 
 const Home = () => {
   return (

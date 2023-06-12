@@ -271,3 +271,8 @@ h1 {
     stroke-dashoffset: -124;
   }
 }
+.main_pic{
+  width: 20vw;
+  height: 20vw;
+  align-content: center;
+}

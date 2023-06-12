@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { UserContext } from '../UserContext';
+import { UserContext } from '../context/UserContext';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUsers } from '../store/slice/UserSlice';
 

@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import Tooth from '../tooth.svg';
-import { UserContext } from '../UserContext';
+import Tooth from '../assets/tooth.svg';
+import { UserContext } from '../context/UserContext';
 import { saveToLocalStorage } from '../utils/localStorage';
 import { useDispatch } from 'react-redux';
 import { requestRegister } from '../store/slice/UserSlice';
