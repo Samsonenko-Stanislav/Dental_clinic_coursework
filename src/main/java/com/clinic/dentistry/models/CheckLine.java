@@ -1,11 +1,14 @@
 package com.clinic.dentistry.models;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "app_check_line")
 public class CheckLine{
     @Id

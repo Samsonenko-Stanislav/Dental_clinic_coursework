@@ -1,7 +1,7 @@
 package com.clinic.dentistry.controllers;
 
-import com.clinic.dentistry.dto.LoginRequest;
-import com.clinic.dentistry.dto.LoginResponse;
+import com.clinic.dentistry.dto.auth.LoginRequest;
+import com.clinic.dentistry.dto.auth.LoginResponse;
 import com.clinic.dentistry.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

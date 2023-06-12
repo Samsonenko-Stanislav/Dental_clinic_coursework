@@ -1,11 +1,15 @@
 package com.clinic.dentistry.models;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
-@Data
 public class OutpatientCard {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -16,6 +20,4 @@ public class OutpatientCard {
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
-
-
 }

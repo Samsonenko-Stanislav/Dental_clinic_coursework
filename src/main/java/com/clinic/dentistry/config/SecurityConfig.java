@@ -20,19 +20,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder(10);
     }
 
-    //    @Override
-//    protected void configure(HttpSecurity http) throws Exception {
-//        http.csrf().disable()
-//                .authorizeRequests()
-//                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Разрешаем pre-flight запросы
-//                .antMatchers("/auth/login").permitAll() // Разрешаем доступ к эндпоинту для получения токена
-//                .anyRequest().authenticated() // Запросы к другим эндпоинтам требуют аутентификации
-//                .and()
-//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                .and()
-//                .formLogin().disable().logout().disable();
-//    }
-//
     @Override
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {
@@ -44,8 +31,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
                 .authorizeRequests()
-                .antMatchers("/login").permitAll() // Разрешаем доступ к эндпоинту для получения токена
-                .anyRequest().authenticated(); // Запросы к другим эндпоинтам требуют аутентификации
+                .antMatchers("/login","/sign_up","/price").permitAll()
+                .anyRequest().authenticated();
 
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 

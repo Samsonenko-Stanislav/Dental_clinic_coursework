@@ -1,5 +1,7 @@
 package com.clinic.dentistry.controllers;
 
+import com.clinic.dentistry.dto.ApiResponse;
+import com.clinic.dentistry.dto.auth.RegisterRequest;
 import com.clinic.dentistry.models.Employee;
 import com.clinic.dentistry.models.OutpatientCard;
 import com.clinic.dentistry.models.Role;
@@ -11,16 +13,13 @@ import com.clinic.dentistry.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -98,29 +97,11 @@ public class UserController {
 
     }
 
-    @GetMapping("/new")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public HashMap<String, Object> userNewForm() {
-        HashMap<String, Object> model = new HashMap<>();
-        model.put("roles", Role.values());
-        return model;
-    }
-
     @PostMapping("/new")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public HttpStatus userNewForm(
-           @RequestParam("user") User user,
-           @RequestParam("outpatientCard") OutpatientCard outpatientCard,
-           @RequestParam("employee") Employee employee
-    ) {
-        HashMap<String, Object> model = new HashMap<>();
-        if (registrationService.isUserInDB(user)) {
-            model.put("message", "Пользователь с таким логином уже существует!");
-            return HttpStatus.BAD_REQUEST;
-        }
-        registrationService.createUser(user, outpatientCard, employee);
-        return HttpStatus.CREATED;
-
+    public ResponseEntity<ApiResponse> userNewForm(@RequestBody RegisterRequest request) {
+        ApiResponse response = registrationService.createUser(request);
+        return new ResponseEntity<>(response,HttpStatus.valueOf(response.getStatus()));
     }
 
 

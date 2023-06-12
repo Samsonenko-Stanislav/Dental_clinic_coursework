@@ -1,13 +1,16 @@
 package com.clinic.dentistry.models;
 
-import lombok.Data;
+import lombok.*;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Appointment {
 
     @Id

@@ -1,4 +1,4 @@
-package com.clinic.dentistry.dto;
+package com.clinic.dentistry.dto.auth;
 
 import lombok.*;
 

@@ -1,6 +1,6 @@
 package com.clinic.dentistry.models;
 
-import lombok.Data;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -9,7 +9,11 @@ import java.util.Collection;
 import java.util.Set;
 
 @Entity
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Table(name = "usr")
 public class User implements UserDetails {
     @Id
@@ -19,11 +23,6 @@ public class User implements UserDetails {
     private String password;
 
     private boolean active;
-
-    public User(String username, String password) {
-        this.username = username;
-        this.password = password;
-    }
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "employee_id")
@@ -37,11 +36,6 @@ public class User implements UserDetails {
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
-
-    public User() {
-
-    }
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

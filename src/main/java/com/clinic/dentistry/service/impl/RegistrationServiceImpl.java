@@ -1,5 +1,7 @@
 package com.clinic.dentistry.service.impl;
 
+import com.clinic.dentistry.dto.ApiResponse;
+import com.clinic.dentistry.dto.auth.RegisterRequest;
 import com.clinic.dentistry.models.*;
 import com.clinic.dentistry.repo.EmployeeRepository;
 import com.clinic.dentistry.repo.OutpatientCardRepository;
@@ -25,71 +27,101 @@ public class RegistrationServiceImpl implements RegistrationService {
     private EmployeeRepository employeeRepository;
 
     @Override
-    public void userRegistration(User user, OutpatientCard outpatientCard){
-        outpatientCardRepository.save(outpatientCard);
-        user.setActive(true);
-        user.setRoles(Collections.singleton(Role.USER));
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setOutpatientCard(outpatientCard);
-        userRepository.save(user);
-    }
-
-    @Override
-    public boolean isUserInDB(User user){
-        User userFromDb = userRepository.findByUsername(user.getUsername());
-        if (userFromDb!= null)
-            return true;
-        else
-            return false;
-    }
-
-    @Override
-    public void createUser(
-                           User user,
-                           OutpatientCard outpatientCard,
-                           Employee employee){
-            if (user.getOutpatientCard() != null){
-                outpatientCard.setEmail(outpatientCard.getEmail());
-            }
-
-            outpatientCard.setGender(outpatientCard.getGender());
-            outpatientCardRepository.save(outpatientCard);
-            user.setOutpatientCard(outpatientCard);
-
-
-        if (user.getEmployee() != null){
-            employeeRepository.save(employee);
-            user.setEmployee(employee);
+    public ApiResponse userRegistration(RegisterRequest request) {
+        if (this.isUserInDB(request)) {
+            return ApiResponse.builder()
+                    .status(400)
+                    .message("Пользователь с такими данными уже существует!")
+                    .build();
         }
 
-        user.setActive(true);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        OutpatientCard outpatientCard = OutpatientCard.builder()
+                .email(request.getEmail())
+                .fullName(request.getFullName())
+                .gender(request.getGender().equalsIgnoreCase("male") ? Gender.MALE : Gender.FEMALE)
+                .build();
+        outpatientCardRepository.save(outpatientCard);
 
-        Set<String> roles = Arrays.stream(Role.values())
-                .map(Role::name)
-                .collect(Collectors.toSet());
-
-        user.setRoles(user.getRoles());
+        User user = User.builder()
+                .username(request.getUsername())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .active(true)
+                .roles(Collections.singleton(Role.USER))
+                .outpatientCard(outpatientCard)
+                .build();
         userRepository.save(user);
+
+        return ApiResponse.builder()
+                .status(200)
+                .message("Регистрация прошла успешно")
+                .build();
     }
 
     @Override
-    public void editUser(User user,  Employee employee, OutpatientCard outpatientCard, Boolean changePassword){
+    public ApiResponse createUser(RegisterRequest request) {
+        if (this.isUserInDB(request)) {
+            return ApiResponse.builder()
+                    .status(400)
+                    .message("Пользователь с такими данными уже существует!")
+                    .build();
+        }
+
+        Employee employee = Employee.builder()
+                .fullName(request.getFullName())
+                .jobTitle(request.getJobTitle())
+                .workStart(request.getWorkStart())
+                .workEnd(request.getWorkEnd())
+                .durationApp(request.getDurationApp())
+                .build();
+        employeeRepository.save(employee);
+
+        OutpatientCard outpatientCard = OutpatientCard.builder()
+                .email(request.getEmail())
+                .fullName(request.getFullName())
+                .gender(request.getGender().equalsIgnoreCase("male") ? Gender.MALE : Gender.FEMALE)
+                .build();
+        outpatientCardRepository.save(outpatientCard);
+
+        User user = User.builder()
+                .username(request.getUsername())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .active(true)
+                .roles(Collections.singleton(Role.USER))
+                .outpatientCard(outpatientCard)
+                .employee(employee)
+                .build();
+        userRepository.save(user);
+
+        return ApiResponse.builder()
+                .status(200)
+                .message("Регистрация прошла успешно")
+                .build();
+
+//        Set<String> roles = Arrays.stream(Role.values())
+//                .map(Role::name)
+//                .collect(Collectors.toSet());
+//
+//        user.setRoles(user.getRoles());
+//        userRepository.save(user);
+    }
+
+    @Override
+    public void editUser(User user, Employee employee, OutpatientCard outpatientCard, Boolean changePassword) {
         user.setUsername(user.getUsername());
         user.setActive(user.isActive());
-        if (changePassword){
+        if (changePassword) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
 
         user.setRoles(user.getRoles());
 
-        if (employee != null && employee.getId() != null){
+        if (employee != null && employee.getId() != null) {
             user.setEmployee(employee);
         } else {
             user.setEmployee(null);
         }
 
-        if (user.getOutpatientCard() != null){
+        if (user.getOutpatientCard() != null) {
             outpatientCard.setId(user.getOutpatientCard().getId());
             outpatientCard.setFullName(user.getOutpatientCard().getFullName());
             outpatientCard.setEmail(user.getOutpatientCard().getEmail());
@@ -101,9 +133,23 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
-    public boolean isUsernameVacant(String username){
+    public boolean isUsernameVacant(String username) {
         User user = userRepository.findUserByUsername(username);
         return user == null;
+    }
+
+    private boolean isUserInDB(RegisterRequest request) {
+        User user = userRepository.findByUsername(request.getUsername());
+        if (user != null) {
+            return true;
+        }
+
+        OutpatientCard outpatientCard = outpatientCardRepository.findByEmail(request.getEmail());
+        if (outpatientCard != null) {
+            return true;
+        }
+
+        return false;
     }
 
 }

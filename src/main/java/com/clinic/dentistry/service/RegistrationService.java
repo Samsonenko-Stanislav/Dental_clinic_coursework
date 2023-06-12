@@ -1,5 +1,7 @@
 package com.clinic.dentistry.service;
 
+import com.clinic.dentistry.dto.ApiResponse;
+import com.clinic.dentistry.dto.auth.RegisterRequest;
 import com.clinic.dentistry.models.Employee;
 import com.clinic.dentistry.models.OutpatientCard;
 import com.clinic.dentistry.models.User;
@@ -7,11 +9,10 @@ import com.clinic.dentistry.models.User;
 import java.util.Map;
 
 public interface RegistrationService {
-    void userRegistration(User user, OutpatientCard outpatientCard);
-    boolean isUserInDB(User user);
-    void createUser(User user,
-                    OutpatientCard outpatientCard,
-                    Employee employee);
+    ApiResponse userRegistration(RegisterRequest request);
+
+    ApiResponse createUser(RegisterRequest request);
+
     void editUser(User user,  Employee employee, OutpatientCard outpatientCard, Boolean changePassword);
     boolean isUsernameVacant(String username);
 }
