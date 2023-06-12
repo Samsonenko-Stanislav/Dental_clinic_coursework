@@ -11,22 +11,22 @@ const EditUsers = () => {
   const [selectedEmployee, setSelectedEmployee] = useState("");
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userResponse = await axiosApi.get("/api/user");
+        const rolesResponse = await axiosApi.get("/api/roles");
+        const employeesResponse = await axiosApi.get("/api/employees");
+
+        setUser([]);
+        setRoles([]);
+        setEmployees([]);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     fetchData();
   }, []);
-
-  const fetchData = async () => {
-    try {
-      const userResponse = await axiosApi.get("/api/user");
-      const rolesResponse = await axiosApi.get("/api/roles");
-      const employeesResponse = await axiosApi.get("/api/employees");
-
-      setUser([]);
-      setRoles([]);
-      setEmployees([]);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const handleCheckboxChange = (event) => {
     const role = event.target.name;

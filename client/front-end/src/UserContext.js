@@ -6,11 +6,10 @@ export function UserContextContextProvider({
   children,
   user,
   role,
-  setUser,
   setLoading,
 }) {
   return (
-    <UserContext.Provider value={{ user, role, setUser, setLoading }}>
+    <UserContext.Provider value={{ user, role, setLoading }}>
       {children}
     </UserContext.Provider>
   );

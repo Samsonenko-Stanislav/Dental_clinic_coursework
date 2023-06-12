@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Footer from './components/Footer.js';
 import Home from './pages/Home';
-import Login from './authorization/Login';
+import Login from './pages/Login';
 import Profile from './pages/Profile';
 import SignUp from './pages/SignUp';
 import Header from './components/Header';
@@ -19,32 +19,25 @@ import EditEmployee from './pages/EditEmployee';
 import GoodEdit from './pages/GoodEdit';
 import GoodNew from './pages/GoodNew';
 import AppointmentsEdit from './pages/AppoimentEdit';
-import { loadFromLocalStorage } from './utils/localStorage';
 import { RequireAuth } from './components/AuthRoute';
 import EditUsers from './pages/EditUsers';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Spinner from './components/Spinner';
+import { useSelector } from 'react-redux';
 
 const App = () => {
-  const userLocal = loadFromLocalStorage("user") || null;
-  const [user, setUser] = useState(userLocal);
+  const user = useSelector((state) => state.user);
   const [loading, setLoading] = useState(false);
 
-  const isUser = useMemo(() => (user ? user?.role === "user" : null), [user]);
-  const isAdmin = useMemo(() => (user ? user?.role === "admin" : null), [user]);
-  const isDoctor = useMemo(
-    () => (user ? user?.role === "doctor" : null),
-    [user]
-  );
+  console.log(user);
+
+  const isUser = useMemo(() => (user ? user?.role === 'user' : null), [user]);
+  const isAdmin = useMemo(() => (user ? user?.role === 'admin' : null), [user]);
+  const isDoctor = useMemo(() => (user ? user?.role === 'doctor' : null), [user]);
 
   return (
-    <UserContextContextProvider
-      user={user}
-      role={user?.role}
-      setUser={setUser}
-      setLoading={setLoading}
-    >
+    <UserContextContextProvider user={user} role={user?.role} setLoading={setLoading}>
       <BrowserRouter>
         <Header />
         <div className="container my-4">
@@ -66,7 +59,7 @@ const App = () => {
               path="/appointments/add"
               element={
                 <RequireAuth access={isUser}>
-                  {" "}
+                  {' '}
                   <AppointmentsAdd />
                 </RequireAuth>
               }

@@ -1,31 +1,31 @@
-import React, { useState, useContext } from "react";
-import Tooth from "../tooth.svg";
-import { Link, useNavigate } from "react-router-dom";
-import axiosApi from "../axiosApi";
-import { UserContext } from "../UserContext";
-import { saveToLocalStorage } from "../utils/localStorage";
-import "../App.css";
-import "./Login.css";
-import "bootstrap/dist/css/bootstrap.min.css";
+import React, { useContext, useState } from 'react';
+import Tooth from '../tooth.svg';
+import { Link, useNavigate } from 'react-router-dom';
+import { UserContext } from '../UserContext';
+import { saveToLocalStorage } from '../utils/localStorage';
+import '../App.css';
+import './Login.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { useDispatch } from 'react-redux';
+import { requestLogin } from '../store/UserSlice';
 
 function Login() {
+  const dispatch = useDispatch()
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const { setUser, setLoading } = useContext(UserContext);
+  const { setLoading } = useContext(UserContext);
 
   const submitHandler = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await axiosApi.post("/login", {
-        username: email,
-        password,
-      });
-      console.log(response);
-      throw "ERROR";
+
+      dispatch(requestLogin({newData:{
+          username: email,
+          password,
+        }}))
     } catch (e) {
-      setUser({ role: "user" });
       saveToLocalStorage("user", { role: "user" });
       navigate("/");
     } finally {
