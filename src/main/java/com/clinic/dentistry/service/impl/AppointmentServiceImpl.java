@@ -129,7 +129,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     public Boolean isCanCancel(User user, Appointment appointment){
         return appointment.getClient() != null && user.getOutpatientCard() != null
                 && appointment.getClient().getId().equals(user.getOutpatientCard().getId())
-                && now.isBefore(appointment.getDate());
+                && now.isBefore(appointment.getDate().toLocalDate().atStartOfDay().plusDays(1));
     }
 
     @Override
