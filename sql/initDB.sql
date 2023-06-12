@@ -116,7 +116,24 @@ create table user_role
 alter table user_role
     owner to postgres;
 
-insert into usr(id, username, password, active)
-values (1, 'admin', '$2a$08$REVL9IX0UmZZJHP4zXxix.IrMws8ELlYUbmdqbv9AYnYeZoNef.SO', true);
+insert into usr(id, username, password, active, employee_id, outpatient_card_id)
+values (1, 'admin', '$2a$10$G2wJN7ErIZ.D5reJ3QOQvOiAhtpWCeAJHxSnZBLxqPh/8KEjAsHWG', true, null, null),
+       (2, 'doctor', '$2a$10$fNrl2zJtYP29g5ngjPQTHOVgubmusFBgUMD0J0FUnVsRuMNDHFc96', true, 1, null),
+       (3, 'patient', '$2a$10$7AJpqdEgyJHhSeWIG2T0/.mYMJGdvvZpa4dudkO/LAYabD.PBNPuO', true, null, 1);
+
+insert into employee (id, duration_app, full_name, job_title, work_end, work_start) VALUES
+(1, 30, 'Иванов Иван Иванович', 'Стоматолог-терапевт', '09:00:00', '18:00:00');
+
+insert into outpatient_card (id, full_name, email, gender) VALUES
+(1, 'Петров Петр Петрович', 'patient@example.com', 'MALE');
+
+
 insert into user_role (user_id, roles)
-values (1, 'ADMIN');
+values (1, 'ADMIN'), (2, 'DOCTOR');
+
+INSERT INTO good (id, active, name, price) VALUES
+(1, true, 'Первичный прием', 2000.0),
+(2, true, 'Повтроный прием', 1500.0),
+(3, true, 'Удажение зуба', 2500.0),
+(4, true, 'Анестезия', 500.0);
+
