@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosApi from "../../axiosApi";
 
 export const requestGoods = createAsyncThunk('userData/requestGoods', async ({ newData, catchFunction }) => {
-  return await axiosApi.post('/goods', newData);
+  return await axiosApi.get('/good', newData);
 });
 
 export const editGoods = createAsyncThunk('userData/editGoods', async ({ newData, catchFunction }) => {
@@ -35,6 +35,24 @@ const goodsSlice = createSlice({
     },
   },
   extraReducers: {
+
+    [requestGoods.pending]: (state) => {
+      state.loading = true;
+    },
+
+    [requestGoods.fulfilled]: (state, action) => {
+      state.goods = action.payload.data.goods;
+      state.loading = false;
+      state.error = null;
+    },
+
+    [requestGoods.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    },
+
+
+
     [getGood.pending]: (state) => {
       state.loading = true;
     },

@@ -7,7 +7,9 @@ import { createReduxStore } from './store/store';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 
-const user = loadFromLocalStorage('user');
+const token = loadFromLocalStorage('token', false) || null;
+const role = loadFromLocalStorage('role') || [];
+const user = { token, role };
 
 export const store = createReduxStore({ user });
 

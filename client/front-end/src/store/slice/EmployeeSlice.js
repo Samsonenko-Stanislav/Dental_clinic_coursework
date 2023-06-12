@@ -1,8 +1,8 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axiosApi from "../../axiosApi";
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import axiosApi from '../../axiosApi';
 
 export const requestEmployee = createAsyncThunk('userData/requestEmployee', async ({ newData, catchFunction }) => {
-  return await axiosApi.post('/employee', newData);
+  return await axiosApi.get('/employee', newData);
 });
 
 export const requestSoloEmployee = createAsyncThunk('userData/requestEmployee', async ({ newData, catchFunction }) => {
@@ -21,7 +21,7 @@ const initialState = {
   loading: false,
   error: null,
   employees: [],
-  employee:{}
+  employee: {},
 };
 
 const employeeSlice = createSlice({
@@ -40,8 +40,7 @@ const employeeSlice = createSlice({
     },
 
     [requestEmployee.fulfilled]: (state, action) => {
-      const response = action.payload;
-      console.log(response);
+      state.employees = action.payload?.data?.employees;
       state.loading = false;
       state.error = null;
     },

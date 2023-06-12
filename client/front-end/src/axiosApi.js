@@ -8,10 +8,13 @@ const axiosApi = axios.create({
 });
 
 axiosApi.interceptors.request.use(async (config) => {
-  config.headers = {
-    Authorization: `Bearer ${loadFromLocalStorage('token', false)}`,
-    Accept: 'application/json',
-  };
+  const token = loadFromLocalStorage('token', false);
+  if (token) {
+    config.headers = {
+      Authorization: `Basic ${token}`,
+      Accept: 'application/json',
+    };
+  }
   return config;
 });
 
@@ -19,7 +22,11 @@ axiosApi.interceptors.response.use(
   (response) => {
     return response;
   },
-  async () => {
+  async (error) => {
+    if (error.response.status) {
+      return Promise.reject(error);
+    }
+
     store.dispatch(logoutUser());
   }
 );

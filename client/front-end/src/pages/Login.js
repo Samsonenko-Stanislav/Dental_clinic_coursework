@@ -1,14 +1,15 @@
-import React, { useContext, useState } from "react";
-import Tooth from "../assets/tooth.svg";
-import { Link } from "react-router-dom";
-import { UserContext } from "../context/UserContext";
-import { useDispatch } from "react-redux";
-import { requestLogin } from "../store/slice/UserSlice";
-import "./Login.css";
+import React, { useContext, useState } from 'react';
+import Tooth from '../assets/tooth.svg';
+import { Link } from 'react-router-dom';
+import { UserContext } from '../context/UserContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { requestLogin } from '../store/slice/UserSlice';
+import './Login.css';
 
 function Login() {
   const dispatch = useDispatch();
-  const [email, setEmail] = useState('');
+  const error = useSelector((state) => state.user.error);
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const { setLoading } = useContext(UserContext);
 
@@ -18,7 +19,7 @@ function Login() {
     dispatch(
       requestLogin({
         newData: {
-          username: email,
+          username,
           password,
         },
       })
@@ -35,11 +36,10 @@ function Login() {
           <Link to="/">Вернуться на главную</Link>
           <h1 className="h3 mb-3 fw-normal">Пожалуйста, войдите</h1>
 
-          <div className={window.location.search.includes('error') ? 'error' : 'hidden'}>Неверный логин и/или пароль.</div>
-          <div className={window.location.search.includes('logout') ? 'logout' : 'hidden'}>Вы вышли.</div>
+          {error && <div className={'error'}>Неверный логин и/или пароль.</div>}
 
           <div className="form-floating my-2">
-            <input type="text" className="form-control" id="floatingInput" placeholder="Логин" name="username" value={email} onChange={(e) => setEmail(e.target.value)} />
+            <input type="text" className="form-control" id="floatingInput" placeholder="Логин" name="username" value={username} onChange={(e) => setUsername(e.target.value)} />
             <label htmlFor="floatingInput">Логин</label>
           </div>
           <div className="form-floating my-2">

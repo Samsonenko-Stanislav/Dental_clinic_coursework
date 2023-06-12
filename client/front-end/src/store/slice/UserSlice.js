@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axiosApi from '../../axiosApi';
+import { saveToLocalStorage } from '../../utils/localStorage';
 
 export const requestLogin = createAsyncThunk('userData/requestLogin', async ({ newData, catchFunction }) => {
   return await axiosApi.post('/login', newData);
@@ -14,23 +15,28 @@ export const getUser = createAsyncThunk('userData/getUser', async ({ newData, ca
 });
 
 export const updateUser = createAsyncThunk('userData/updateUser', async ({ newData, catchFunction }) => {
-  return await axiosApi.post('/user/me');
+  return await axiosApi.post('/user/new');
 });
 
 export const getUsers = createAsyncThunk('userData/getUsers', async ({ newData, catchFunction }) => {
-  return await axiosApi.get('/user/me');
+  return await axiosApi.get('/user');
+});
+
+export const getSoloUser = createAsyncThunk('userData/getSoloUser', async ({ newData, catchFunction }) => {
+  return await axiosApi.get(`/user/${newData.id}`);
 });
 
 const initialState = {
   loading: false,
   error: null,
-  role: null,
+  role: [],
   fullName: null,
   token: null,
   username: null,
   email: null,
   gender: null,
   users: [],
+  user: {},
 };
 
 const userSlice = createSlice({
@@ -49,15 +55,22 @@ const userSlice = createSlice({
     },
 
     [requestLogin.fulfilled]: (state, action) => {
-      const response = action.payload;
-      console.log(response);
-      state.loading = false;
-      state.error = null;
+      if (action?.payload) {
+        const response = action?.payload?.data;
+
+        saveToLocalStorage('token', response.token, false);
+        saveToLocalStorage('role', response?.roles);
+
+        state.token = response.token;
+        state.role = response?.roles;
+        state.loading = false;
+        state.error = null;
+      }
     },
 
-    [requestLogin.rejected]: (state, action) => {
+    [requestLogin.rejected]: (state) => {
       state.loading = false;
-      state.error = action.error.message;
+      state.error = 'Неверный логин и/или пароль.';
     },
 
     [requestRegister.pending]: (state) => {
@@ -113,13 +126,25 @@ const userSlice = createSlice({
     },
 
     [getUsers.fulfilled]: (state, action) => {
-      const response = [] || action.payload;
-      state.users = response;
+      state.users = action.payload?.data?.users || [];
       state.loading = false;
       state.error = null;
     },
 
     [getUsers.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    },
+
+    [getSoloUser.pending]: (state) => {
+      state.loading = true;
+    },
+    [getSoloUser.fulfilled]: (state, action) => {
+      state.user = action.payload?.data;
+      state.loading = false;
+      state.error = null;
+    },
+    [getSoloUser.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.error.message;
     },

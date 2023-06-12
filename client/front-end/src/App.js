@@ -30,9 +30,9 @@ const App = () => {
   const user = useSelector((state) => state.user);
   const [loading, setLoading] = useState(false);
 
-  const isUser = useMemo(() => (user ? user?.role === 'user' : null), [user]);
-  const isAdmin = useMemo(() => (user ? user?.role === 'admin' : null), [user]);
-  const isDoctor = useMemo(() => (user ? user?.role === 'doctor' : null), [user]);
+  const isUser = useMemo(() => (user ? user?.role.includes('USER') : null), [user]);
+  const isAdmin = useMemo(() => (user ? user?.role.includes('ADMIN') : null), [user]);
+  const isDoctor = useMemo(() => (user ? user?.role.includes('DOCTOR') : null), [user]);
 
   return (
     <UserContextContextProvider user={user} role={user?.role} setLoading={setLoading}>

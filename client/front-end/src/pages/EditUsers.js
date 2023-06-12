@@ -1,32 +1,22 @@
-import React, { useEffect, useState } from "react";
-import axiosApi from "../axiosApi";
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getSoloUser } from '../store/slice/UserSlice';
+import { useParams } from 'react-router-dom';
 
 const EditUsers = () => {
-  const [user, setUser] = useState({});
-  const [roles, setRoles] = useState([]);
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.user);
+  const params = useParams();
+
   const [employees, setEmployees] = useState([]);
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState('');
   const [changePassword, setChangePassword] = useState(false);
   const [selectedRoles, setSelectedRoles] = useState([]);
-  const [selectedEmployee, setSelectedEmployee] = useState("");
+  const [selectedEmployee, setSelectedEmployee] = useState('');
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const userResponse = await axiosApi.get("/api/user");
-        const rolesResponse = await axiosApi.get("/api/roles");
-        const employeesResponse = await axiosApi.get("/api/employees");
-
-        setUser([]);
-        setRoles([]);
-        setEmployees([]);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchData();
-  }, []);
+    dispatch(getSoloUser({ newData: { id: params.id } }));
+  }, [dispatch, params.id]);
 
   const handleCheckboxChange = (event) => {
     const role = event.target.name;
@@ -35,9 +25,7 @@ const EditUsers = () => {
     if (checked) {
       setSelectedRoles((prevRoles) => [...prevRoles, role]);
     } else {
-      setSelectedRoles((prevRoles) =>
-        prevRoles.filter((prevRole) => prevRole !== role)
-      );
+      setSelectedRoles((prevRoles) => prevRoles.filter((prevRole) => prevRole !== role));
     }
   };
 
@@ -71,37 +59,17 @@ const EditUsers = () => {
                 <label htmlFor="username" className="form-label">
                   Логин
                 </label>
-                <input
-                  type="text"
-                  name="username"
-                  className="form-control"
-                  readOnly
-                  id="username"
-                  required
-                  value={user.username}
-                />
+                <input type="text" name="username" className="form-control" readOnly id="username" required value={user?.user?.username} />
               </div>
               <div className="col-3">
-                <input
-                  type="checkbox"
-                  name="active"
-                  id="active"
-                  checked={user.active}
-                  onChange={handleCheckboxChange}
-                />
+                <input type="checkbox" name="active" id="active" checked={user?.user?.active} onChange={handleCheckboxChange} />
                 <label htmlFor="active" className="form-label">
                   Активен
                 </label>
               </div>
             </div>
             <div className="col-12">
-              <input
-                type="checkbox"
-                name="changePassword"
-                id="changePassword"
-                checked={changePassword}
-                onChange={handlePasswordChange}
-              />
+              <input type="checkbox" name="changePassword" id="changePassword" checked={changePassword} onChange={handlePasswordChange} />
               <label htmlFor="changePassword" className="form-label">
                 Сменить пароль
               </label>
@@ -110,50 +78,30 @@ const EditUsers = () => {
                   <label htmlFor="password" className="form-label">
                     Новый пароль
                   </label>
-                  <input
-                    type="password"
-                    name="password"
-                    id="password"
-                    className="form-control"
-                  />
+                  <input type="password" name="password" id="password" className="form-control" />
                 </div>
               )}
             </div>
             <div className="col-12">
-              {roles &&
-                roles.map((role) => (
+              {user?.roles &&
+                user?.roles.map((role) => (
                   <div key={role}>
-                    <input
-                      type="checkbox"
-                      name={role}
-                      id={role}
-                      checked={selectedRoles.includes(role)}
-                      onChange={handleCheckboxChange}
-                    />
+                    <input type="checkbox" name={role} id={role} checked={selectedRoles.includes(role)} onChange={handleCheckboxChange} />
                     <label htmlFor={role} className="form-label">
                       {role}
                     </label>
                   </div>
                 ))}
             </div>
-            {selectedRoles.includes("DOCTOR") && (
+            {selectedRoles.includes('DOCTOR') && (
               <div id="forEmpl">
                 <div className="col-md-5">
                   <label htmlFor="employee" className="form-label">
                     Сотрудник
                   </label>
-                  <select
-                    className="form-select"
-                    id="employee"
-                    name="employee"
-                    value={selectedEmployee}
-                    onChange={handleEmployeeSelect}
-                  >
+                  <select className="form-select" id="employee" name="employee" value={selectedEmployee} onChange={handleEmployeeSelect}>
                     {employees.map((employee) => (
-                      <option
-                        key={employee.id}
-                        value={employee.id}
-                      >{`${employee.id}:${employee.fullName}`}</option>
+                      <option key={employee.id} value={employee.id}>{`${employee.id}:${employee.fullName}`}</option>
                     ))}
                   </select>
                 </div>
@@ -163,7 +111,6 @@ const EditUsers = () => {
               Сохранить
             </button>
           </div>
-          <input type="hidden" name="userId" value={user.id} />
         </form>
       </div>
     </div>
