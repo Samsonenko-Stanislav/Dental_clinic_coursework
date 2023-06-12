@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { requestGoods } from '../store/slice/GoodsSlice';
 
 const Goods = () => {
+  const dispatch = useDispatch();
   const goods = useSelector((state) => state.goods.goods);
   const [withArchived, setWithArchived] = useState(false);
 
   useEffect(() => {
-    // Выполнение запроса для получения списка услуг
-    // При успешном выполнении запроса установите данные в состояние
-    // setGoods(response.data);
-  }, []);
+    dispatch(requestGoods({}));
+  }, [dispatch]);
 
   const toggleArchived = () => {
     setWithArchived((prevValue) => !prevValue);

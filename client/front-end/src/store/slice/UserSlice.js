@@ -17,6 +17,10 @@ export const updateUser = createAsyncThunk('userData/updateUser', async ({ newDa
   return await axiosApi.post('/user/me');
 });
 
+export const getUsers = createAsyncThunk('userData/getUsers', async ({ newData, catchFunction }) => {
+  return await axiosApi.get('/user/me');
+});
+
 const initialState = {
   loading: false,
   error: null,
@@ -26,6 +30,7 @@ const initialState = {
   username: null,
   email: null,
   gender: null,
+  users: [],
 };
 
 const userSlice = createSlice({
@@ -99,6 +104,22 @@ const userSlice = createSlice({
     },
 
     [updateUser.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    },
+
+    [getUsers.pending]: (state) => {
+      state.loading = true;
+    },
+
+    [getUsers.fulfilled]: (state, action) => {
+      const response = action.payload;
+      state.users = [];
+      state.loading = false;
+      state.error = null;
+    },
+
+    [getUsers.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.error.message;
     },

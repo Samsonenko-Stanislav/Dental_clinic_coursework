@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axiosApi from '../../axiosApi';
+import { requestRegister } from './UserSlice';
 
 export const requestEmployee = createAsyncThunk('userData/requestEmployee', async ({ newData, catchFunction }) => {
   return await axiosApi.post('/employee', newData);
@@ -16,7 +17,7 @@ export const addEmployee = createAsyncThunk('userData/addEmployee', async ({ new
 const initialState = {
   loading: false,
   error: null,
-  employee: [],
+  employees: [],
 };
 
 const employeeSlice = createSlice({
@@ -27,6 +28,23 @@ const employeeSlice = createSlice({
   reducers: {
     nullifyDataEmployee(state) {
       state = Object.assign(state, initialState);
+    },
+  },
+  extraReducers: {
+    [requestEmployee.pending]: (state) => {
+      state.loading = true;
+    },
+
+    [requestEmployee.fulfilled]: (state, action) => {
+      const response = action.payload;
+      console.log(response);
+      state.loading = false;
+      state.error = null;
+    },
+
+    [requestEmployee.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
     },
   },
 });

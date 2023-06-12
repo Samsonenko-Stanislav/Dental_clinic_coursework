@@ -3,6 +3,7 @@ import { createReducerManager } from './reducerManager';
 import userSlice from './slice/UserSlice';
 import goodsSlice from './slice/GoodsSlice';
 import appointmentsSlice from './slice/AppoimentsSlice';
+import employeeSlice from './slice/EmployeeSlice';
 
 export function createReduxStore(initialState, asyncReducers) {
   const rootReducers = {
@@ -10,6 +11,7 @@ export function createReduxStore(initialState, asyncReducers) {
     user: userSlice,
     goods: goodsSlice,
     appointments: appointmentsSlice,
+    employee: employeeSlice,
   };
 
   const reducerManager = createReducerManager(rootReducers);

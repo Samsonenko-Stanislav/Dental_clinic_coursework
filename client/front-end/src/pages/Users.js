@@ -1,28 +1,19 @@
-import React, { useEffect, useState, useContext } from "react";
-import { Link } from "react-router-dom";
-import { UserContext } from "../UserContext";
+import React, { useContext, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { UserContext } from '../UserContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUsers } from '../store/slice/UserSlice';
 
 const Users = () => {
-  const [users, setUsers] = useState([]);
+  const dispatch = useDispatch();
+  const users = useSelector((state) => state.user.users) || [];
   const { setLoading } = useContext(UserContext);
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch(
-          "https://jsonplaceholder.typicode.com/users"
-        );
-        const data = await response.json();
-        setUsers(data.map((user) => ({ ...user, roles: "Admin" })));
-      } catch (error) {
-      } finally {
-        setTimeout(() => setLoading(false), 1000);
-      }
-    };
-
-    fetchUsers();
-  }, [setLoading]);
+    setLoading(true);
+    dispatch(getUsers({}));
+    setLoading(false);
+  }, [dispatch, setLoading]);
 
   return (
     <>
@@ -41,9 +32,7 @@ const Users = () => {
               ? users.map((user) => (
                   <tr key={user.id}>
                     <td>{user.id}</td>
-                    <td className={user.active ? "" : "archived"}>
-                      {user.username}
-                    </td>
+                    <td className={user.active ? '' : 'archived'}>{user.username}</td>
                     <td>
                       {user.roles}
                       {/*{user.roles.map((role, index) => (*/}
@@ -63,12 +52,8 @@ const Users = () => {
       <Link to="/user/new" className="btn btn-primary mx-2">
         Создать нового
       </Link>
-      <button className="btn btn-primary mx-2">
-        Показать архивных пользователей
-      </button>
-      <button className="btn btn-primary mx-2">
-        Скрыть архивных пользователей
-      </button>
+      <button className="btn btn-primary mx-2">Показать архивных пользователей</button>
+      <button className="btn btn-primary mx-2">Скрыть архивных пользователей</button>
     </>
   );
 };
