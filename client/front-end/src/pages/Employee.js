@@ -20,12 +20,12 @@ const Employee = () => {
     <>
       {employees.length ? (
         <>
-          {[employees].map((employee) => (
+          {employees.map((employee) => (
             <div className="col-md-12" key={employee.id}>
               <div className="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
                 <div className="col p-4 d-flex flex-column position-static">
-                  <strong className="d-inline-block mb-2 text-primary">{`${employee.id}:${employee.name}`}</strong>
-                  <h3 className="mb-0">{employee.email}</h3>
+                  <strong className="d-inline-block mb-2 text-primary">{`${employee.fullName}`}</strong>
+                  <h3 className="mb-0">Должность: {employee.jobTitle}</h3>
                   <div className="mb-1 text-muted">{`${employee.workStart}-${employee.workEnd}`}</div>
                   <Link to={`/employee/edit/${employee.id}`} className="stretched-link">
                     Редактировать

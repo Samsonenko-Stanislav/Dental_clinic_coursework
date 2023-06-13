@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,8 +7,13 @@ import EmptyComponent from '../components/EmptyComonent/EmptyComonent';
 
 const Users = () => {
   const dispatch = useDispatch();
-  const users = useSelector((state) => state.user.users) || [];
+  const usersStore = useSelector((state) => state.user.users) || [];
   const { setLoading } = useContext(UserContext);
+  const [active, setActive] = useState(true);
+
+  const users = useMemo(() => {
+    return active ? usersStore.filter((user) => user.active) : usersStore.filter((user) => !user.active);
+  }, [usersStore, active]);
 
   useEffect(() => {
     setLoading(true);
@@ -37,10 +42,9 @@ const Users = () => {
                     <td>{user.id}</td>
                     <td className={user.active ? '' : 'archived'}>{user.username}</td>
                     <td>
-                      {user.roles}
-                      {/*{user.roles.map((role, index) => (*/}
-                      {/*  <p key={index}>{role},</p>*/}
-                      {/*))}*/}
+                      {user.roles.map((role, index) => (
+                        <p key={index}>{role},</p>
+                      ))}
                     </td>
                     <td>
                       <Link to={`/user/edit/${user.id}`}>Редактировать</Link>
@@ -49,15 +53,21 @@ const Users = () => {
                 ))}
               </tbody>
             </table>{' '}
-            <button className="btn btn-primary mx-2">Показать архивных пользователей</button>
-            <button className="btn btn-primary mx-2">Скрыть архивных пользователей</button>
           </>
         ) : (
           <EmptyComponent />
         )}{' '}
-        <Link to="/user/new" className="btn btn-primary mx-2">
-          Создать нового
-        </Link>
+        <div className="my-4">
+          <button className="btn btn-primary mx-2" onClick={() => setActive(false)}>
+            Показать архивных пользователей
+          </button>
+          <button className="btn btn-primary mx-2" onClick={() => setActive(true)}>
+            Скрыть архивных пользователей
+          </button>
+          <Link to="/user/new" className="btn btn-primary mx-2">
+            Создать нового
+          </Link>
+        </div>
       </div>
     </>
   );

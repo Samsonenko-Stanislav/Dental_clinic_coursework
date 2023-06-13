@@ -38,7 +38,7 @@ const App = () => {
     <UserContextContextProvider user={user} role={user?.role} setLoading={setLoading}>
       <BrowserRouter>
         <Header />
-        <div className="container my-4">
+        <div className="container overflow-auto overflow-block">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route

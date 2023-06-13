@@ -4,6 +4,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   padding: 0 !important ;
+  overflow: auto;
 }
 
 body::-webkit-scrollbar {
@@ -24,16 +25,23 @@ code {
 html,
 body {
   height: 100%;
+  min-height: 100vh;
+  overflow: auto;
 }
 
 body {
   display: flex;
   align-items: center;
-  padding-top: 40px;
-  padding-bottom: 40px;
   background-color: #f5f5f5;
 }
 
+.overflow-block {
+  height: calc(100vh - 134px );
+}
+.overflow-block::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
 .form-signin {
   max-width: 330px;
   padding: 15px;
@@ -104,19 +112,6 @@ body {
   text-align: center;
   white-space: nowrap;
   -webkit-overflow-scrolling: touch;
-}
-
-html,
-body {
-  height: 100%;
-}
-
-body {
-  display: flex;
-  align-items: center;
-  padding-top: 40px;
-  padding-bottom: 40px;
-  background-color: #f5f5f5;
 }
 
 .form-signup {

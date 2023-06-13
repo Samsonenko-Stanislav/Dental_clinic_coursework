@@ -5,16 +5,16 @@ export const requestEmployee = createAsyncThunk('userData/requestEmployee', asyn
   return await axiosApi.get('/employee', newData);
 });
 
-export const requestSoloEmployee = createAsyncThunk('userData/requestEmployee', async ({ newData, catchFunction }) => {
-  return await axiosApi.get('/employee', newData);
+export const requestSoloEmployee = createAsyncThunk('userData/requestSoloEmployee', async ({ newData, catchFunction }) => {
+  return await axiosApi.get('/employee/' + newData.id, newData);
 });
 
 export const editEmployee = createAsyncThunk('userData/editEmployee', async ({ newData, catchFunction }) => {
-  return await axiosApi.post('/employee', newData);
+  return await axiosApi.post('/employee/' + newData.id, newData);
 });
 
 export const addEmployee = createAsyncThunk('userData/addEmployee', async ({ newData, catchFunction }) => {
-  return await axiosApi.post('employees', newData);
+  return await axiosApi.post('employee/new', newData);
 });
 
 const initialState = {
@@ -46,6 +46,20 @@ const employeeSlice = createSlice({
     },
 
     [requestEmployee.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    },
+    [requestSoloEmployee.pending]: (state) => {
+      state.loading = true;
+    },
+
+    [requestSoloEmployee.fulfilled]: (state, action) => {
+      state.employee = action.payload?.data?.employee;
+      state.loading = false;
+      state.error = null;
+    },
+
+    [requestSoloEmployee.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.error.message;
     },

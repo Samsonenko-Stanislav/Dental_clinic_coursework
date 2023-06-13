@@ -16,3 +16,9 @@ export const useOnClickOutside = (ref, handler) => {
     };
   }, [ref, handler]);
 };
+
+
+
+export const removeEmptyFromObject = (obj) => {
+  return Object.fromEntries(Object.entries(obj).filter(([_, v]) => v != null && v !== 'null'));
+};

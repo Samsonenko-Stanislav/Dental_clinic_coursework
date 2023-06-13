@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { editGoods, getGood } from '../store/slice/GoodsSlice';
 
 const GoodEdit = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const params = useParams();
   const good = useSelector((state) => state.goods.good);
-  const [title, setTitle] = useState('');
+  const [name, setName] = useState('');
   const [price, setPrice] = useState('');
   const [active, setActive] = useState(false);
 
@@ -15,9 +16,18 @@ const GoodEdit = () => {
     dispatch(getGood({ newData: { id: params.id } }));
   }, [dispatch, params.id]);
 
+  useEffect(() => {
+    if (Object.keys(good).length) {
+      setPrice(good.price);
+      setName(good.name);
+      setActive(good.active);
+    }
+  }, [good]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(editGoods({}));
+    dispatch(editGoods({ newData: { price, name, active, id: params.id } }));
+    navigate('/good');
   };
 
   return (
@@ -37,7 +47,7 @@ const GoodEdit = () => {
                 <label htmlFor="name" className="form-label">
                   Название
                 </label>
-                <input type="text" name="name" className="form-control" id="name" required defaultValue={good.name} value={title} onChange={(e) => setTitle(e.target.value)} />
+                <input type="text" name="name" className="form-control" id="name" required defaultValue={good.name} value={name} onChange={(e) => setName(e.target.value)} />
               </div>
               <div className="col-6">
                 <label htmlFor="price" className="form-label">

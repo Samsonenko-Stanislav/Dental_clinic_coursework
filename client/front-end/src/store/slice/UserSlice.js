@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axiosApi from '../../axiosApi';
 import { saveToLocalStorage } from '../../utils/localStorage';
+import { removeEmptyFromObject } from '../../utils/useOnClickOutside';
 
 export const requestLogin = createAsyncThunk('userData/requestLogin', async ({ newData, catchFunction }) => {
   return await axiosApi.post('/login', newData);
@@ -15,7 +16,7 @@ export const getUser = createAsyncThunk('userData/getUser', async ({ newData, ca
 });
 
 export const updateUser = createAsyncThunk('userData/updateUser', async ({ newData, catchFunction }) => {
-  return await axiosApi.post('/user/new');
+  return await axiosApi.post('/user/new', removeEmptyFromObject(newData));
 });
 
 export const getUsers = createAsyncThunk('userData/getUsers', async ({ newData, catchFunction }) => {
@@ -24,6 +25,10 @@ export const getUsers = createAsyncThunk('userData/getUsers', async ({ newData, 
 
 export const getSoloUser = createAsyncThunk('userData/getSoloUser', async ({ newData, catchFunction }) => {
   return await axiosApi.get(`/user/${newData.id}`);
+});
+
+export const editUser = createAsyncThunk('userData/editUser', async ({ newData, catchFunction }) => {
+  return await axiosApi.post('/user/' + newData.id, removeEmptyFromObject(newData));
 });
 
 const initialState = {

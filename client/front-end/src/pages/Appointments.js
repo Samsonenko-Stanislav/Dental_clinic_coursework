@@ -23,23 +23,24 @@ const Appointments = () => {
           <div className="col-12">
             <h3>{withArchived ? 'Предыдущие записи к вам:' : 'Ближайшие записи к вам:'}</h3>
           </div>
-          {appointmentsDoctor.map((appointment) => (
-            <div className="col-md-4" key={appointment.id}>
-              <div className="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-                <div className="col p-4 d-flex flex-column position-static">
-                  <strong className="d-inline-block mb-2 text-primary">{appointment.name}</strong>
-                  <div className="mb-1 text-muted">{appointment.date}</div>
-                  <Link href={`/appointments/${appointment.id}/edit`} className="stretched-link">
-                    Подробнее
-                  </Link>
+          {role.includes('DOCTOR') &&
+            appointmentsDoctor.map((appointment) => (
+              <div className="col-md-4" key={appointment.id}>
+                <div className="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                  <div className="col p-4 d-flex flex-column position-static">
+                    <strong className="d-inline-block mb-2 text-primary">{appointment.name}</strong>
+                    <div className="mb-1 text-muted">{appointment.date}</div>
+                    <Link href={`/appointments/${appointment.id}/edit`} className="stretched-link">
+                      Подробнее
+                    </Link>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
       )}
 
-      {role === 'user' && appointmentsClient.length > 0 && (
+      {role.includes('USER') && appointmentsClient.length > 0 && (
         <div className="row mb-2">
           <div className="col-12">
             <h3>{withArchived ? 'Вы были у врачей:' : 'Вы записаны к врачам:'}</h3>
@@ -61,7 +62,7 @@ const Appointments = () => {
         </div>
       )}
 
-      {role === 'user' && (
+      {role.includes('USER') && (
         <Link to="/appointments/add" className="btn btn-primary">
           Записаться
         </Link>

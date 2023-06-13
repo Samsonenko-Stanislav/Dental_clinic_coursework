@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { addGoods } from '../store/slice/GoodsSlice';
+import { useNavigate } from 'react-router-dom';
 
 const GoodNew = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     dispatch(addGoods({ newData: { price: parseInt(price), name, active: true } }));
+    navigate('/good');
   };
 
   return (

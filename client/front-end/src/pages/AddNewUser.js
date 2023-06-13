@@ -1,8 +1,10 @@
 import React, { memo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { updateUser } from '../store/slice/UserSlice';
+import { useNavigate } from 'react-router-dom';
 
 const AddNewUser = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isAdmin, setIsAdmin] = useState(false);
   const [isDoctor, setIsDoctor] = useState(false);
@@ -12,6 +14,11 @@ const AddNewUser = () => {
   const [email, setEmail] = useState('');
   const [gender, setGender] = useState('male');
   const [fullName, setFullName] = useState('');
+
+  const [jobTitle, setJobTitle] = useState('');
+  const [workStart, setWorkStart] = useState('');
+  const [workEnd, setWorkEnd] = useState('');
+  const [durationApp, setDurationApp] = useState('');
 
   const handleAdminChange = (event) => {
     setIsAdmin(event.target.checked);
@@ -41,9 +48,15 @@ const AddNewUser = () => {
           gender,
           fullName,
           roles,
+          jobTitle,
+          workStart,
+          workEnd,
+          durationApp,
         },
       })
     );
+
+    navigate('/user');
   };
 
   return (
@@ -103,26 +116,26 @@ const AddNewUser = () => {
                 <label htmlFor="jobTitle" className="form-label">
                   Должность
                 </label>
-                <input type="text" name="jobTitle" className="form-control" required id="jobTitle" />
+                <input type="text" name="jobTitle" className="form-control" required id="jobTitle" value={jobTitle} onChange={(e) => setJobTitle(e.target.value)} />
               </div>
               <div className="row col-12">
                 <div className="col-6">
                   <label htmlFor="workStart" className="form-label">
                     Старт рабочего дня
                   </label>
-                  <input type="time" name="workStart" className="form-control" required id="workStart" />
+                  <input type="time" name="workStart" className="form-control" required id="workStart" value={workStart} onChange={(e) => setWorkStart(e.target.value)} />
                 </div>
                 <div className="col-6">
                   <label htmlFor="workEnd" className="form-label">
                     Конец рабочего дня
                   </label>
-                  <input type="time" name="workEnd" className="form-control" required id="workEnd" />
+                  <input type="time" name="workEnd" className="form-control" required id="workEnd" value={workEnd} onChange={(e) => setWorkEnd(e.target.value)} />
                 </div>
                 <div className="col-6">
                   <label htmlFor="durationApp" className="form-label">
                     Время приема (минут)
                   </label>
-                  <input type="text" name="durationApp" className="form-control" required id="durationApp" />
+                  <input type="text" name="durationApp" className="form-control" required id="durationApp" value={durationApp} onChange={(e) => setDurationApp(e.target.value)} />
                 </div>
               </div>
             </div>

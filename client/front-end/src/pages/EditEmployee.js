@@ -1,25 +1,39 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { editEmployee, requestSoloEmployee } from '../store/slice/EmployeeSlice';
+import { editEmployee, nullifyDataEmployee, requestSoloEmployee } from '../store/slice/EmployeeSlice';
 
 const EditEmployee = () => {
   const dispatch = useDispatch();
   const params = useParams();
   const employee = useSelector((state) => state.employee.employee);
   const [fullName, setFullName] = useState('');
-  const [title, setTitle] = useState('');
-  const [timeReception, setTimeReception] = useState('');
-  const [timeStart, setTimeStart] = useState('');
-  const [timeEnd, setTimeEnd] = useState('');
+  const [jobTitle, setTitle] = useState('');
+  const [durationApp, setTimeReception] = useState('');
+  const [workStart, setTimeStart] = useState('');
+  const [workEnd, setTimeEnd] = useState('');
+
+  useEffect(() => {
+    if (Object.keys(employee).length) {
+      setTimeEnd(employee.workEnd);
+      setTimeStart(employee.workStart);
+      setFullName(employee.fullName);
+      setTitle(employee.jobTitle);
+      setTimeReception(employee.durationApp);
+    }
+  }, [employee]);
 
   useEffect(() => {
     dispatch(requestSoloEmployee({ newData: { id: params.id } }));
+
+    return () => {
+      dispatch(nullifyDataEmployee());
+    };
   }, [dispatch, params.id]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(editEmployee({}));
+    dispatch(editEmployee({ newData: { id: params.id, workEnd, workStart, jobTitle, durationApp, fullName } }));
   };
 
   return (
@@ -39,7 +53,7 @@ const EditEmployee = () => {
                 <label htmlFor="jobTitle" className="form-label">
                   Должность
                 </label>
-                <input type="text" name="jobTitle" className="form-control" id="jobTitle" value={title} onChange={(e) => setTitle(e.target.value)} />
+                <input type="text" name="jobTitle" className="form-control" id="jobTitle" value={jobTitle} onChange={(e) => setTitle(e.target.value)} />
               </div>
             </div>
             <div className="row col-12">
@@ -47,19 +61,19 @@ const EditEmployee = () => {
                 <label htmlFor="workStart" className="form-label">
                   Старт рабочего дня
                 </label>
-                <input type="time" name="workStart" className="form-control" id="workStart" value={timeStart} onChange={(e) => setTimeStart(e.target.value)} />
+                <input type="time" name="workStart" className="form-control" id="workStart" value={workStart} onChange={(e) => setTimeStart(e.target.value)} />
               </div>
               <div className="col-6">
                 <label htmlFor="workEnd" className="form-label">
                   Конец рабочего дня
                 </label>
-                <input type="time" name="workEnd" className="form-control" id="workEnd" value={timeEnd} onChange={(e) => setTimeEnd(e.target.value)} />
+                <input type="time" name="workEnd" className="form-control" id="workEnd" value={workEnd} onChange={(e) => setTimeEnd(e.target.value)} />
               </div>
               <div className="col-6">
                 <label htmlFor="durationApp" className="form-label">
                   Время приема (минут)
                 </label>
-                <input type="text" name="durationApp" className="form-control" id="durationApp" value={timeReception} onChange={(e) => setTimeReception(e.target.value)} />
+                <input type="text" name="durationApp" className="form-control" id="durationApp" value={durationApp} onChange={(e) => setTimeReception(e.target.value)} />
               </div>
             </div>
             <input type="hidden" name="employeeId" value={employee.id} />

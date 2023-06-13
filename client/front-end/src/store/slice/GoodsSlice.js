@@ -9,8 +9,8 @@ export const editGoods = createAsyncThunk('userData/editGoods', async ({ newData
   return await axiosApi.post(`/good/${newData.id}`, newData);
 });
 
-export const getGood = createAsyncThunk('userData/editGoods', async ({ newData, catchFunction }) => {
-  return await axiosApi.get('/good', newData);
+export const getGood = createAsyncThunk('userData/getGood', async ({ newData, catchFunction }) => {
+  return await axiosApi.get('/good/' + newData.id, newData);
 });
 
 export const addGoods = createAsyncThunk('userData/addGoods', async ({ newData, catchFunction }) => {
@@ -55,7 +55,7 @@ const goodsSlice = createSlice({
     },
 
     [getGood.fulfilled]: (state, action) => {
-      state.prices = action.payload.data.goods;
+      state.good = action.payload.data.good;
       state.loading = false;
       state.error = null;
     },

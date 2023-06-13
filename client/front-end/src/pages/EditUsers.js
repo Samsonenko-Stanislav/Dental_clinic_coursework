@@ -1,22 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getSoloUser } from '../store/slice/UserSlice';
+import { editUser, getSoloUser } from '../store/slice/UserSlice';
 import { useParams } from 'react-router-dom';
 
 const EditUsers = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
   const params = useParams();
-
-  const [employees, setEmployees] = useState([]);
-  const [message, setMessage] = useState('');
+  const [username, setUserName] = useState('');
+  const [active, setActive] = useState(false);
+  const [employee, setEmployee] = useState('');
   const [changePassword, setChangePassword] = useState(false);
   const [selectedRoles, setSelectedRoles] = useState([]);
-  const [selectedEmployee, setSelectedEmployee] = useState('');
 
   useEffect(() => {
     dispatch(getSoloUser({ newData: { id: params.id } }));
   }, [dispatch, params.id]);
+
+  useEffect(() => {
+    if (user?.user) {
+      setUserName(user?.user?.username);
+      setActive(user?.user?.active);
+      setSelectedRoles(user?.user?.roles);
+      setEmployee(user?.user?.employeeId);
+    }
+  }, [user?.user]);
 
   const handleCheckboxChange = (event) => {
     const role = event.target.name;
@@ -29,29 +37,19 @@ const EditUsers = () => {
     }
   };
 
-  const handleEmployeeSelect = (event) => {
-    setSelectedEmployee(event.target.value);
-  };
-
   const handlePasswordChange = (event) => {
     setChangePassword(event.target.checked);
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    try {
-      // Perform your submit logic here using axios or any other library
-    } catch (error) {
-      console.log(error);
-    }
+    dispatch(editUser({ newData: { active, username, id: params.id, employeeId: employee, roles: selectedRoles } }));
   };
 
   return (
     <div className="container">
       <div className="col-md-7 col-lg-8">
         <h4 className="mb-3">Редактирование пользователя</h4>
-        {message && <div>{message}</div>}
         <form onSubmit={handleSubmit}>
           <div className="row">
             <div className="row col-12 justify-content-between">
@@ -59,10 +57,10 @@ const EditUsers = () => {
                 <label htmlFor="username" className="form-label">
                   Логин
                 </label>
-                <input type="text" name="username" className="form-control" readOnly id="username" required value={user?.user?.username} />
+                <input type="text" name="username" className="form-control" readOnly id="username" required value={username} onChange={(e) => setUserName(e.target.value)} />
               </div>
               <div className="col-3">
-                <input type="checkbox" name="active" id="active" checked={user?.user?.active} onChange={handleCheckboxChange} />
+                <input type="checkbox" name="active" id="active" checked={active} onChange={(e) => setActive(e.target.checked)} />
                 <label htmlFor="active" className="form-label">
                   Активен
                 </label>
@@ -99,9 +97,9 @@ const EditUsers = () => {
                   <label htmlFor="employee" className="form-label">
                     Сотрудник
                   </label>
-                  <select className="form-select" id="employee" name="employee" value={selectedEmployee} onChange={handleEmployeeSelect}>
-                    {employees.map((employee) => (
-                      <option key={employee.id} value={employee.id}>{`${employee.id}:${employee.fullName}`}</option>
+                  <select className="form-select" id="employee" name="employee" value={employee} onChange={(e) => setEmployee(e.target.value)}>
+                    {user?.employees.map((employee) => (
+                      <option key={employee.id} value={employee.id}>{`${employee.fullName}`}</option>
                     ))}
                   </select>
                 </div>

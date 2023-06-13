@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { requestGoods } from '../store/slice/GoodsSlice';
@@ -6,8 +6,12 @@ import EmptyComponent from '../components/EmptyComonent/EmptyComonent';
 
 const Goods = () => {
   const dispatch = useDispatch();
-  const goods = useSelector((state) => state.goods.goods);
-  const [withArchived, setWithArchived] = useState(false);
+  const goodsStore = useSelector((state) => state.goods.goods);
+  const [withArchived, setWithArchived] = useState(true);
+
+  const goods = useMemo(() => {
+    return withArchived ? goodsStore.filter((user) => user.active) : goodsStore.filter((user) => !user.active);
+  }, [goodsStore, withArchived]);
 
   useEffect(() => {
     dispatch(requestGoods({}));
@@ -41,24 +45,24 @@ const Goods = () => {
                 </div>
               </div>
             ))}
-
-            {withArchived ? (
-              <Link to="/good" className="btn btn-primary mx-1" onClick={toggleArchived}>
-                Скрыть архивные услуги
-              </Link>
-            ) : (
-              <Link to="/good?withArchived" className="btn btn-primary mx-1" onClick={toggleArchived}>
-                Показать архивные услуги
-              </Link>
-            )}
           </>
         ) : (
           <EmptyComponent />
         )}
-
-        <Link to="/good/new" className="btn btn-primary mx-1 my-4">
-          Создать новую
-        </Link>
+        <div className="my-4">
+          {!withArchived ? (
+            <button className="btn btn-primary mx-1" onClick={toggleArchived}>
+              Скрыть архивные услуги
+            </button>
+          ) : (
+            <button className="btn btn-primary mx-1" onClick={toggleArchived}>
+              Показать архивные услуги
+            </button>
+          )}
+          <Link to="/good/new" className="btn btn-primary mx-1 my-4">
+            Создать новую
+          </Link>
+        </div>
       </div>
     </>
   );

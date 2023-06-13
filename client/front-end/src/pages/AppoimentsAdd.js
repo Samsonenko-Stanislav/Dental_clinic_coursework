@@ -1,31 +1,26 @@
 import React, { useState } from 'react';
-import axiosApi from '../axiosApi';
+import { addAppointments } from '../store/slice/AppoimentsSlice';
+import { useDispatch } from 'react-redux';
 
 const AppointmentsAdd = () => {
-  const [selectedDoctorId, setSelectedDoctorId] = useState("");
-  const [selectedAppointmentDate, setSelectedAppointmentDate] = useState("");
-  const [doctors,setDoctors]= useState([])
+  const dispatch = useDispatch();
+  const [selectedDoctorId, setSelectedDoctorId] = useState('');
+  const [selectedAppointmentDate, setSelectedAppointmentDate] = useState('');
+  const [doctors, setDoctors] = useState([]);
 
   const handleSetDoctor = (doctorId, date, time, button) => {
-    document.querySelectorAll("button").forEach(function (element) {
+    document.querySelectorAll('button').forEach(function (element) {
       element.disabled = false;
     });
     setSelectedDoctorId(doctorId);
     setSelectedAppointmentDate(`${date}T${time}`);
     button.disabled = true;
-    document.getElementById("add_appointment").scrollIntoView();
+    document.getElementById('add_appointment').scrollIntoView();
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await axiosApi.post("/login", {
-
-      });
-      console.log(response);
-    } catch (e) {
-      console.log(e);
-    }
+    dispatch(addAppointments({}));
   };
 
   return (
@@ -47,14 +42,7 @@ const AppointmentsAdd = () => {
                             className="mt-1 ms-1"
                             data-date={date}
                             data-time={time}
-                            onClick={(e) =>
-                              handleSetDoctor(
-                                doctor.key.id,
-                                e.target.getAttribute("data-date"),
-                                e.target.getAttribute("data-time"),
-                                e.target
-                              )
-                            }
+                            onClick={(e) => handleSetDoctor(doctor.key.id, e.target.getAttribute('data-date'), e.target.getAttribute('data-time'), e.target)}
                           >
                             {time}
                           </button>
@@ -71,17 +59,11 @@ const AppointmentsAdd = () => {
 
       <form onSubmit={handleSubmit}>
         <input type="hidden" value={selectedDoctorId} name="doctorId" placeholder="Доктор" />
-        <input
-          type="hidden"
-          value={selectedAppointmentDate}
-          name="dateStr"
-          placeholder="Время"
-        />
+        <input type="hidden" value={selectedAppointmentDate} name="dateStr" placeholder="Время" />
         <button className="btn btn-primary btn-lg" id="add_appointment" type="submit">
           Добавить запись
         </button>
       </form>
-
     </>
   );
 };

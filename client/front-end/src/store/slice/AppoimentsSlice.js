@@ -14,7 +14,7 @@ export const editAppointments = createAsyncThunk('userData/editAppointments', as
 });
 
 export const addAppointments = createAsyncThunk('userData/addAppointments', async ({ newData, catchFunction }) => {
-  return await axiosApi.post('appointments', newData);
+  return await axiosApi.post('/appointments/new', newData);
 });
 
 const initialState = {
