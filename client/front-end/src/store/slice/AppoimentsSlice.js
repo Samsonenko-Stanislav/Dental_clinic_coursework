@@ -6,7 +6,7 @@ export const requestAppointments = createAsyncThunk('userData/requestAppointment
 });
 
 export const requestAppointmentsDoctors = createAsyncThunk('userData/requestAppointmentsDoctors', async ({ newData, catchFunction }) => {
-  return await axiosApi.get('/appointments', newData);
+  return await axiosApi.get('/appointments');
 });
 
 export const editAppointments = createAsyncThunk('userData/editAppointments', async ({ newData, catchFunction }) => {
@@ -15,6 +15,10 @@ export const editAppointments = createAsyncThunk('userData/editAppointments', as
 
 export const addAppointments = createAsyncThunk('userData/addAppointments', async ({ newData, catchFunction }) => {
   return await axiosApi.post('/appointments/new', newData);
+});
+
+export const getAddAppointments = createAsyncThunk('userData/getAddAppointments', async ({ newData, catchFunction }) => {
+  return await axiosApi.get('/appointments/add');
 });
 
 const initialState = {
@@ -58,7 +62,7 @@ const appointmentsSlice = createSlice({
     [requestAppointmentsDoctors.fulfilled]: (state, action) => {
       const response = action.payload;
 
-      console.log( response.data.appointmentsDoctor, response.data.appointmentsClient);
+      console.log(response.data.appointmentsDoctor, response.data.appointmentsClient);
       state.appointmentsDoctor = response.data.appointmentsDoctor;
       state.appointmentsClient = response.data.appointmentsClient;
       state.loading = false;

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { addAppointments } from '../store/slice/AppoimentsSlice';
+import React, { useEffect, useState } from "react";
+import { addAppointments, getAddAppointments } from "../store/slice/AppoimentsSlice";
 import { useDispatch } from 'react-redux';
 
 const AppointmentsAdd = () => {
@@ -17,6 +17,12 @@ const AppointmentsAdd = () => {
     button.disabled = true;
     document.getElementById('add_appointment').scrollIntoView();
   };
+
+
+  useEffect(()=>{
+    dispatch(getAddAppointments({}));
+
+  },[dispatch])
 
   const handleSubmit = async (e) => {
     e.preventDefault();
