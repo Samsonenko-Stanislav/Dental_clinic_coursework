@@ -16,9 +16,9 @@ const Employee = () => {
   }, [dispatch, setLoading]);
 
   return (
-    <>
+    <div className="mt-4">
       {employees.length ? (
-        <>
+        <div className={"list"}>
           {employees.map((employee) => (
             <div className="col-md-12" key={employee.id}>
               <div className="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
@@ -33,12 +33,12 @@ const Employee = () => {
               </div>
             </div>
           ))}
-        </>
+        </div>
       ) : null}
-      <Link to="/employee/new" className="btn btn-primary">
+      <Link to="/employee/new" className="btn btn-primary my-4">
         Создать нового
       </Link>
-    </>
+    </div>
   );
 };
 

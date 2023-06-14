@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUsers } from '../store/slice/UserSlice';
+import { Table } from 'antd';
 
 const Users = () => {
   const dispatch = useDispatch();
@@ -20,39 +21,40 @@ const Users = () => {
     setLoading(false);
   }, [dispatch, setLoading]);
 
+  const columns = [
+    {
+      title: '#',
+      dataIndex: 'id',
+      key: 'id',
+    },
+    {
+      title: 'Логин',
+      dataIndex: 'username',
+      key: 'username',
+      render: (text, record) => <td className={record.active ? '' : 'archived'}>{record.username}</td>,
+    },
+
+    {
+      title: 'Роли',
+      dataIndex: 'roles',
+      key: 'roles',
+      render: (text, record) => <div>{record.roles.join(', ')}</div>,
+    },
+    {
+      title: '',
+      dataIndex: 'address',
+      key: 'address',
+      render: (text, record) => <Link to={`/user/edit/${record.id}`}>Редактировать</Link>,
+    },
+  ];
+
   return (
     <>
       <div className="table-responsive">
-        {' '}
         {users.length ? (
-          <>
-            <table className="table table-striped table-sm">
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Логин</th>
-                  <th scope="col">Роли</th>
-                  <th scope="col" />
-                </tr>
-              </thead>
-              <tbody>
-                {users.map((user) => (
-                  <tr key={user.id}>
-                    <td>{user.id}</td>
-                    <td className={user.active ? '' : 'archived'}>{user.username}</td>
-                    <td>
-                      {user.roles.map((role, index) => (
-                        <p key={index}>{role},</p>
-                      ))}
-                    </td>
-                    <td>
-                      <Link to={`/user/edit/${user.id}`}>Редактировать</Link>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>{' '}
-          </>
+          <div className="my-4 list">
+            <Table dataSource={users} pagination={false} columns={columns} />
+          </div>
         ) : null}
         <div className="my-4">
           <button className="btn btn-primary mx-2" onClick={() => setActive(false)}>

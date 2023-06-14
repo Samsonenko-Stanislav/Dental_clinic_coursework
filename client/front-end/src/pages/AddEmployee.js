@@ -24,8 +24,7 @@ const AddEmployee = () => {
   };
 
   return (
-    <div className="container">
-      <div className="col-md-7 col-lg-8">
+      <div className="col-md-7 col-lg-8 mt-4">
         <h4 className="mb-3">Создать нового сотрудника</h4>
         <form onSubmit={handleSubmit}>
           <div className="row">
@@ -69,7 +68,6 @@ const AddEmployee = () => {
           </div>
         </form>
       </div>
-    </div>
   );
 };
 
