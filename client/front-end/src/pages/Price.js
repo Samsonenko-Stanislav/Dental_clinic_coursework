@@ -12,7 +12,7 @@ const Price = () => {
   }, [dispatch]);
 
   return (
-    <>
+    <div className={'my-4'}>
       {goods.length ? (
         goods.map((good) => (
           <div className="col-md-12" key={good.id}>
@@ -27,7 +27,7 @@ const Price = () => {
       ) : (
         <EmptyComponent />
       )}
-    </>
+    </div>
   );
 };
 

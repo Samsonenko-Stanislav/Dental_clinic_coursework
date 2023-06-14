@@ -28,11 +28,10 @@ const EditUsers = () => {
       setSelectedRoles(user?.user?.roles);
       setEmployee(user?.user?.employeeId);
 
-
-      if(user.user.outpatientCard){
-        setEmail(user.user.outpatientCard.email)
-        setGender(user.user.outpatientCard.gender)
-        setFullName(user.user.outpatientCard.fullName)
+      if (user.user.outpatientCard) {
+        setEmail(user.user.outpatientCard.email);
+        setGender(user.user.outpatientCard.gender);
+        setFullName(user.user.outpatientCard.fullName);
       }
     }
   }, [user?.user]);

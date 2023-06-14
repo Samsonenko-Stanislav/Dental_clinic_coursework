@@ -1,23 +1,32 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
 import { useDispatch, useSelector } from 'react-redux';
-import { requestAppointments, requestAppointmentsDoctors } from '../store/slice/AppoimentsSlice';
+import { requestAppointmentsDoctors } from '../store/slice/AppoimentsSlice';
 
 const Appointments = () => {
   const dispatch = useDispatch();
-  const appointmentsDoctor = useSelector((state) => state.appointments.appointmentsDoctor);
-  const appointmentsClient = useSelector((state) => state.appointments.appointmentsClient);
+  const appointmentsDoctorStore = useSelector((state) => state.appointments.appointmentsDoctor);
+  const appointmentsClientStore = useSelector((state) => state.appointments.appointmentsClient);
   const { role } = useContext(UserContext);
   const [withArchived, setWithArchived] = useState(false);
 
+  const appointmentsDoctor = useMemo(() => {
+    if (!appointmentsDoctorStore) return [];
+    else return withArchived ? appointmentsDoctorStore.filter((user) => user.active) : appointmentsDoctorStore.filter((user) => !user.active);
+  }, [withArchived, appointmentsDoctorStore]);
+
+  const appointmentsClient = useMemo(() => {
+    if (!appointmentsClientStore) return [];
+    else return withArchived ? appointmentsClientStore.filter((user) => user.active) : appointmentsClientStore.filter((user) => !user.active);
+  }, [withArchived, appointmentsClientStore]);
+
   useEffect(() => {
-    dispatch(requestAppointments({}));
     dispatch(requestAppointmentsDoctors({}));
   }, [dispatch]);
 
   return (
-    <div>
+    <div className="my-4">
       {role === 'doctor' && (
         <div className="row mb-2">
           <div className="col-12">

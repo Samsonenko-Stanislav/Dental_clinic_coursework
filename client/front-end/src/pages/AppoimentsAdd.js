@@ -1,77 +1,81 @@
-import React, { useEffect, useState } from "react";
-import { addAppointments, getAddAppointments } from "../store/slice/AppoimentsSlice";
-import { useDispatch } from 'react-redux';
+import React, { memo, useEffect, useState, useContext } from 'react';
+import { addAppointments, getAddAppointments } from '../store/slice/AppoimentsSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import moment from 'moment';
+import 'moment/locale/ru';
+import { UserContext } from '../context/UserContext';
+moment.locale('ru');
 
 const AppointmentsAdd = () => {
   const dispatch = useDispatch();
+  const [currentNameDoctor, setCurrentNameDoctor] = useState('');
   const [selectedDoctorId, setSelectedDoctorId] = useState('');
   const [selectedAppointmentDate, setSelectedAppointmentDate] = useState('');
-  const [doctors, setDoctors] = useState([]);
+  const doctors = useSelector((state) => state.appointments.doctors) || [];
+  const { setLoading } = useContext(UserContext);
 
-  const handleSetDoctor = (doctorId, date, time, button) => {
-    document.querySelectorAll('button').forEach(function (element) {
-      element.disabled = false;
-    });
-    setSelectedDoctorId(doctorId);
-    setSelectedAppointmentDate(`${date}T${time}`);
-    button.disabled = true;
-    document.getElementById('add_appointment').scrollIntoView();
+  const handleSetDoctor = (id, time, name) => {
+    setSelectedDoctorId(id);
+    setSelectedAppointmentDate(time);
+    setCurrentNameDoctor(name);
   };
 
-
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(getAddAppointments({}));
-
-  },[dispatch])
+  }, [dispatch]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(addAppointments({}));
+
+    setLoading(true);
+    const response = await dispatch(addAppointments({ newData: { id: selectedDoctorId, time: selectedAppointmentDate } }));
+    if (response?.type?.includes('fulfilled')) dispatch(getAddAppointments({}));
+    setLoading(false);
   };
 
   return (
     <>
-      <div className="row mx-2 mt-4">
-        {doctors.map((doctor) => (
-          <div key={doctor.key.id} className="col-md-12">
-            <div className="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-              <div className="col p-4 d-flex flex-column position-static">
-                <h3 className="mb-2">{`${doctor.key.employee.jobTitle} ${doctor.key.employee.fullName}`}</h3>
-                <div className="row m-0">
-                  {Object.entries(doctor.value).map(([date, times]) => (
-                    <div key={date} className="col-md-4 border rounded">
-                      <div className="ps-2 pt-2">{date}</div>
-                      <div className="p-2">
-                        {times.map((time) => (
-                          <button
-                            key={time}
-                            className="mt-1 ms-1"
-                            data-date={date}
-                            data-time={time}
-                            onClick={(e) => handleSetDoctor(doctor.key.id, e.target.getAttribute('data-date'), e.target.getAttribute('data-time'), e.target)}
-                          >
-                            {time}
-                          </button>
-                        ))}
-                      </div>
+      <div className="row mx-2 mt-4 list">
+        {doctors.length
+          ? doctors.map((doctor, index) => (
+              <div key={index} className="col-md-12">
+                <div className="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                  <div className="col p-4 d-flex flex-column position-static">
+                    <h3 className="mb-2">{`${doctor.fullName} ${doctor.jobTitle}`}</h3>
+                    <div className="row m-0">
+                      {doctor?.timetable?.length
+                        ? doctor?.timetable.map((date, index) => (
+                            <div key={index} className="col-md-4 border rounded">
+                              <div className="ps-2 pt-2">{date.day}</div>
+                              <div className="p-2">
+                                {date.times.map((time) => (
+                                  <button key={time} className="mt-1 ms-1" onClick={() => handleSetDoctor(doctor.id, date.day + 'T' + time, doctor.fullName)}>
+                                    {time}
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+                          ))
+                        : null}
                     </div>
-                  ))}
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-        ))}
+            ))
+          : null}
       </div>
 
-      <form onSubmit={handleSubmit}>
-        <input type="hidden" value={selectedDoctorId} name="doctorId" placeholder="Доктор" />
-        <input type="hidden" value={selectedAppointmentDate} name="dateStr" placeholder="Время" />
-        <button className="btn btn-primary btn-lg" id="add_appointment" type="submit">
-          Добавить запись
-        </button>
-      </form>
+      {currentNameDoctor && (
+        <form onSubmit={handleSubmit} className="mt-2">
+          <div>Выбранный врач: {currentNameDoctor}</div>
+          <div>Выбранная дата: {moment(selectedAppointmentDate).format('lll')}</div>
+          <button className="btn btn-primary btn-lg my-1" id="add_appointment" type="submit">
+            Добавить запись
+          </button>
+        </form>
+      )}
     </>
   );
 };
 
-export default AppointmentsAdd;
+export default memo(AppointmentsAdd);

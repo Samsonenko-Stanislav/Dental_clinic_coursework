@@ -7,12 +7,13 @@ import { Table } from 'antd';
 
 const Users = () => {
   const dispatch = useDispatch();
-  const usersStore = useSelector((state) => state.user.users) || [];
+  const usersStore = useSelector((state) => state.user.users);
   const { setLoading } = useContext(UserContext);
   const [active, setActive] = useState(true);
 
   const users = useMemo(() => {
-    return active ? usersStore.filter((user) => user.active) : usersStore.filter((user) => !user.active);
+    if (!usersStore) return [];
+    else return active ? usersStore.filter((user) => user.active) : usersStore.filter((user) => !user.active);
   }, [active, usersStore]);
 
   useEffect(() => {

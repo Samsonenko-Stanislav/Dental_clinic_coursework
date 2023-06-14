@@ -1,10 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axiosApi from '../../axiosApi';
 
-export const requestAppointments = createAsyncThunk('userData/requestAppointments', async ({ newData, catchFunction }) => {
-  return await axiosApi.get('/appointments', newData);
-});
-
 export const requestAppointmentsDoctors = createAsyncThunk('userData/requestAppointmentsDoctors', async ({ newData, catchFunction }) => {
   return await axiosApi.get('/appointments');
 });
@@ -14,11 +10,11 @@ export const editAppointments = createAsyncThunk('userData/editAppointments', as
 });
 
 export const addAppointments = createAsyncThunk('userData/addAppointments', async ({ newData, catchFunction }) => {
-  return await axiosApi.post('/appointments/new', newData);
+  return await axiosApi.post(`/appointments/add?doctorId=${newData.id}&dateStr=${newData.time}`, newData);
 });
 
 export const getAddAppointments = createAsyncThunk('userData/getAddAppointments', async ({ newData, catchFunction }) => {
-  return await axiosApi.get('/appointments/add');
+  return await axiosApi.get(`/appointments/add`);
 });
 
 const initialState = {
@@ -26,6 +22,7 @@ const initialState = {
   error: null,
   appointmentsDoctor: [],
   appointmentsClient: [],
+  doctors: [],
 };
 
 const appointmentsSlice = createSlice({
@@ -39,22 +36,6 @@ const appointmentsSlice = createSlice({
     },
   },
   extraReducers: {
-    [requestAppointments.pending]: (state) => {
-      state.loading = true;
-    },
-
-    [requestAppointments.fulfilled]: (state, action) => {
-      const response = action.payload;
-      console.log(response);
-      state.loading = false;
-      state.error = null;
-    },
-
-    [requestAppointments.rejected]: (state, action) => {
-      state.loading = false;
-      state.error = action.error.message;
-    },
-
     [requestAppointmentsDoctors.pending]: (state) => {
       state.loading = true;
     },
@@ -70,6 +51,21 @@ const appointmentsSlice = createSlice({
     },
 
     [requestAppointmentsDoctors.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    },
+    [getAddAppointments.pending]: (state) => {
+      state.loading = true;
+    },
+
+    [getAddAppointments.fulfilled]: (state, action) => {
+      const response = action.payload;
+      state.doctors = response.data;
+      state.loading = false;
+      state.error = null;
+    },
+
+    [getAddAppointments.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.error.message;
     },

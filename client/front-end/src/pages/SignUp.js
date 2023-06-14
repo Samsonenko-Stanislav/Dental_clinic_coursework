@@ -1,10 +1,9 @@
-import React, { useContext, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import Tooth from '../assets/tooth.svg';
-import { UserContext } from '../context/UserContext';
-import { useDispatch } from 'react-redux';
-import { requestRegister } from '../store/slice/UserSlice';
-import { showNotification } from '../index';
+import React, { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import Tooth from "../assets/tooth.svg";
+import { UserContext } from "../context/UserContext";
+import { useDispatch } from "react-redux";
+import { requestRegister } from "../store/slice/UserSlice";
 
 const SignUp = () => {
   const dispatch = useDispatch();
