@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { editUser, getSoloUser } from '../store/slice/UserSlice';
-import { useParams } from 'react-router-dom';
+import { updateUser, getSoloUser, nullifyUser } from '../store/slice/UserSlice';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const EditUsers = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
   const params = useParams();
@@ -12,6 +13,9 @@ const EditUsers = () => {
   const [employee, setEmployee] = useState('');
   const [changePassword, setChangePassword] = useState(false);
   const [selectedRoles, setSelectedRoles] = useState([]);
+  const [email, setEmail] = useState('');
+  const [gender, setGender] = useState('male');
+  const [fullName, setFullName] = useState('');
 
   useEffect(() => {
     dispatch(getSoloUser({ newData: { id: params.id } }));
@@ -25,6 +29,12 @@ const EditUsers = () => {
       setEmployee(user?.user?.employeeId);
     }
   }, [user?.user]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(nullifyUser());
+    };
+  }, [dispatch]);
 
   const handleCheckboxChange = (event) => {
     const role = event.target.name;
@@ -43,7 +53,9 @@ const EditUsers = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    dispatch(editUser({ newData: { active, username, id: params.id, employeeId: employee, roles: selectedRoles } }));
+    const response = await dispatch(updateUser({ newData: { active, username, id: params.id, employeeId: employee, roles: selectedRoles, email, gender, fullName } }));
+
+    if (response?.type?.includes('fulfilled')) navigate('/user');
   };
 
   return (
@@ -105,7 +117,35 @@ const EditUsers = () => {
                 </div>
               </div>
             )}
-            <button className="w-100 btn btn-primary btn-lg" type="submit">
+
+            {selectedRoles.includes('USER') && (
+              <div id="forUser">
+                <div className="col-6">
+                  <label htmlFor="email" className="form-label">
+                    e-mail
+                  </label>
+                  <input type="email" name="email" className="form-control" id="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                </div>
+                <div className="row col-12">
+                  <div className="col-6">
+                    <input type="radio" id="MALE" name="gender" value="MALE" onChange={() => setGender('MALE')} />
+                    <label htmlFor="MALE">Мужской</label>
+                  </div>
+                  <div>
+                    <input type="radio" id="FEMALE" name="gender" value="FEMALE" onChange={() => setGender('FEMALE')} />
+                    <label htmlFor="FEMALE">Женский</label>
+                  </div>
+                </div>
+
+                <div className="col-6">
+                  <label htmlFor="fullName" className="form-label">
+                    ФИО
+                  </label>
+                  <input type="text" name="fullName" className="form-control" required id="fullName" value={fullName} onChange={(e) => setFullName(e.target.value)} />
+                </div>
+              </div>
+            )}
+            <button className="w-100 btn btn-primary btn-lg my-4" type="submit">
               Сохранить
             </button>
           </div>

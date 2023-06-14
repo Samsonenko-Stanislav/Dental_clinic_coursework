@@ -1,18 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useDispatch } from 'react-redux';
 import { addGoods } from '../store/slice/GoodsSlice';
 import { useNavigate } from 'react-router-dom';
+import { showNotification } from '../App';
+import { UserContext } from '../context/UserContext';
 
 const GoodNew = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
+  const { setLoading } = useContext(UserContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(addGoods({ newData: { price: parseInt(price), name, active: true } }));
-    navigate('/good');
+    setLoading(true);
+    const response = await dispatch(addGoods({ newData: { price: parseInt(price), name, active: true } }));
+    if (response?.type?.includes('fulfilled')) {
+      showNotification('success', 'Вы успешно создали услугу', 'Услуга');
+
+      navigate('/good');
+      setLoading(false);
+    }
   };
 
   return (

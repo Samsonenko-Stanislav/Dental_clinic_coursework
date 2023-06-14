@@ -1,18 +1,18 @@
-import React, { useContext, useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
-import { UserContext } from "../context/UserContext";
-import { useDispatch, useSelector } from "react-redux";
-import { getUsers } from "../store/slice/UserSlice";
+import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { UserContext } from '../context/UserContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUsers } from '../store/slice/UserSlice';
 
 const Users = () => {
   const dispatch = useDispatch();
-  const usersStore = useSelector((state) => state.user.users) || [];
+  const usersStore = useSelector((state) => state.user.users)||[];
   const { setLoading } = useContext(UserContext);
   const [active, setActive] = useState(true);
 
   const users = useMemo(() => {
     return active ? usersStore.filter((user) => user.active) : usersStore.filter((user) => !user.active);
-  }, [usersStore, active]);
+  }, [active, usersStore]);
 
   useEffect(() => {
     setLoading(true);

@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axiosApi from '../../axiosApi';
 import { saveToLocalStorage } from '../../utils/localStorage';
 import { removeEmptyFromObject } from '../../utils/useOnClickOutside';
+import { showNotification } from '../../App.js';
 
 export const requestLogin = createAsyncThunk('userData/requestLogin', async ({ newData, catchFunction }) => {
   return await axiosApi.post('/login', newData);
@@ -15,7 +16,7 @@ export const getUser = createAsyncThunk('userData/getUser', async ({ newData, ca
   return await axiosApi.get('/user/me');
 });
 
-export const updateUser = createAsyncThunk('userData/updateUser', async ({ newData, catchFunction }) => {
+export const createUser = createAsyncThunk('userData/createUser', async ({ newData, catchFunction }) => {
   return await axiosApi.post('/user/new', removeEmptyFromObject(newData));
 });
 
@@ -27,7 +28,7 @@ export const getSoloUser = createAsyncThunk('userData/getSoloUser', async ({ new
   return await axiosApi.get(`/user/${newData.id}`);
 });
 
-export const editUser = createAsyncThunk('userData/editUser', async ({ newData, catchFunction }) => {
+export const updateUser = createAsyncThunk('userData/updateUser', async ({ newData, catchFunction }) => {
   return await axiosApi.post('/user/' + newData.id, removeEmptyFromObject(newData));
 });
 
@@ -53,6 +54,10 @@ const userSlice = createSlice({
     logoutUser(state) {
       state = Object.assign(state, initialState);
     },
+
+    nullifyUser(state) {
+      state.user = {};
+    },
   },
   extraReducers: {
     [requestLogin.pending]: (state) => {
@@ -74,6 +79,8 @@ const userSlice = createSlice({
     },
 
     [requestLogin.rejected]: (state) => {
+      showNotification('error', 'Неверный логин и/или пароль.', 'Ошибка');
+
       state.loading = false;
       state.error = 'Неверный логин и/или пароль.';
     },
@@ -82,14 +89,32 @@ const userSlice = createSlice({
       state.loading = true;
     },
 
-    [requestRegister.fulfilled]: (state, action) => {
+    [requestRegister.fulfilled]: (state) => {
       state.loading = false;
       state.error = null;
+      showNotification('success', 'Вы успешно зарегистрировались', 'Регистрация');
     },
 
     [requestRegister.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.error.message;
+      showNotification('error', 'Такой пользователь уже существует', 'Ошибка');
+    },
+
+    [createUser.pending]: (state) => {
+      state.loading = true;
+    },
+
+    [createUser.fulfilled]: (state) => {
+      state.loading = false;
+      state.error = null;
+      showNotification('success', 'Вы успешно создали юзера', 'Создание Юзера');
+    },
+
+    [createUser.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+      showNotification('error', 'Такой пользователь уже существует', 'Создание Юзера');
     },
 
     [getUser.pending]: (state) => {
@@ -155,4 +180,4 @@ const userSlice = createSlice({
 });
 
 export default userSlice.reducer;
-export const { logoutUser } = userSlice.actions;
+export const { logoutUser, nullifyUser } = userSlice.actions;
