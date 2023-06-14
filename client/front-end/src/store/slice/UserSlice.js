@@ -43,6 +43,7 @@ const initialState = {
   gender: null,
   users: [],
   user: {},
+  profile: {},
 };
 
 const userSlice = createSlice({
@@ -122,8 +123,7 @@ const userSlice = createSlice({
     },
 
     [getUser.fulfilled]: (state, action) => {
-      const response = action.payload;
-      console.log(response);
+      state.profile = action.payload.data.user;
       state.loading = false;
       state.error = null;
     },
