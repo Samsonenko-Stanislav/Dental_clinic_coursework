@@ -14,7 +14,7 @@ const AddEmployee = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await dispatch(addEmployee({ newData: { fullName, jobTitle, workStart, workEnd, durationApp } }));
+    const response = await dispatch(addEmployee({ newData: { fullName, jobTitle, workStart, workEnd, durationApp:parseInt(durationApp) } }));
 
     if (response?.type?.includes('fulfilled')) navigate('/employee');
   };
