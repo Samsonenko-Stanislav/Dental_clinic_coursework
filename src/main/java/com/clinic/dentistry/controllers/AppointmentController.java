@@ -21,18 +21,14 @@ public class AppointmentController {
     private final CheckService checkService;
     private final GoodService goodService;
 
-    @GetMapping()
-    public Map<String, Object> appointmentsMain(@AuthenticationPrincipal User user) {
-        Map<String, Object> model = new HashMap<>();
+    @GetMapping("/clientList")
+    public Iterable<Appointment> getClientAppointments(@AuthenticationPrincipal User user) {
+        return appointmentService.getClientList(user);
+    }
 
-//        Iterable<Appointment> appointmentsClient = appointmentService.getArchiveAppointmentsForClient(user);
-//        Iterable<Appointment> appointmentsDoctor = appointmentService.getArchiveAppointmentsForDoctor(user);
-//        model.put("withArchived", true);
-
-        model.put("appointmentsClient", appointmentService.getAllForDoctor(user));
-        model.put("appointmentsDoctor", appointmentService.getAllForClient(user));
-        return model;
-
+    @GetMapping("/doctorList")
+    public Iterable<Appointment> getDoctorAppointments(@AuthenticationPrincipal User user) {
+        return appointmentService.getDoctorList(user);
     }
 
     @GetMapping("/add")

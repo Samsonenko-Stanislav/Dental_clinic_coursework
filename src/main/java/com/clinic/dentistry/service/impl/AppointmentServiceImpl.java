@@ -111,15 +111,23 @@ public class AppointmentServiceImpl implements AppointmentService {
         return appointmentRepository.findByDoctorAndActiveTrueAndConclusionNull(user.getEmployee());
     }
 
+
     @Override
-    public List<Appointment>getAllForDoctor(User user) {
-        return appointmentRepository.findAllByDoctor(user.getEmployee());
+    public List<Appointment> getClientList(User user) {
+        List<Appointment> result = new ArrayList<>();
+        appointmentRepository.findByClientAndConclusionNotNull(user.getOutpatientCard()).forEach(result::add);
+        appointmentRepository.findByClientAndActiveTrueAndConclusionNull(user.getOutpatientCard()).forEach(result::add);
+        return result;
     }
 
     @Override
-    public List<Appointment>getAllForClient(User user){
-        return appointmentRepository.findAllByClient(user.getOutpatientCard());
+    public List<Appointment> getDoctorList(User user) {
+        List<Appointment> result = new ArrayList<>();
+        appointmentRepository.findByDoctorAndConclusionNotNull(user.getEmployee()).forEach(result::add);
+        appointmentRepository.findByDoctorAndActiveTrueAndConclusionNull(user.getEmployee()).forEach(result::add);
+        return result;
     }
+
 
     @Override
     public Iterable<User> getActiveDoctors() {

@@ -15,6 +15,4 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     Iterable<Appointment> findByDoctorAndConclusionNotNull(Employee employee);
     Iterable<Appointment> findByDoctorAndActiveTrueAndConclusionNull(Employee employee);
     Appointment findAppointmentById(Long id);
-    List<Appointment> findAllByClient(OutpatientCard outpatientCard);
-    List<Appointment> findAllByDoctor(Employee employee);
 }
