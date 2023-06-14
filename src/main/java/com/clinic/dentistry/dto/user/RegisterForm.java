@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.time.LocalTime;
 import java.util.Set;
@@ -29,7 +30,7 @@ public class RegisterForm {
     @NotBlank(message = "fullName is required")
     private String fullName;
 
-    @NotBlank
+    @NotNull
     private Gender gender;
 
     private Set<Role> roles;
