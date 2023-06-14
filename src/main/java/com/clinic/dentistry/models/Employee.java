@@ -21,6 +21,15 @@ public class Employee {
     private Long id;
     private String fullName;
     private String jobTitle;
-    private LocalTime workStart, workEnd;
+    private LocalTime workStart;
+    private LocalTime workEnd;
     private int durationApp;
+
+    public LocalTime getWorkStart() {
+        return workStart != null ? workStart : LocalTime.of(9, 0);
+    }
+
+    public LocalTime getWorkEnd() {
+        return workEnd != null ? workEnd : LocalTime.of(18, 0);
+    }
 }
