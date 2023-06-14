@@ -113,7 +113,7 @@ const userSlice = createSlice({
     [createUser.fulfilled]: (state) => {
       state.loading = false;
       state.error = null;
-      showNotification('success', 'Вы успешно создали юзера', 'Создание Юзера');
+      showNotification('success', 'Вы успешно создали пользователя', 'Создание пользователя');
     },
 
     [createUser.rejected]: (state, action) => {

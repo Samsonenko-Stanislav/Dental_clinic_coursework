@@ -16,7 +16,7 @@ function Login() {
   const submitHandler = async (e) => {
     e.preventDefault();
     setLoading(true);
-    dispatch(
+    await dispatch(
       requestLogin({
         newData: {
           username,

@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getUser, updateProfile } from "../store/slice/UserSlice";
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUser, updateProfile } from '../store/slice/UserSlice';
+import { useNavigate } from 'react-router-dom';
+import { showNotification } from '../App';
 
 const Profile = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [user, setUser] = useState({});
   const [changePassword, setChangePassword] = useState(false);
@@ -18,10 +21,9 @@ const Profile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(
+    const response = await dispatch(
       updateProfile({
         newData: {
-          username: user.username,
           password: user.password,
           active: true,
           email: user.email,
@@ -30,6 +32,11 @@ const Profile = () => {
         },
       })
     );
+
+    if (response?.type?.includes('fulfilled')) {
+      navigate('/');
+      showNotification('success', 'Вы успешно изменили профиль', 'Профиль');
+    }
   };
 
   const handleCheckboxChange = (e) => {
@@ -94,12 +101,28 @@ const Profile = () => {
               </div>
             </div>
           </div>
-          <div>
+          <div className="mb-4">
             <br />
             <p>Пол:</p>
-            <input type="radio" id="male" name="gender" value="male" checked={user?.outpatientCard?.gender === 'MALE'} onChange={handleInputChange} className="mx-2" />
+            <input
+              type="radio"
+              id="male"
+              name="gender"
+              value="MALE"
+              checked={user?.gender === 'MALE' || user?.outpatientCard?.gender === 'MALE'}
+              onChange={handleInputChange}
+              className="mx-2"
+            />
             <label htmlFor="male">Мужской</label>
-            <input type="radio" id="female" name="gender" value="female" checked={user?.outpatientCard?.gender === 'FEMALE'} onChange={handleInputChange} className="mx-2" />
+            <input
+              type="radio"
+              id="FEMALE"
+              name="gender"
+              value="FEMALE"
+              checked={user?.gender === 'FEMALE' || user?.outpatientCard?.gender === 'FEMALE'}
+              onChange={handleInputChange}
+              className="mx-2"
+            />
             <label htmlFor="FEMALE">Женский</label>
           </div>
           <button className="w-100 btn btn-primary btn-lg  my-" type="submit">

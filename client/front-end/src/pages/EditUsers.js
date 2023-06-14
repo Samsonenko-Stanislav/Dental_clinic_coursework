@@ -16,6 +16,7 @@ const EditUsers = () => {
   const [email, setEmail] = useState('');
   const [gender, setGender] = useState('MALE');
   const [fullName, setFullName] = useState('');
+  const [password, setPassword] = useState('');
 
   useEffect(() => {
     dispatch(getSoloUser({ newData: { id: params.id } }));
@@ -59,8 +60,8 @@ const EditUsers = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const response = await dispatch(updateUser({ newData: { active, username, id: params.id, employeeId: employee, roles: selectedRoles, email, gender, fullName } }));
-
+    const response = await dispatch(updateUser({ newData: { active, username, id: params.id, employeeId: employee, roles: selectedRoles, email, gender, fullName, password } }));
+    setPassword('');
     if (response?.type?.includes('fulfilled')) navigate('/user');
   };
 
@@ -94,7 +95,7 @@ const EditUsers = () => {
                   <label htmlFor="password" className="form-label">
                     Новый пароль
                   </label>
-                  <input type="password" name="password" id="password" className="form-control" />
+                  <input type="password" name="password" id="password" className="form-control" password={password} onChange={(e) => setPassword(e.target.value)} />
                 </div>
               )}
             </div>
@@ -134,11 +135,11 @@ const EditUsers = () => {
                 </div>
                 <div className="row col-12">
                   <div className="col-6">
-                    <input type="radio" id="MALE" name="gender" value="MALE" onChange={() => setGender('MALE')} />
+                    <input type="radio" id="MALE" name="gender" value={gender === 'MALE'} onChange={() => setGender('MALE')} />
                     <label htmlFor="MALE">Мужской</label>
                   </div>
                   <div>
-                    <input type="radio" id="FEMALE" name="gender" value="FEMALE" onChange={() => setGender('FEMALE')} />
+                    <input type="radio" id="FEMALE" name="gender" value={gender === 'FEMALE'} onChange={() => setGender('FEMALE')} />
                     <label htmlFor="FEMALE">Женский</label>
                   </div>
                 </div>

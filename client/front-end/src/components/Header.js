@@ -114,12 +114,13 @@ function Header() {
                     </div>
                   </li>
 
-                  <li>
-                    <Link to="/user/me" className="dropdown-item">
-                      Профиль
-                    </Link>
-                  </li>
-
+                  {role.includes('USER') && (
+                    <li>
+                      <Link to="/user/me" className="dropdown-item">
+                        Профиль
+                      </Link>
+                    </li>
+                  )}
                   <li>
                     <button onClick={logoutHandler} className="dropdown-item">
                       Выйти
