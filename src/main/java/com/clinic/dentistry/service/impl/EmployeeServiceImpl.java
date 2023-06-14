@@ -1,5 +1,7 @@
 package com.clinic.dentistry.service.impl;
 
+import com.clinic.dentistry.dto.ApiResponse;
+import com.clinic.dentistry.dto.EmployeeDto;
 import com.clinic.dentistry.models.Employee;
 import com.clinic.dentistry.repo.EmployeeRepository;
 import com.clinic.dentistry.service.EmployeeService;
@@ -19,8 +21,20 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void saveEmployee(Employee employee){
+    public ApiResponse saveEmployee(EmployeeDto dto){
+        Employee employee = Employee.builder()
+                .fullName(dto.getFullName())
+                .jobTitle(dto.getJobTitle())
+                .workStart(dto.getWorkStart())
+                .workEnd(dto.getWorkEnd())
+                .durationApp(dto.getDurationApp())
+                .build();
         employeeRepository.save(employee);
+
+        return ApiResponse.builder()
+                .status(201)
+                .message("Success")
+                .build();
     }
 
     @Override
