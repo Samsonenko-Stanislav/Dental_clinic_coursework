@@ -83,4 +83,10 @@ public class User implements UserDetails {
     public Long getEmployeeId(){
         return employee != null ? employee.getId() : 0;
     }
+
+
+    @Override
+    public String toString() {
+        return employee != null ? employee.toString() : username;
+    }
 }

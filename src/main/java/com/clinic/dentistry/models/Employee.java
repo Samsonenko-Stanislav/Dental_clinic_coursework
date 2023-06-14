@@ -32,4 +32,9 @@ public class Employee {
     public LocalTime getWorkEnd() {
         return workEnd != null ? workEnd : LocalTime.of(18, 0);
     }
+
+    @Override
+    public String toString() {
+        return fullName + " " + jobTitle;
+    }
 }

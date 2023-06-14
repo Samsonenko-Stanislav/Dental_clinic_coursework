@@ -1,5 +1,6 @@
 package com.clinic.dentistry.service.impl;
 
+import com.clinic.dentistry.dto.AppointmentDto;
 import com.clinic.dentistry.models.Appointment;
 import com.clinic.dentistry.models.Employee;
 import com.clinic.dentistry.models.Role;
@@ -26,12 +27,12 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Autowired
     private UserRepository userRepository;
 
-    private  LocalDateTime now = LocalDateTime.now();
+    private LocalDateTime now = LocalDateTime.now();
 
     @Override
-    public Map<User, Map<String, ArrayList<String>>> getAvailableDatesByDoctors(Iterable<User> doctors) {
-        Map<User, Map<String ,ArrayList<String>>> availableDatesByDoctor = new HashMap<>();
-        Map<String ,ArrayList<String>> availableDates;
+    public List<AppointmentDto> getAvailableDatesByDoctors(Iterable<User> doctors) {
+        Map<User, Map<String, ArrayList<String>>> availableDatesByDoctor = new HashMap<>();
+        Map<String, ArrayList<String>> availableDates;
         ArrayList<String> avalibleTimes;
         Boolean dateTaken;
 
@@ -40,12 +41,17 @@ public class AppointmentServiceImpl implements AppointmentService {
         DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern("HH:mm");
 
+
+        List<AppointmentDto> dtoList = new ArrayList<>();
         for (User doctor : doctors) {
+            AppointmentDto dto = new AppointmentDto(doctor);
+
             LocalDate startDate = LocalDate.now();
             LocalDate endDate = startDate.plusWeeks(2);
             availableDates = new TreeMap<>();
+
             for (LocalDate date = startDate; date.isBefore(endDate); date = date.plusDays(1)) {
-               if (!(date.getDayOfWeek().equals(DayOfWeek.SUNDAY) || (date.getDayOfWeek().equals(DayOfWeek.MONDAY)))) {
+                if (!(date.getDayOfWeek().equals(DayOfWeek.SUNDAY) || (date.getDayOfWeek().equals(DayOfWeek.MONDAY)))) {
                     avalibleTimes = new ArrayList();
                     LocalTime workStart = LocalTime.of(8, 0);
                     LocalTime workEnd = LocalTime.of(17, 0);
@@ -55,6 +61,8 @@ public class AppointmentServiceImpl implements AppointmentService {
                     }
                     LocalDateTime startTime = date.atTime(workStart);
                     LocalDateTime endTime = date.atTime(workEnd);
+
+
                     for (LocalDateTime time = startTime; time.isBefore(endTime); time = time.plusMinutes(doctor.getEmployee().getDurationApp())) {
                         dateTaken = Boolean.FALSE;
                         for (Appointment appointment : appointments) {
@@ -66,43 +74,51 @@ public class AppointmentServiceImpl implements AppointmentService {
                             avalibleTimes.add(time.format(formatterTime));
                         }
                     }
+
+
                     availableDates.put(date.format(formatterDate), avalibleTimes);
+
+                    dto.timetable.add(
+                            new AppointmentDto.DayTimes(date.format(formatterDate), avalibleTimes));
                 }
             }
             availableDatesByDoctor.put(doctor, availableDates);
+
+            dtoList.add(dto);
         }
 
-        return availableDatesByDoctor;
+        return dtoList;
+
+//        return availableDatesByDoctor;
     }
 
-
     @Override
-    public Iterable<Appointment> getArchiveAppointmentsForClient(User user){
+    public Iterable<Appointment> getArchiveAppointmentsForClient(User user) {
         return appointmentRepository.findByClientAndConclusionNotNull(user.getOutpatientCard());
     }
 
     @Override
-    public Iterable<Appointment> getArchiveAppointmentsForDoctor(User user){
+    public Iterable<Appointment> getArchiveAppointmentsForDoctor(User user) {
         return appointmentRepository.findByDoctorAndConclusionNotNull(user.getEmployee());
     }
 
     @Override
-    public Iterable<Appointment> getActiveAppointmentsForClient(User user){
+    public Iterable<Appointment> getActiveAppointmentsForClient(User user) {
         return appointmentRepository.findByClientAndActiveTrueAndConclusionNull(user.getOutpatientCard());
     }
 
     @Override
-    public Iterable<Appointment> getActiveAppointmentsForDoctor(User user){
+    public Iterable<Appointment> getActiveAppointmentsForDoctor(User user) {
         return appointmentRepository.findByDoctorAndActiveTrueAndConclusionNull(user.getEmployee());
     }
 
     @Override
-    public Iterable<User> getActiveDoctors(){
+    public Iterable<User> getActiveDoctors() {
         return userRepository.findByRolesInAndActiveTrue(Collections.singleton(Role.DOCTOR));
     }
 
     @Override
-    public Appointment addAppointment(String dateStr, User doctor, User user){
+    public Appointment addAppointment(String dateStr, User doctor, User user) {
         LocalDateTime date = LocalDateTime.parse(dateStr);
         Appointment appointment = new Appointment();
         appointment.setDoctor(doctor.getEmployee());
@@ -114,13 +130,13 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public void cancelAppointment(Appointment appointment){
+    public void cancelAppointment(Appointment appointment) {
         appointment.setActive(Boolean.FALSE);
         appointmentRepository.save(appointment);
     }
 
     @Override
-    public Boolean isCanEditByDoctor(User user, Appointment appointment){
+    public Boolean isCanEditByDoctor(User user, Appointment appointment) {
         return appointment.getDoctor() != null && user.getEmployee() != null &&
                 appointment.getDoctor().getId().equals(user.getEmployee().getId())
                 && now.isAfter(appointment.getDate().toLocalDate().atStartOfDay())
@@ -128,14 +144,14 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public Boolean isCanCancel(User user, Appointment appointment){
+    public Boolean isCanCancel(User user, Appointment appointment) {
         return appointment.getClient() != null && user.getOutpatientCard() != null
                 && appointment.getClient().getId().equals(user.getOutpatientCard().getId())
                 && now.isBefore(appointment.getDate().toLocalDate().atStartOfDay().plusDays(1));
     }
 
     @Override
-    public Appointment findAppointment(Long id){
+    public Appointment findAppointment(Long id) {
         return appointmentRepository.findAppointmentById(id);
     }
 

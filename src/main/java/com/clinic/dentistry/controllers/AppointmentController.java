@@ -1,5 +1,6 @@
 package com.clinic.dentistry.controllers;
 
+import com.clinic.dentistry.dto.AppointmentDto;
 import com.clinic.dentistry.models.*;
 import com.clinic.dentistry.service.*;
 import lombok.*;
@@ -21,24 +22,12 @@ public class AppointmentController {
     private final GoodService goodService;
 
     @GetMapping()
-    public Map<String, Object> appointmentsMain(
-            @AuthenticationPrincipal User user,
-            @RequestParam(value = "withArchived", required = false) String withArchived
-    ){
+    public Map<String, Object> appointmentsMain(@AuthenticationPrincipal User user) {
         Map<String, Object> model = new HashMap<>();
 
-        Iterable<Appointment> appointmentsClient;
-        Iterable<Appointment> appointmentsDoctor;
-        if (withArchived != null){
-            appointmentsClient = appointmentService.getArchiveAppointmentsForClient(user);
-            appointmentsDoctor = appointmentService.getArchiveAppointmentsForDoctor(user);
-            model.put("withArchived", true);
-        } else {
-            appointmentsClient = appointmentService.getActiveAppointmentsForClient(user);
-            appointmentsDoctor = appointmentService.getActiveAppointmentsForDoctor(user);
-            model.put("withArchived", false);
-        }
-
+        Iterable<Appointment> appointmentsClient = appointmentService.getArchiveAppointmentsForClient(user);
+        Iterable<Appointment> appointmentsDoctor = appointmentService.getArchiveAppointmentsForDoctor(user);
+        model.put("withArchived", true);
 
         model.put("appointmentsClient", appointmentsClient);
         model.put("appointmentsDoctor", appointmentsDoctor);
@@ -48,19 +37,19 @@ public class AppointmentController {
 
     @GetMapping("/add")
     @PreAuthorize("hasAuthority('USER')")
-    public Map<String, Object> appointmentsAddForm(){
+    public List<AppointmentDto> appointmentsAddForm() {
         Map<String, Object> model = new HashMap<>();
 
         Iterable<User> doctors = appointmentService.getActiveDoctors();
-        Map<User, Map<String, ArrayList<String>>> availableDatesByDoctor = appointmentService.getAvailableDatesByDoctors(doctors);
+        List<AppointmentDto> availableDatesByDoctor = appointmentService.getAvailableDatesByDoctors(doctors);
         model.put("doctors", availableDatesByDoctor);
-        return model;
+        return availableDatesByDoctor;
     }
 
     @PostMapping("/add")
     @PreAuthorize("hasAuthority('USER')")
     public HttpStatus appointmentsAdd(@AuthenticationPrincipal User user, @RequestParam("doctorId") User doctor,
-                                      @RequestParam("dateStr") String dateStr){
+                                      @RequestParam("dateStr") String dateStr) {
         appointmentService.addAppointment(dateStr, doctor, user);
         return HttpStatus.CREATED;
     }
@@ -68,7 +57,7 @@ public class AppointmentController {
     @GetMapping("/{appointmentId}/edit")
     public Map<String, Object> appointmentsEdit(@AuthenticationPrincipal User user,
                                                 @PathVariable("appointmentId") Long appointmentId
-    ){
+    ) {
         Map<String, Object> model = new HashMap<>();
 
         Appointment appointment = appointmentService.findAppointment(appointmentId);
@@ -105,9 +94,9 @@ public class AppointmentController {
     @PreAuthorize("hasAuthority('DOCTOR')")
     public HttpStatus appointmentsEdit(@PathVariable("appointmentId") Long appointmentId,
                                        @RequestParam Map<String, String> form
-    ){
+    ) {
         Appointment appointment = appointmentService.findAppointment(appointmentId);
-        if (appointment != null){
+        if (appointment != null) {
             checkService.addConclusion(appointment, form);
             checkService.createCheckFromJson(form, appointment);
             return HttpStatus.OK;
@@ -121,8 +110,8 @@ public class AppointmentController {
     @PreAuthorize("hasAuthority('USER')")
     public HttpStatus appointmentsCancel(@AuthenticationPrincipal User user,
                                          @PathVariable("appointmentId") Appointment appointment
-    ){
-        if (appointmentService.isCanCancel(user, appointment)){
+    ) {
+        if (appointmentService.isCanCancel(user, appointment)) {
             appointmentService.cancelAppointment(appointment);
             return HttpStatus.OK;
         }
