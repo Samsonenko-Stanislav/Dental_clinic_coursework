@@ -1,15 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getUser, updateUser } from '../store/slice/UserSlice';
 
 const Profile = () => {
   const dispatch = useDispatch();
   const [user, setUser] = useState({});
   const [changePassword, setChangePassword] = useState(false);
+  const profile = useSelector((state) => state.user.profile);
 
   useEffect(() => {
     dispatch(getUser({}));
   }, [dispatch]);
+
+  useEffect(() => {
+    setUser({ ...profile, password: '' });
+  }, [profile]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,15 +32,12 @@ const Profile = () => {
     });
   };
 
-  // const togglePassword = () => {
-  //   setChangePassword(!changePassword);
-  // };
-
   const handleRemoveChangePassword = () => {
     setUser({
       ...user,
       password: '',
     });
+    setChangePassword(!changePassword);
   };
 
   return (
@@ -77,16 +79,16 @@ const Profile = () => {
                 <label htmlFor="email" className="form-label">
                   Email
                 </label>
-                <input type="text" name="email" className="form-control" id="email" value={user.email || ''} onChange={handleInputChange} />
+                <input type="text" name="email" className="form-control" id="email" value={user?.outpatientCard?.email || ''} onChange={handleInputChange} />
               </div>
             </div>
           </div>
           <div>
             <br />
             <p>Пол:</p>
-            <input type="radio" id="male" name="gender" value="male" checked={user.gender === 'MALE'} onChange={handleInputChange} className="mx-2" />
+            <input type="radio" id="male" name="gender" value="male" checked={user?.outpatientCard?.gender === 'MALE'} onChange={handleInputChange} className="mx-2" />
             <label htmlFor="male">Мужской</label>
-            <input type="radio" id="female" name="gender" value="female" checked={user.gender === 'FEMALE'} onChange={handleInputChange} className="mx-2" />
+            <input type="radio" id="female" name="gender" value="female" checked={user?.outpatientCard?.gender === 'FEMALE'} onChange={handleInputChange} className="mx-2" />
             <label htmlFor="FEMALE">Женский</label>
           </div>
           <button className="w-100 btn btn-primary btn-lg  my-" type="submit">

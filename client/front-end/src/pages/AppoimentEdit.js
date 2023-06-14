@@ -1,25 +1,26 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { UserContext } from '../context/UserContext';
-import { editAppointments, getSoloAppointments, nullifyAppointment } from '../store/slice/AppoimentsSlice';
+import { cancelAppointment, editAppointments, getSoloAppointments, nullifyAppointment } from '../store/slice/AppoimentsSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { requestGoods } from '../store/slice/GoodsSlice';
 import moment from 'moment';
 import 'moment/locale/ru';
 moment.locale('ru');
 
-const AppointmentsEdit = ({ checkLines = [] }) => {
+const AppointmentsEdit = () => {
   const dispatch = useDispatch();
   const params = useParams();
   const { role } = useContext(UserContext);
   const appointmentStore = useSelector((state) => state.appointments.appointment);
   const goodsStore = useSelector((state) => state.goods.goods);
+  const checkLines = appointmentStore.checkLines || [];
   const readOnly = appointmentStore.readOnly;
+  const navigate = useNavigate();
 
-  console.log(readOnly);
   const [conclusion, setConclusion] = useState('');
 
-  const [currentCheck, setCurrentCheck] = useState([{ id: 0, good: null, price: null, count: null, total: null }]);
+  const [currentCheck, setCurrentCheck] = useState([{ id: 0, good: null, price: null, qty: null, total: null, goodId: null }]);
 
   const [total, setTotal] = useState(0);
 
@@ -32,12 +33,16 @@ const AppointmentsEdit = ({ checkLines = [] }) => {
   }, [appointmentStore]);
 
   useEffect(() => {
-    const totalSum = currentCheck.reduce((sum, item) => {
-      return sum + (item.total || 0);
-    }, 0);
+    const totalSum = readOnly
+      ? checkLines.reduce((sum, item) => {
+          return sum + (item.qty * item.price || 0);
+        }, 0)
+      : currentCheck.reduce((sum, item) => {
+          return sum + (item.total || 0);
+        }, 0);
 
     setTotal(totalSum);
-  }, [currentCheck]);
+  }, [currentCheck, checkLines]);
 
   useEffect(() => {
     dispatch(getSoloAppointments({ newData: { id: params.id } }));
@@ -53,7 +58,6 @@ const AppointmentsEdit = ({ checkLines = [] }) => {
     }
   }, [appointment]);
 
-
   const handleInputChange = (e) => {
     const good = JSON.parse(e.target.value);
 
@@ -64,7 +68,8 @@ const AppointmentsEdit = ({ checkLines = [] }) => {
             ...item,
             price: good.price,
             total: good.price * 1,
-            count: 1,
+            qty: 1,
+            goodId: item.id.toString(),
           };
         }
         return item;
@@ -78,7 +83,7 @@ const AppointmentsEdit = ({ checkLines = [] }) => {
         if (item.id === id) {
           return {
             ...item,
-            count: value,
+            qty: value,
             total: value * item.price,
           };
         }
@@ -89,21 +94,34 @@ const AppointmentsEdit = ({ checkLines = [] }) => {
 
   const addFieldHandler = () => {
     setCurrentCheck((prevState) => {
-      return [...prevState, { id: prevState.length, good: null, price: null, count: null, total: null }];
+      return [...prevState, { id: prevState.length, good: null, price: null, qty: null, total: null, goodId: null }];
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    dispatch(
+    const response = await dispatch(
       editAppointments({
         newData: {
           conclusion,
-          id: params.id,
+          appointmentId: params.id,
+          checks: currentCheck.filter((item) => item.goodId).map((item) => ({ goodId: item.goodId, price: item.price, qty: item.qty })),
         },
       })
     );
+
+    if (response?.type?.includes('fulfilled')) {
+      navigate('/appointments');
+    }
+  };
+
+  const cancelHandler = async (e) => {
+    e.preventDefault();
+    const response = await dispatch(cancelAppointment({ newData: { id: params.id } }));
+
+    if (response?.type?.includes('fulfilled')) {
+      navigate('/appointments');
+    }
   };
 
   return (
@@ -149,14 +167,22 @@ const AppointmentsEdit = ({ checkLines = [] }) => {
                   </thead>
                   <tbody id="check">
                     {readOnly ? (
-                      checkLines.map((checkLine) => (
-                        <tr key={checkLine.id}>
-                          <td className="w-25">{checkLine.name}</td>
-                          <td>{checkLine.price}</td>
-                          <td>{checkLine.qty}</td>
-                          <td>{checkLine.price * checkLine.qty}</td>
-                        </tr>
-                      ))
+                      <>
+                        {checkLines.map((checkLine) => (
+                          <tr key={checkLine.id}>
+                            <td className="w-25">{checkLine.good.name}</td>
+                            <td>
+                              <input type="number" disabled step="0.01" name="price" className="form-control price" value={checkLine.good.price} />
+                            </td>
+                            <td>
+                              <input type="number" disabled step="1" name="qty" className="form-control qty" value={checkLine.qty} />
+                            </td>
+                            <td>
+                              <input type="number" disabled step="0.01" name="total" className="form-control total" value={checkLine.good.price * checkLine.qty} />
+                            </td>
+                          </tr>
+                        ))}
+                      </>
                     ) : (
                       <>
                         {currentCheck.map((item, index) => {
@@ -178,7 +204,7 @@ const AppointmentsEdit = ({ checkLines = [] }) => {
                               <td>
                                 <input
                                   type="number"
-                                  value={item.count}
+                                  value={item.qty}
                                   step="1"
                                   name="qty"
                                   min={0}
@@ -196,21 +222,6 @@ const AppointmentsEdit = ({ checkLines = [] }) => {
                         <button className="btn btn-primary my-2" type={'button'} onClick={addFieldHandler}>
                           Добавить поле
                         </button>
-
-                        {checkLines.map((checkLine) => (
-                          <tr key={checkLine.id}>
-                            <td className="w-25">{checkLine.good.name}</td>
-                            <td>
-                              <input type="number" disabled step="0.01" name="price" className="form-control price" value={checkLine.price} />
-                            </td>
-                            <td>
-                              <input type="number" disabled step="1" name="qty" className="form-control qty" value={checkLine.qty} />
-                            </td>
-                            <td>
-                              <input type="number" disabled step="0.01" name="total" className="form-control total" value={checkLine.price * checkLine.qty} />
-                            </td>
-                          </tr>
-                        ))}
                       </>
                     )}
                   </tbody>
@@ -231,12 +242,16 @@ const AppointmentsEdit = ({ checkLines = [] }) => {
             </div>
           </div>
           <input type="hidden" name="appointmentId" value={appointment.id} />
-          {role !== 'doctor' && readOnly ? null : (
+          {readOnly ? null : (
             <button className="w-100 my-3 btn btn-primary btn-lg" type="submit">
               Сохранить
             </button>
           )}
-          {role === 'user' && <button className="btn btn-primary">Отменить запись</button>}
+          {role.includes('USER') && readOnly && (
+            <button className="btn btn-primary" type={'button'} onClick={cancelHandler}>
+              Отменить запись
+            </button>
+          )}
         </form>
       </div>
     </div>
