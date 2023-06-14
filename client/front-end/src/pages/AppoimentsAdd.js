@@ -1,13 +1,17 @@
-import React, { memo, useEffect, useState, useContext } from 'react';
-import { addAppointments, getAddAppointments } from '../store/slice/AppoimentsSlice';
-import { useDispatch, useSelector } from 'react-redux';
-import moment from 'moment';
-import 'moment/locale/ru';
-import { UserContext } from '../context/UserContext';
+import React, { memo, useContext, useEffect, useState } from "react";
+import { addAppointments, getAddAppointments } from "../store/slice/AppoimentsSlice";
+import { useDispatch, useSelector } from "react-redux";
+import moment from "moment";
+import { UserContext } from "../context/UserContext";
+import "moment/locale/ru";
+import { useNavigate } from "react-router-dom";
+import { showNotification } from "../App";
+
 moment.locale('ru');
 
 const AppointmentsAdd = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [currentNameDoctor, setCurrentNameDoctor] = useState('');
   const [selectedDoctorId, setSelectedDoctorId] = useState('');
   const [selectedAppointmentDate, setSelectedAppointmentDate] = useState('');
@@ -29,7 +33,12 @@ const AppointmentsAdd = () => {
 
     setLoading(true);
     const response = await dispatch(addAppointments({ newData: { id: selectedDoctorId, time: selectedAppointmentDate } }));
-    if (response?.type?.includes('fulfilled')) dispatch(getAddAppointments({}));
+    if (response?.type?.includes('fulfilled')) {
+      navigate('/appointments');
+      showNotification('success', 'Вы успешно записаны', 'Запись');
+
+      dispatch(getAddAppointments({}));
+    }
     setLoading(false);
   };
 

@@ -1,8 +1,12 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axiosApi from '../../axiosApi';
 
+export const requestAppointmentsClient = createAsyncThunk('userData/requestAppointmentsClient', async ({ newData, catchFunction }) => {
+  return await axiosApi.get('/appointments/clientList', newData);
+});
+
 export const requestAppointmentsDoctors = createAsyncThunk('userData/requestAppointmentsDoctors', async ({ newData, catchFunction }) => {
-  return await axiosApi.get('/appointments');
+  return await axiosApi.get('/appointments/doctorList');
 });
 
 export const editAppointments = createAsyncThunk('userData/editAppointments', async ({ newData, catchFunction }) => {
@@ -36,6 +40,24 @@ const appointmentsSlice = createSlice({
     },
   },
   extraReducers: {
+    [requestAppointmentsClient.pending]: (state) => {
+      state.loading = true;
+    },
+
+    [requestAppointmentsClient.fulfilled]: (state, action) => {
+      const response = action.payload;
+
+      state.appointmentsClient = response.data;
+
+      state.loading = false;
+      state.error = null;
+    },
+
+    [requestAppointmentsClient.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    },
+
     [requestAppointmentsDoctors.pending]: (state) => {
       state.loading = true;
     },
@@ -43,9 +65,7 @@ const appointmentsSlice = createSlice({
     [requestAppointmentsDoctors.fulfilled]: (state, action) => {
       const response = action.payload;
 
-      console.log(response.data.appointmentsDoctor, response.data.appointmentsClient);
-      state.appointmentsDoctor = response.data.appointmentsDoctor;
-      state.appointmentsClient = response.data.appointmentsClient;
+      state.appointmentsDoctor = response.data;
       state.loading = false;
       state.error = null;
     },
