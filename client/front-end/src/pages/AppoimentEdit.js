@@ -15,6 +15,8 @@ const AppointmentsEdit = ({ checkLines = [] }) => {
   const appointmentStore = useSelector((state) => state.appointments.appointment);
   const goodsStore = useSelector((state) => state.goods.goods);
   const readOnly = appointmentStore.readOnly;
+
+  console.log(readOnly);
   const [conclusion, setConclusion] = useState('');
 
   const [currentCheck, setCurrentCheck] = useState([{ id: 0, good: null, price: null, count: null, total: null }]);
@@ -40,6 +42,9 @@ const AppointmentsEdit = ({ checkLines = [] }) => {
   useEffect(() => {
     dispatch(getSoloAppointments({ newData: { id: params.id } }));
     dispatch(requestGoods({}));
+    return () => {
+      dispatch(nullifyAppointment());
+    };
   }, [dispatch, params.id]);
 
   useEffect(() => {
@@ -48,11 +53,6 @@ const AppointmentsEdit = ({ checkLines = [] }) => {
     }
   }, [appointment]);
 
-  useEffect(() => {
-    return () => {
-      dispatch(nullifyAppointment());
-    };
-  }, [dispatch]);
 
   const handleInputChange = (e) => {
     const good = JSON.parse(e.target.value);
