@@ -1,9 +1,8 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { UserContext } from '../context/UserContext';
-import { useDispatch, useSelector } from 'react-redux';
-import { getUsers } from '../store/slice/UserSlice';
-import EmptyComponent from '../components/EmptyComonent/EmptyComonent';
+import React, { useContext, useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
+import { useDispatch, useSelector } from "react-redux";
+import { getUsers } from "../store/slice/UserSlice";
 
 const Users = () => {
   const dispatch = useDispatch();
@@ -54,9 +53,7 @@ const Users = () => {
               </tbody>
             </table>{' '}
           </>
-        ) : (
-          <EmptyComponent />
-        )}{' '}
+        ) : null}
         <div className="my-4">
           <button className="btn btn-primary mx-2" onClick={() => setActive(false)}>
             Показать архивных пользователей
