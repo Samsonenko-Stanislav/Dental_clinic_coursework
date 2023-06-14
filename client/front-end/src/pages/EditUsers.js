@@ -27,6 +27,13 @@ const EditUsers = () => {
       setActive(user?.user?.active);
       setSelectedRoles(user?.user?.roles);
       setEmployee(user?.user?.employeeId);
+
+
+      if(user.user.outpatientCard){
+        setEmail(user.user.outpatientCard.email)
+        setGender(user.user.outpatientCard.gender)
+        setFullName(user.user.outpatientCard.fullName)
+      }
     }
   }, [user?.user]);
 
@@ -69,7 +76,7 @@ const EditUsers = () => {
                 <label htmlFor="username" className="form-label">
                   Логин
                 </label>
-                <input type="text" name="username" className="form-control" readOnly id="username" required value={username} onChange={(e) => setUserName(e.target.value)} />
+                <input type="text" name="username" className="form-control" id="username" required value={username} onChange={(e) => setUserName(e.target.value)} />
               </div>
               <div className="col-3">
                 <input type="checkbox" name="active" id="active" checked={active} onChange={(e) => setActive(e.target.checked)} />

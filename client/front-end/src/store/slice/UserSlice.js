@@ -29,7 +29,7 @@ export const getSoloUser = createAsyncThunk('userData/getSoloUser', async ({ new
 });
 
 export const updateUser = createAsyncThunk('userData/updateUser', async ({ newData, catchFunction }) => {
-  return await axiosApi.post('/user/' + newData.id, removeEmptyFromObject(newData));
+  return await axiosApi.post('/user/edit/' + newData.id, removeEmptyFromObject(newData));
 });
 
 const initialState = {
