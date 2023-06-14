@@ -7,8 +7,8 @@ import { Checkbox } from 'antd';
 
 const Goods = () => {
   const dispatch = useDispatch();
-  const goodsStore = useSelector((state) => state.goods.goods);
   const [withArchived, setWithArchived] = useState(true);
+  const goodsStore = useSelector((state) => state.goods.goods);
 
   const goods = useMemo(() => {
     return withArchived ? goodsStore.filter((user) => user.active) : goodsStore.filter((user) => !user.active);

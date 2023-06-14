@@ -9,10 +9,6 @@ export const requestAppointmentsDoctors = createAsyncThunk('userData/requestAppo
   return await axiosApi.get('/appointments/doctorList');
 });
 
-export const editAppointments = createAsyncThunk('userData/editAppointments', async ({ newData, catchFunction }) => {
-  return await axiosApi.post('/appointments', newData);
-});
-
 export const addAppointments = createAsyncThunk('userData/addAppointments', async ({ newData, catchFunction }) => {
   return await axiosApi.post(`/appointments/add?doctorId=${newData.id}&dateStr=${newData.time}`, newData);
 });
@@ -21,12 +17,21 @@ export const getAddAppointments = createAsyncThunk('userData/getAddAppointments'
   return await axiosApi.get(`/appointments/add`);
 });
 
+export const editAppointments = createAsyncThunk('userData/editAppointments', async ({ newData, catchFunction }) => {
+  return await axiosApi.post('/appointments', newData);
+});
+
+export const getSoloAppointments = createAsyncThunk('userData/getSoloAppointments', async ({ newData, catchFunction }) => {
+  return await axiosApi.get(`/appointments/${newData.id}/edit`, newData);
+});
+
 const initialState = {
   loading: false,
   error: null,
   appointmentsDoctor: [],
   appointmentsClient: [],
   doctors: [],
+  appointment: {},
 };
 
 const appointmentsSlice = createSlice({
@@ -37,6 +42,9 @@ const appointmentsSlice = createSlice({
   reducers: {
     nullifyDataAppointments(state) {
       state = Object.assign(state, initialState);
+    },
+    nullifyAppointment(state) {
+      state.appointment = {};
     },
   },
   extraReducers: {
@@ -89,8 +97,24 @@ const appointmentsSlice = createSlice({
       state.loading = false;
       state.error = action.error.message;
     },
+
+    [getSoloAppointments.pending]: (state) => {
+      state.loading = true;
+    },
+
+    [getSoloAppointments.fulfilled]: (state, action) => {
+      const response = action.payload;
+      state.appointment = response.data;
+      state.loading = false;
+      state.error = null;
+    },
+
+    [getSoloAppointments.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    },
   },
 });
 
 export default appointmentsSlice.reducer;
-export const { nullifyDataAppointments } = appointmentsSlice.actions;
+export const { nullifyDataAppointments, nullifyAppointment } = appointmentsSlice.actions;
