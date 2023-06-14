@@ -56,8 +56,8 @@ const AddNewUser = () => {
           fullName,
           roles,
           jobTitle,
-          workStart: workStart + ':00',
-          workEnd: workEnd + ':00',
+          workStart: !workStart ? null : workStart + ':00',
+          workEnd: !workEnd ? null : workEnd + ':00',
           durationApp,
         },
       })
