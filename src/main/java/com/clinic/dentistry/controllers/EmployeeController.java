@@ -44,18 +44,15 @@ public class EmployeeController {
 
     @PostMapping("/new")
     public ResponseEntity<?> employeeNewForm(@RequestBody EmployeeDto employeeDto) {
-        ApiResponse response =employeeService.saveEmployee(employeeDto);
+        ApiResponse response = employeeService.saveEmployee(employeeDto);
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
     }
 
 
-    @PostMapping
-    public HttpStatus employeeSave(
-            @RequestParam("employeeId") Employee employee,
-            @RequestParam Employee employee_new
-    ) {
-        employeeService.editEmployee(employee, employee_new);
-        return HttpStatus.OK;
+    @PostMapping("/edit/{employeeId}")
+    public ResponseEntity<?> employeeSave(@PathVariable("employeeId") Long employeeId, @RequestBody EmployeeDto employeeDto) {
+        ApiResponse response = employeeService.editEmployee(employeeId, employeeDto);
+        return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
     }
 
 }

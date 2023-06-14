@@ -38,13 +38,28 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void editEmployee(Employee employee, Employee employee_new){
-        employee.setFullName(employee_new.getFullName());
-        employee.setJobTitle(employee_new.getJobTitle());
-        employee.setWorkStart(employee_new.getWorkStart());
-        employee.setWorkEnd(employee_new.getWorkEnd());
-        employee.setDurationApp(employee_new.getDurationApp());
-        employeeRepository.save(employee);
+    public ApiResponse editEmployee(Long employeeId, EmployeeDto dto){
+        Employee employee = employeeRepository.findEmployeeById(employeeId);
+
+        if (employee == null) {
+            return ApiResponse.builder()
+                    .status(404)
+                    .message("Не найден работник с ID " + employeeId)
+                    .build();
+        }
+
+       if (dto.getFullName() != null) employee.setFullName(dto.getFullName());
+       if (dto.getJobTitle() != null) employee.setJobTitle(dto.getJobTitle());
+       if (dto.getWorkStart() != null) employee.setWorkStart(dto.getWorkStart());
+       if (dto.getWorkEnd() != null) employee.setWorkEnd(dto.getWorkEnd());
+       if (dto.getDurationApp() != null) employee.setDurationApp(dto.getDurationApp());
+
+       employeeRepository.save(employee);
+
+        return ApiResponse.builder()
+                .status(201)
+                .message("Success")
+                .build();
     }
 
     @Override

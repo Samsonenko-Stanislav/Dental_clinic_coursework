@@ -14,5 +14,5 @@ public class EmployeeDto {
     private String jobTitle;
     private LocalTime workStart;
     private LocalTime workEnd;
-    private int durationApp;
+    private Integer durationApp;
 }

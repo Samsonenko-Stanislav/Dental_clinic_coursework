@@ -111,16 +111,4 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
     }
 
-
-//    @PostMapping("/edit/{userId}")
-//    @PreAuthorize("hasAuthority('ADMIN')")
-//    public HttpStatus userEdit(
-//            @RequestParam("user") User user,
-//            @RequestParam("employee") Employee employee,
-//            @RequestParam("outpatientCard") OutpatientCard outpatientCard,
-//            @RequestParam(value = "changePassword", required = false) Boolean changePassword
-//    ) {
-//        registrationService.editUser(user, employee, outpatientCard, changePassword);
-//        return HttpStatus.OK;
-//    }
 }
