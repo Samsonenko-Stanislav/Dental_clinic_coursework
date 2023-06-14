@@ -1,18 +1,17 @@
 package com.clinic.dentistry.service;
 
 import com.clinic.dentistry.dto.ApiResponse;
-import com.clinic.dentistry.dto.auth.RegisterRequest;
+import com.clinic.dentistry.dto.user.RegisterForm;
+import com.clinic.dentistry.dto.user.UserEditForm;
 import com.clinic.dentistry.models.Employee;
 import com.clinic.dentistry.models.OutpatientCard;
 import com.clinic.dentistry.models.User;
 
-import java.util.Map;
-
 public interface RegistrationService {
-    ApiResponse userRegistration(RegisterRequest request);
+    ApiResponse userRegistration(RegisterForm request);
 
-    ApiResponse createUser(RegisterRequest request);
+    ApiResponse createUser(RegisterForm request);
 
-    void editUser(User user,  Employee employee, OutpatientCard outpatientCard, Boolean changePassword);
+    ApiResponse editUser(Long userId, UserEditForm editForm);
     boolean isUsernameVacant(String username);
 }

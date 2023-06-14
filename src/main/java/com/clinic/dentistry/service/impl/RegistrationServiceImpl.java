@@ -1,7 +1,8 @@
 package com.clinic.dentistry.service.impl;
 
 import com.clinic.dentistry.dto.ApiResponse;
-import com.clinic.dentistry.dto.auth.RegisterRequest;
+import com.clinic.dentistry.dto.user.RegisterForm;
+import com.clinic.dentistry.dto.user.UserEditForm;
 import com.clinic.dentistry.models.*;
 import com.clinic.dentistry.repo.EmployeeRepository;
 import com.clinic.dentistry.repo.OutpatientCardRepository;
@@ -12,7 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class RegistrationServiceImpl implements RegistrationService {
@@ -27,7 +27,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     private EmployeeRepository employeeRepository;
 
     @Override
-    public ApiResponse userRegistration(RegisterRequest request) {
+    public ApiResponse userRegistration(RegisterForm request) {
         if (this.isUserInDB(request)) {
             return ApiResponse.builder()
                     .status(400)
@@ -38,7 +38,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         OutpatientCard outpatientCard = OutpatientCard.builder()
                 .email(request.getEmail())
                 .fullName(request.getFullName())
-                .gender(request.getGender().equalsIgnoreCase("male") ? Gender.MALE : Gender.FEMALE)
+                .gender(request.getGender())
                 .build();
         outpatientCardRepository.save(outpatientCard);
 
@@ -58,7 +58,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
-    public ApiResponse createUser(RegisterRequest request) {
+    public ApiResponse createUser(RegisterForm request) {
         if (this.isUserInDB(request)) {
             return ApiResponse.builder()
                     .status(400)
@@ -89,7 +89,7 @@ public class RegistrationServiceImpl implements RegistrationService {
             OutpatientCard outpatientCard = OutpatientCard.builder()
                     .email(request.getEmail())
                     .fullName(request.getFullName())
-                    .gender(request.getGender().equalsIgnoreCase("male") ? Gender.MALE : Gender.FEMALE)
+                    .gender(request.getGender())
                     .build();
             outpatientCardRepository.save(outpatientCard);
             user.setOutpatientCard(outpatientCard);
@@ -104,30 +104,70 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
-    public void editUser(User user, Employee employee, OutpatientCard outpatientCard, Boolean changePassword) {
-        user.setUsername(user.getUsername());
-        user.setActive(user.isActive());
-        if (changePassword) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
+    public ApiResponse editUser(Long userId, UserEditForm form) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if (!optionalUser.isPresent()) {
+            return ApiResponse.builder()
+                    .status(404)
+                    .message("Не найден пользователь с ID " + userId)
+                    .build();
         }
 
-        user.setRoles(user.getRoles());
+        try {
+            User userDb = optionalUser.get();
 
-        if (employee != null && employee.getId() != null) {
-            user.setEmployee(employee);
-        } else {
-            user.setEmployee(null);
+            Set<Role> roles = form.getRoles() != null ? form.getRoles() : Collections.emptySet();
+
+            if (form.getUsername() != null) userDb.setUsername(form.getUsername());
+
+            if (form.getActive() != null) userDb.setActive(form.getActive());
+
+            if (form.getRoles() != null) userDb.setRoles(form.getRoles());
+
+            if (form.getPassword() != null && !form.getPassword().isEmpty()) {
+                userDb.setPassword(passwordEncoder.encode(form.getPassword()));
+            }
+
+            if (roles.contains(Role.USER)) {
+                OutpatientCard card = userDb.getOutpatientCard() != null ? userDb.getOutpatientCard() : new OutpatientCard();
+                card.setEmail(form.getEmail());
+                card.setFullName(form.getFullName());
+                card.setGender(form.getGender());
+                outpatientCardRepository.save(card);
+                userDb.setOutpatientCard(card);
+            } else {
+                OutpatientCard card = userDb.getOutpatientCard();
+                userDb.setOutpatientCard(null);
+                //TODO уточнить удаляем или нет
+                if (card != null) {
+                    outpatientCardRepository.delete(card);
+                }
+            }
+
+            if (roles.contains(Role.DOCTOR)) {
+                Employee employee = employeeRepository.findEmployeeById(form.getEmployeeId());
+                userDb.setEmployee(employee);
+            } else {
+                Employee employee = userDb.getEmployee();
+                userDb.setEmployee(null);
+                //TODO уточнить удаляем или нет
+                if (employee != null) {
+                    employeeRepository.delete(employee);
+                }
+            }
+
+            userRepository.save(userDb);
+            return ApiResponse.builder()
+                    .status(200)
+                    .message("Пользователь отредактирован")
+                    .build();
+        }catch (Exception e){
+            return ApiResponse.builder()
+                    .status(500)
+                    .message(e.getClass().getSimpleName() + " " + e.getMessage())
+                    .build();
         }
 
-        if (user.getOutpatientCard() != null) {
-            outpatientCard.setId(user.getOutpatientCard().getId());
-            outpatientCard.setFullName(user.getOutpatientCard().getFullName());
-            outpatientCard.setEmail(user.getOutpatientCard().getEmail());
-            outpatientCard.setGender(user.getOutpatientCard().getGender());
-            outpatientCardRepository.save(outpatientCard);
-            user.setOutpatientCard(outpatientCard);
-        }
-        userRepository.save(user);
     }
 
     @Override
@@ -136,7 +176,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         return user == null;
     }
 
-    private boolean isUserInDB(RegisterRequest request) {
+    private boolean isUserInDB(RegisterForm request) {
         User user = userRepository.findByUsername(request.getUsername());
         if (user != null) {
             return true;

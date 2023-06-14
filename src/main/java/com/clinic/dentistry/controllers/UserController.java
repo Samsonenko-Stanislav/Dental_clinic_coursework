@@ -1,7 +1,8 @@
 package com.clinic.dentistry.controllers;
 
 import com.clinic.dentistry.dto.ApiResponse;
-import com.clinic.dentistry.dto.auth.RegisterRequest;
+import com.clinic.dentistry.dto.user.RegisterForm;
+import com.clinic.dentistry.dto.user.UserEditForm;
 import com.clinic.dentistry.models.Employee;
 import com.clinic.dentistry.models.OutpatientCard;
 import com.clinic.dentistry.models.Role;
@@ -98,21 +99,28 @@ public class UserController {
 
     @PostMapping("/new")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<ApiResponse> userNewForm(@RequestBody RegisterRequest request) {
+    public ResponseEntity<ApiResponse> userNewForm(@RequestBody RegisterForm request) {
         ApiResponse response = registrationService.createUser(request);
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
     }
 
-
-    @PostMapping
+    @PostMapping("/edit/{userId}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public HttpStatus userEdit(
-            @RequestParam("user") User user,
-            @RequestParam("employee") Employee employee,
-            @RequestParam("outpatientCard") OutpatientCard outpatientCard,
-            @RequestParam(value = "changePassword", required = false) Boolean changePassword
-    ) {
-        registrationService.editUser(user, employee, outpatientCard, changePassword);
-        return HttpStatus.OK;
+    public ResponseEntity<ApiResponse> userEdit(@PathVariable("userId") Long userId, @RequestBody UserEditForm editForm) {
+        ApiResponse response = registrationService.editUser(userId, editForm);
+        return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
     }
+
+
+//    @PostMapping("/edit/{userId}")
+//    @PreAuthorize("hasAuthority('ADMIN')")
+//    public HttpStatus userEdit(
+//            @RequestParam("user") User user,
+//            @RequestParam("employee") Employee employee,
+//            @RequestParam("outpatientCard") OutpatientCard outpatientCard,
+//            @RequestParam(value = "changePassword", required = false) Boolean changePassword
+//    ) {
+//        registrationService.editUser(user, employee, outpatientCard, changePassword);
+//        return HttpStatus.OK;
+//    }
 }
