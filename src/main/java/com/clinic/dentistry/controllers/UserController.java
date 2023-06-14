@@ -73,7 +73,7 @@ public class UserController {
     @PreAuthorize("hasAuthority('USER')")
     public HashMap<String, Object> userMeEdit(@AuthenticationPrincipal User user, @RequestBody UserEditForm editForm) {
         HashMap<String, Object> model = new HashMap<>();
-        if (registrationService.isUsernameVacant(editForm.getUsername())) {
+        if (editForm.getUsername() != null && registrationService.isUsernameVacant(editForm.getUsername())) {
             model.put("message", "Данные успешно обновлены!");
             outpatientCardService.userMeEdit(user, editForm);
             model.put("user", user);
