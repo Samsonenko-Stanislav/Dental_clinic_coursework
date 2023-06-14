@@ -1,6 +1,7 @@
 package com.clinic.dentistry.controllers;
 
 import com.clinic.dentistry.dto.AppointmentDto;
+import com.clinic.dentistry.dto.AppointmentEditForm;
 import com.clinic.dentistry.models.*;
 import com.clinic.dentistry.service.*;
 import lombok.*;
@@ -89,12 +90,12 @@ public class AppointmentController {
     @PostMapping("/{appointmentId}/edit")
     @PreAuthorize("hasAuthority('DOCTOR')")
     public HttpStatus appointmentsEdit(@PathVariable("appointmentId") Long appointmentId,
-                                       @RequestParam Map<String, String> form
+                                       @RequestBody AppointmentEditForm form
     ) {
         Appointment appointment = appointmentService.findAppointment(appointmentId);
         if (appointment != null) {
             checkService.addConclusion(appointment, form);
-            checkService.createCheckFromJson(form, appointment);
+            checkService.createCheckFromForm(form, appointment);
             return HttpStatus.OK;
         }
         throw new ResponseStatusException(
