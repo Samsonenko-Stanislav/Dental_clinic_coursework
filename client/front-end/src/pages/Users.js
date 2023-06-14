@@ -13,7 +13,6 @@ const Users = () => {
   const users = useMemo(() => {
     return active ? usersStore.filter((user) => user.active) : usersStore.filter((user) => !user.active);
   }, [active, usersStore]);
-  console.log(users);
 
   useEffect(() => {
     setLoading(true);

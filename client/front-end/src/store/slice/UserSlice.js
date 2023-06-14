@@ -137,9 +137,7 @@ const userSlice = createSlice({
       state.loading = true;
     },
 
-    [updateUser.fulfilled]: (state, action) => {
-      const response = action.payload;
-      console.log(response);
+    [updateUser.fulfilled]: (state) => {
       state.loading = false;
       state.error = null;
     },

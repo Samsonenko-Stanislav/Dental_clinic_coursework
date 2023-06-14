@@ -108,7 +108,7 @@ const AddNewUser = () => {
             </div>
           </div>
           <div className="row col-12" id="forNotAdmin">
-            {isDoctor && (
+            {isDoctor || isUser && (
               <div className="col-6">
                 <label htmlFor="fullName" className="form-label">
                   ФИО
@@ -157,11 +157,11 @@ const AddNewUser = () => {
               </div>
               <div className="row col-12">
                 <div className="col-6">
-                  <input type="radio" id="MALE" name="gender" value="MALE" onChange={() => setGender('MALE')} />
+                  <input type="radio" id="MALE" name="gender" value={"MALE"} onChange={() => setGender('MALE')} />
                   <label htmlFor="MALE">Мужской</label>
                 </div>
                 <div>
-                  <input type="radio" id="FEMALE" name="gender" value="FEMALE" onChange={() => setGender('FEMALE')} />
+                  <input type="radio" id="FEMALE" name="gender" value={"FEMALE"} onChange={() => setGender('FEMALE')} />
                   <label htmlFor="FEMALE">Женский</label>
                 </div>
               </div>

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { addEmployee } from '../store/slice/EmployeeSlice';
 import { useNavigate } from 'react-router-dom';
+import { showNotification } from "../App";
 
 const AddEmployee = () => {
   const navigate = useNavigate();
@@ -14,9 +15,12 @@ const AddEmployee = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await dispatch(addEmployee({ newData: { fullName, jobTitle, workStart, workEnd, durationApp:parseInt(durationApp) } }));
+    const response = await dispatch(addEmployee({ newData: { fullName, jobTitle, workStart: workStart + ':00', workEnd: workEnd + ':00', durationApp: parseInt(durationApp) } }));
 
-    if (response?.type?.includes('fulfilled')) navigate('/employee');
+    if (response?.type?.includes('fulfilled')) {
+      showNotification('success', 'Вы успешно создали сотрудника', 'Создание Сотрудника');
+      navigate("/employee");
+    };
   };
 
   return (
@@ -44,13 +48,13 @@ const AddEmployee = () => {
                 <label htmlFor="workStart" className="form-label">
                   Старт рабочего дня
                 </label>
-                <input type="time" name="workStart" className="form-control" required id="workStart" value={workStart} onChange={(e) => setWorkStart(e.target.value)} />
+                <input type="time" name="workStart" className="form-control" id="workStart" value={workStart} onChange={(e) => setWorkStart(e.target.value)} />
               </div>
               <div className="col-6">
                 <label htmlFor="workEnd" className="form-label">
                   Конец рабочего дня
                 </label>
-                <input type="time" name="workEnd" className="form-control" required id="workEnd" value={workEnd} onChange={(e) => setWorkEnd(e.target.value)} />
+                <input type="time" name="workEnd" className="form-control" id="workEnd" value={workEnd} onChange={(e) => setWorkEnd(e.target.value)} />
               </div>
               <div className="col-6">
                 <label htmlFor="durationApp" className="form-label">
