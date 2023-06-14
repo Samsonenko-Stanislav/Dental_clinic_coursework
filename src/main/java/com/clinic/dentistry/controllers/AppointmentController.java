@@ -25,12 +25,12 @@ public class AppointmentController {
     public Map<String, Object> appointmentsMain(@AuthenticationPrincipal User user) {
         Map<String, Object> model = new HashMap<>();
 
-        Iterable<Appointment> appointmentsClient = appointmentService.getArchiveAppointmentsForClient(user);
-        Iterable<Appointment> appointmentsDoctor = appointmentService.getArchiveAppointmentsForDoctor(user);
-        model.put("withArchived", true);
+//        Iterable<Appointment> appointmentsClient = appointmentService.getArchiveAppointmentsForClient(user);
+//        Iterable<Appointment> appointmentsDoctor = appointmentService.getArchiveAppointmentsForDoctor(user);
+//        model.put("withArchived", true);
 
-        model.put("appointmentsClient", appointmentsClient);
-        model.put("appointmentsDoctor", appointmentsDoctor);
+        model.put("appointmentsClient", appointmentService.getAllForDoctor(user));
+        model.put("appointmentsDoctor", appointmentService.getAllForClient(user));
         return model;
 
     }

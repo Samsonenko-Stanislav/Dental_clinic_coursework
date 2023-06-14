@@ -15,6 +15,11 @@ public interface AppointmentService {
     Iterable<Appointment> getArchiveAppointmentsForDoctor(User user);
     Iterable<Appointment> getActiveAppointmentsForClient(User user);
     Iterable<Appointment> getActiveAppointmentsForDoctor(User user);
+
+    List<Appointment>getAllForDoctor(User user);
+
+    List<Appointment>getAllForClient(User user);
+
     Iterable<User> getActiveDoctors();
     Appointment addAppointment(String dateStr, User doctor, User user);
     void cancelAppointment(Appointment appointment);

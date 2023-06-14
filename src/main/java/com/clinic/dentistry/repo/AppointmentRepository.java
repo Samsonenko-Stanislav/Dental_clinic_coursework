@@ -5,6 +5,8 @@ import com.clinic.dentistry.models.Employee;
 import com.clinic.dentistry.models.OutpatientCard;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
     Iterable<Appointment> findByActiveTrue();
@@ -13,4 +15,6 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     Iterable<Appointment> findByDoctorAndConclusionNotNull(Employee employee);
     Iterable<Appointment> findByDoctorAndActiveTrueAndConclusionNull(Employee employee);
     Appointment findAppointmentById(Long id);
+    List<Appointment> findAllByClient(OutpatientCard outpatientCard);
+    List<Appointment> findAllByDoctor(Employee employee);
 }

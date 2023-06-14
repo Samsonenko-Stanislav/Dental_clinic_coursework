@@ -2,7 +2,6 @@ package com.clinic.dentistry.service.impl;
 
 import com.clinic.dentistry.dto.AppointmentDto;
 import com.clinic.dentistry.models.Appointment;
-import com.clinic.dentistry.models.Employee;
 import com.clinic.dentistry.models.Role;
 import com.clinic.dentistry.models.User;
 import com.clinic.dentistry.repo.AppointmentRepository;
@@ -110,6 +109,16 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public Iterable<Appointment> getActiveAppointmentsForDoctor(User user) {
         return appointmentRepository.findByDoctorAndActiveTrueAndConclusionNull(user.getEmployee());
+    }
+
+    @Override
+    public List<Appointment>getAllForDoctor(User user) {
+        return appointmentRepository.findAllByDoctor(user.getEmployee());
+    }
+
+    @Override
+    public List<Appointment>getAllForClient(User user){
+        return appointmentRepository.findAllByClient(user.getOutpatientCard());
     }
 
     @Override
