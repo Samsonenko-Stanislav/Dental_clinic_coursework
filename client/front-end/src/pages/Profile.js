@@ -84,9 +84,9 @@ const Profile = () => {
           <div>
             <br />
             <p>Пол:</p>
-            <input type="radio" id="male" name="gender" value="male" checked={user.gender === 'male'} onChange={handleInputChange} className="mx-2" />
+            <input type="radio" id="male" name="gender" value="male" checked={user.gender === 'MALE'} onChange={handleInputChange} className="mx-2" />
             <label htmlFor="male">Мужской</label>
-            <input type="radio" id="female" name="gender" value="female" checked={user.gender === 'female'} onChange={handleInputChange} className="mx-2" />
+            <input type="radio" id="female" name="gender" value="female" checked={user.gender === 'FEMALE'} onChange={handleInputChange} className="mx-2" />
             <label htmlFor="FEMALE">Женский</label>
           </div>
           <button className="w-100 btn btn-primary btn-lg  my-" type="submit">

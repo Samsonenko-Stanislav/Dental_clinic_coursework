@@ -4,6 +4,7 @@ import Tooth from '../assets/tooth.svg';
 import { UserContext } from '../context/UserContext';
 import { useDispatch } from 'react-redux';
 import { requestRegister } from '../store/slice/UserSlice';
+import { showNotification } from '../index';
 
 const SignUp = () => {
   const dispatch = useDispatch();
@@ -19,7 +20,7 @@ const SignUp = () => {
     e.preventDefault();
     setLoading(true);
 
-    dispatch(
+    const response = await dispatch(
       requestRegister({
         newData: {
           fullName,
@@ -30,10 +31,9 @@ const SignUp = () => {
         },
       })
     );
-
-    navigate('/login');
-
     setLoading(false);
+
+    if (response?.type?.includes('fulfilled')) navigate('/login');
   };
 
   return (
@@ -92,11 +92,11 @@ const SignUp = () => {
             <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" className="form-control" id="EMAIL" placeholder="e-mail" name="email" />
           </div>
           <div>
-            <input type="radio" id="MALE" name="gender" value={gender} onChange={(e) => setGender('male')} />
+            <input type="radio" id="MALE" name="gender" value={gender} onChange={() => setGender('MALE')} />
             <label htmlFor="MALE">Мужской</label>
           </div>
           <div>
-            <input value={gender} onChange={(e) => setGender('female')} type="radio" id="FEMALE" name="gender" />
+            <input value={gender} onChange={() => setGender('FEMALE')} type="radio" id="FEMALE" name="gender" />
             <label htmlFor="FEMALE">Женский</label>
           </div>
           <button className="w-100 btn btn-lg btn-primary" type="submit">

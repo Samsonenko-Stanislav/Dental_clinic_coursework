@@ -3,17 +3,16 @@ import { Link } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUsers } from '../store/slice/UserSlice';
-import EmptyComponent from '../components/EmptyComonent/EmptyComonent';
 
 const Users = () => {
   const dispatch = useDispatch();
-  const usersStore = useSelector((state) => state.user.users) || [];
+  const usersStore = useSelector((state) => state.user.users)||[];
   const { setLoading } = useContext(UserContext);
   const [active, setActive] = useState(true);
 
   const users = useMemo(() => {
     return active ? usersStore.filter((user) => user.active) : usersStore.filter((user) => !user.active);
-  }, [usersStore, active]);
+  }, [active, usersStore]);
 
   useEffect(() => {
     setLoading(true);
@@ -54,9 +53,7 @@ const Users = () => {
               </tbody>
             </table>{' '}
           </>
-        ) : (
-          <EmptyComponent />
-        )}{' '}
+        ) : null}
         <div className="my-4">
           <button className="btn btn-primary mx-2" onClick={() => setActive(false)}>
             Показать архивных пользователей

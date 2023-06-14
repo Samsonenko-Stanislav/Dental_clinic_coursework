@@ -1,9 +1,8 @@
-import React, { useContext, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { UserContext } from '../context/UserContext';
-import { useDispatch, useSelector } from 'react-redux';
-import { requestEmployee } from '../store/slice/EmployeeSlice';
-import EmptyComponent from '../components/EmptyComonent/EmptyComonent';
+import React, { useContext, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
+import { useDispatch, useSelector } from "react-redux";
+import { requestEmployee } from "../store/slice/EmployeeSlice";
 
 const Employee = () => {
   const dispatch = useDispatch();
@@ -35,9 +34,7 @@ const Employee = () => {
             </div>
           ))}
         </>
-      ) : (
-        <EmptyComponent />
-      )}
+      ) : null}
       <Link to="/employee/new" className="btn btn-primary">
         Создать нового
       </Link>

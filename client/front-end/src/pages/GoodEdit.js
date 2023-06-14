@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { editGoods, getGood } from '../store/slice/GoodsSlice';
+import { UserContext } from '../context/UserContext';
 
 const GoodEdit = () => {
   const navigate = useNavigate();
@@ -11,6 +12,7 @@ const GoodEdit = () => {
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
   const [active, setActive] = useState(false);
+  const { setLoading } = useContext(UserContext);
 
   useEffect(() => {
     dispatch(getGood({ newData: { id: params.id } }));
@@ -26,8 +28,12 @@ const GoodEdit = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(editGoods({ newData: { price, name, active, id: params.id } }));
-    navigate('/good');
+    setLoading(true);
+
+    const response = await dispatch(editGoods({ newData: { price, name, active, id: params.id } }));
+
+    if (response?.type?.includes('fulfilled')) navigate('/good');
+    setLoading(false);
   };
 
   return (

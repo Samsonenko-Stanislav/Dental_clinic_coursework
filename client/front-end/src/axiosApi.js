@@ -2,6 +2,7 @@ import axios from 'axios';
 import { loadFromLocalStorage } from './utils/localStorage';
 import { logoutUser } from './store/slice/UserSlice';
 import { store } from './index';
+// baseURL: 'http://localhost:8086',
 
 const axiosApi = axios.create({
   baseURL: 'http://158.160.43.172:8086',

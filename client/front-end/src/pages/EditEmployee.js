@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { editEmployee, nullifyDataEmployee, requestSoloEmployee } from '../store/slice/EmployeeSlice';
 
 const EditEmployee = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const params = useParams();
   const employee = useSelector((state) => state.employee.employee);
@@ -33,7 +34,8 @@ const EditEmployee = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(editEmployee({ newData: { id: params.id, workEnd, workStart, jobTitle, durationApp, fullName } }));
+    const response = await dispatch(editEmployee({ newData: { id: params.id, workEnd, workStart, jobTitle, durationApp, fullName } }));
+    if (response?.type?.includes('fulfilled')) navigate('/employee');
   };
 
   return (

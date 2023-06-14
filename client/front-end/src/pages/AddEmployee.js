@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { addEmployee } from '../store/slice/EmployeeSlice';
+import { useNavigate } from 'react-router-dom';
 
 const AddEmployee = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [fullName, setFullName] = useState('');
   const [jobTitle, setJobTitle] = useState('');
@@ -12,7 +14,9 @@ const AddEmployee = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(addEmployee({ newData: { fullName, jobTitle, workStart, workEnd, durationApp } }));
+    const response = await dispatch(addEmployee({ newData: { fullName, jobTitle, workStart, workEnd, durationApp } }));
+
+    if (response?.type?.includes('fulfilled')) navigate('/employee');
   };
 
   return (

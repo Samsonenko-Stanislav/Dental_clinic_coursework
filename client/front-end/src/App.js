@@ -1,5 +1,5 @@
 import React, { useMemo, useState, memo } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 import Footer from './components/Footer.js';
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -25,6 +25,17 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Spinner from './components/Spinner';
 import { useSelector } from 'react-redux';
 import { NoLoginRoute } from './components/NoLoginRoute';
+import { notification } from 'antd';
+
+export const showNotification = (type, text, title) => {
+  if(notification[type]){
+    notification[type]({
+      message: title,
+      description: text,
+      className: 'notification-border',
+    });
+  }
+};
 
 const App = () => {
   const user = useSelector((state) => state.user);
@@ -36,7 +47,7 @@ const App = () => {
 
   return (
     <UserContextContextProvider user={user} role={user?.role} setLoading={setLoading}>
-      <BrowserRouter>
+      <BrowserRouter >
         <Header />
         <div className="container overflow-auto overflow-block">
           <Routes>

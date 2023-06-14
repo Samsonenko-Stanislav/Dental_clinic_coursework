@@ -1,7 +1,8 @@
 import React, { memo, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { updateUser } from '../store/slice/UserSlice';
 import { useNavigate } from 'react-router-dom';
+import { createUser } from '../store/slice/UserSlice';
+import { showNotification } from '../App';
 
 const AddNewUser = () => {
   const navigate = useNavigate();
@@ -33,14 +34,20 @@ const AddNewUser = () => {
   };
 
   const handleSubmit = async (e) => {
+    e.preventDefault();
+
     const roles = [];
     if (isUser) roles.push('USER');
     if (isDoctor) roles.push('DOCTOR');
     if (isAdmin) roles.push('ADMIN');
 
-    e.preventDefault();
-    dispatch(
-      updateUser({
+    if (!isUser && !isDoctor && !isAdmin) {
+      showNotification('error', 'Выберите хоть одну роль', 'Ошибка');
+      return;
+    }
+
+    const response = await dispatch(
+      createUser({
         newData: {
           password,
           username,
@@ -56,7 +63,7 @@ const AddNewUser = () => {
       })
     );
 
-    navigate('/user');
+    if (response?.type?.includes('fulfilled')) navigate('/user');
   };
 
   return (
@@ -150,11 +157,11 @@ const AddNewUser = () => {
               </div>
               <div className="row col-12">
                 <div className="col-6">
-                  <input type="radio" id="MALE" name="gender" value="MALE" onChange={() => setGender('male')} />
+                  <input type="radio" id="MALE" name="gender" value="MALE" onChange={() => setGender('MALE')} />
                   <label htmlFor="MALE">Мужской</label>
                 </div>
                 <div>
-                  <input type="radio" id="FEMALE" name="gender" value="FEMALE" onChange={() => setGender('female')} />
+                  <input type="radio" id="FEMALE" name="gender" value="FEMALE" onChange={() => setGender('FEMALE')} />
                   <label htmlFor="FEMALE">Женский</label>
                 </div>
               </div>
