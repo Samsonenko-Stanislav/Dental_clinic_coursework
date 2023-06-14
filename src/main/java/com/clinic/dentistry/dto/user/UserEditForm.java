@@ -18,19 +18,11 @@ import java.util.Set;
 @AllArgsConstructor
 public class UserEditForm {
     private String username;
-
     private String password;
-
     private String fullName;
-
     private String email;
-
     private Gender gender;
-
     private Set<Role> roles;
-
     private Boolean active;
-
     private Long employeeId;
-
 }

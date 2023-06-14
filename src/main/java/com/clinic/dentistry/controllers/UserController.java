@@ -71,14 +71,11 @@ public class UserController {
 
     @PostMapping("/me")
     @PreAuthorize("hasAuthority('USER')")
-    public <changePassword> HashMap<String, Object> userMeEdit(@AuthenticationPrincipal User user,
-                                                               @RequestParam("updateUser") User updateUser,
-                                                               @RequestParam(value = "changePassword", required = false) Boolean changePassword
-    ) {
+    public HashMap<String, Object> userMeEdit(@AuthenticationPrincipal User user, @RequestBody UserEditForm editForm) {
         HashMap<String, Object> model = new HashMap<>();
-        if (registrationService.isUsernameVacant(updateUser.getUsername())) {
+        if (registrationService.isUsernameVacant(editForm.getUsername())) {
             model.put("message", "Данные успешно обновлены!");
-            outpatientCardService.userMeEdit(user, updateUser, changePassword);
+            outpatientCardService.userMeEdit(user, editForm);
             model.put("user", user);
             return model;
         } else {

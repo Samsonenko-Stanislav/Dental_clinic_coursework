@@ -1,5 +1,6 @@
 package com.clinic.dentistry.service.impl;
 
+import com.clinic.dentistry.dto.user.UserEditForm;
 import com.clinic.dentistry.models.Gender;
 import com.clinic.dentistry.models.OutpatientCard;
 import com.clinic.dentistry.models.User;
@@ -25,20 +26,23 @@ public class OutpatientCardServiceImpl implements OutpatientCardService {
     private UserRepository usesRepositotory;
 
     @Override
-    public List<OutpatientCard> findAllCards(){
+    public List<OutpatientCard> findAllCards() {
         return outpatientCardRepository.findAll();
     }
 
     @Override
-    public void userMeEdit(User user, User updateUser, Boolean changePassword){
-        user.getOutpatientCard().setFullName(updateUser.getFullName());
-        user.getOutpatientCard().setEmail(updateUser.getOutpatientCard().getEmail());
-        user.setUsername(updateUser.getUsername());
-        if (changePassword){
-            user.setPassword(passwordEncoder.encode(updateUser.getPassword()));
-        }
-        user.getOutpatientCard().setGender(updateUser.getOutpatientCard().getGender());
-        outpatientCardRepository.save(updateUser.getOutpatientCard());
+    public void userMeEdit(User user, UserEditForm form) {
+        if (form.getFullName() != null) user.getOutpatientCard().setFullName(form.getFullName());
+
+        if (form.getEmail() != null) user.getOutpatientCard().setEmail(form.getEmail());
+
+        if (form.getUsername() != null) user.setUsername(form.getUsername());
+
+        if (form.getPassword() != null) user.setPassword(passwordEncoder.encode(form.getPassword()));
+
+        if (form.getGender() != null) user.getOutpatientCard().setGender(form.getGender());
+
+        outpatientCardRepository.save(user.getOutpatientCard());
         usesRepositotory.save(user);
     }
 }
