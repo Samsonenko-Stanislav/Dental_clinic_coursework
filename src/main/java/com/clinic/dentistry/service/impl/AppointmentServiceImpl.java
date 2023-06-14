@@ -74,6 +74,8 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         return availableDatesByDoctor;
     }
+
+
     @Override
     public Iterable<Appointment> getArchiveAppointmentsForClient(User user){
         return appointmentRepository.findByClientAndConclusionNotNull(user.getOutpatientCard());

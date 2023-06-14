@@ -37,17 +37,10 @@ public class UserController {
 
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    public HashMap<String, Object> userList(
-            @RequestParam(value = "withArchived", required = false) String withArchived
-    ) {
+    public HashMap<String, Object> userList() {
         HashMap<String, Object> model = new HashMap<>();
-        if (withArchived != null) {
-            model.put("users", userService.findAllUsers());
-            model.put("withArchived", true);
-        } else {
-            model.put("users", userService.findAllActiveUsers());
-            model.put("withArchived", false);
-        }
+        model.put("users", userService.findAllUsers());
+        model.put("withArchived", true);
         return model;
     }
 
@@ -93,8 +86,6 @@ public class UserController {
             model.put("user", user);
             return model;
         }
-
-
     }
 
     @PostMapping("/new")

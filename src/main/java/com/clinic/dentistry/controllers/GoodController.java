@@ -23,17 +23,10 @@ public class GoodController {
     private GoodService goodService;
 
     @GetMapping
-    public HashMap<String, Object> goodList(
-            @RequestParam(value = "withArchived", required = false) String withArchived) {
+    public HashMap<String, Object> goodList() {
         HashMap<String, Object> model = new HashMap<>();
         Iterable<Good> goods;
-        if (withArchived != null) {
-            goods = goodService.findAllGoods();
-            model.put("withArchived", true);
-        } else {
-            goods = goodService.findActiveGoods();
-            model.put("withArchived", false);
-        }
+        goods = goodService.findAllGoods();
         model.put("goods", goods);
         return model;
     }
