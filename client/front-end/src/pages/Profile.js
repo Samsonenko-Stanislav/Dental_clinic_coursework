@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { getUser, updateUser } from '../store/slice/UserSlice';
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getUser, updateProfile } from "../store/slice/UserSlice";
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -18,7 +18,18 @@ const Profile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(updateUser({ newData: user }));
+    dispatch(
+      updateProfile({
+        newData: {
+          username: user.username,
+          password: user.password,
+          active: true,
+          email: user.email,
+          gender: user.gender,
+          fullName: user.fullName,
+        },
+      })
+    );
   };
 
   const handleCheckboxChange = (e) => {
