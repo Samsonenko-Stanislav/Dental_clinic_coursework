@@ -13,7 +13,7 @@ const AddNewUser = () => {
   const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
-  const [gender, setGender] = useState('male');
+  const [gender, setGender] = useState('MALE');
   const [fullName, setFullName] = useState('');
 
   const [jobTitle, setJobTitle] = useState('');
@@ -56,8 +56,8 @@ const AddNewUser = () => {
           fullName,
           roles,
           jobTitle,
-          workStart,
-          workEnd,
+          workStart: workStart + ':00',
+          workEnd: workEnd + ':00',
           durationApp,
         },
       })

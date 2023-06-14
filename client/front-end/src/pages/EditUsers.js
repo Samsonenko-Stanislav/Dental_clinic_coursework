@@ -14,7 +14,7 @@ const EditUsers = () => {
   const [changePassword, setChangePassword] = useState(false);
   const [selectedRoles, setSelectedRoles] = useState([]);
   const [email, setEmail] = useState('');
-  const [gender, setGender] = useState('male');
+  const [gender, setGender] = useState('MALE');
   const [fullName, setFullName] = useState('');
 
   useEffect(() => {
