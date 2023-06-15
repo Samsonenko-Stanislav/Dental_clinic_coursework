@@ -42,7 +42,7 @@ const Profile = () => {
       })
     );
 
-    if (password || username !== profile?.username) {
+    if (response?.type?.includes('fulfilled') && password || username !== profile?.username) {
       removeFromLocalStorage('token');
       removeFromLocalStorage('role');
       dispatch(logoutUser({}));
