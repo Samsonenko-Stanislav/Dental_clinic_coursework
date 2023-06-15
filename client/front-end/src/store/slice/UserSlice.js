@@ -95,7 +95,6 @@ const userSlice = createSlice({
     },
 
     [updateProfile.fulfilled]: (state, action) => {
-
       if (action?.payload) {
         state.loading = false;
         state.error = null;
@@ -103,8 +102,6 @@ const userSlice = createSlice({
     },
 
     [updateProfile.rejected]: (state) => {
-      showNotification('error', 'Неверный логин и/или пароль.', 'Ошибка');
-
       state.loading = false;
       state.error = 'Неверный логин и/или пароль.';
     },

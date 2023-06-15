@@ -43,7 +43,7 @@ const Profile = () => {
     );
 
     if (response?.type?.includes('rejected')) {
-      showNotification('error', response?.payload?.data?.message, 'Профиль');
+      showNotification('error','Введите корректные данные', 'Профиль');
 
       return;
     }
