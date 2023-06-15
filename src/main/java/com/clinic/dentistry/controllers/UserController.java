@@ -71,18 +71,9 @@ public class UserController {
 
     @PostMapping("/me")
     @PreAuthorize("hasAuthority('USER')")
-    public HashMap<String, Object> userMeEdit(@AuthenticationPrincipal User user, @RequestBody UserEditForm editForm) {
-        HashMap<String, Object> model = new HashMap<>();
-        if (editForm.getUsername() != null && registrationService.isUsernameVacant(editForm.getUsername())) {
-            model.put("message", "Данные успешно обновлены!");
-            outpatientCardService.userMeEdit(user, editForm);
-            model.put("user", user);
-            return model;
-        } else {
-            model.put("message", "Пользователь с таким логином уже существует!");
-            model.put("user", user);
-            return model;
-        }
+    public ResponseEntity<?> userMeEdit(@AuthenticationPrincipal User user, @RequestBody UserEditForm editForm) {
+        ApiResponse response = outpatientCardService.userMeEdit(user, editForm);
+        return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
     }
 
     @PostMapping("/new")
