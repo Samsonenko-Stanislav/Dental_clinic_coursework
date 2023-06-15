@@ -61,7 +61,6 @@ const AppointmentsEdit = () => {
 
   const handleInputChange = (e) => {
     const good = JSON.parse(e.target.value);
-
     setCurrentCheck((prevState) => {
       return prevState.map((item) => {
         if (item.id === good.lineId) {
@@ -70,7 +69,7 @@ const AppointmentsEdit = () => {
             price: good.price,
             total: good.price * 1,
             qty: 1,
-            goodId: item.id.toString(),
+            goodId: good.id,
           };
         }
         return item;
@@ -252,7 +251,7 @@ const AppointmentsEdit = () => {
               Сохранить
             </button>
           )}
-          {role.includes('USER') && readOnly && (
+          {role.includes('USER') && readOnly && !checkLines.length && (
             <button className="btn btn-primary" type={'button'} onClick={cancelHandler}>
               Отменить запись
             </button>
