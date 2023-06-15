@@ -17,7 +17,7 @@ export const getUser = createAsyncThunk('userData/getUser', async ({ newData, ca
 });
 
 export const updateProfile = createAsyncThunk('userData/getUser', async ({ newData, catchFunction }) => {
-  return await axiosApi.post('/user/me', newData);
+  return await axiosApi.post('/user/me', removeEmptyFromObject(newData));
 });
 
 export const createUser = createAsyncThunk('userData/createUser', async ({ newData, catchFunction }) => {

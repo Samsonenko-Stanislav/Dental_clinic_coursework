@@ -15,13 +15,14 @@ const AppointmentsEdit = () => {
   const appointmentStore = useSelector((state) => state.appointments.appointment);
   const goodsStore = useSelector((state) => state.goods.goods);
   const checkLines = appointmentStore.checkLines || [];
-  const readOnly = appointmentStore.readOnly;
+
+  const readOnly = useMemo(() => {
+    return appointmentStore.readOnly;
+  }, [appointmentStore.readOnly]);
+
   const navigate = useNavigate();
-
   const [conclusion, setConclusion] = useState('');
-
   const [currentCheck, setCurrentCheck] = useState([{ id: 0, good: null, price: null, qty: null, total: null, goodId: null }]);
-
   const [total, setTotal] = useState(0);
 
   const goods = useMemo(() => {
@@ -123,6 +124,10 @@ const AppointmentsEdit = () => {
       navigate('/appointments');
     }
   };
+
+  if (!Object.keys(appointmentStore).length) {
+    return null;
+  }
 
   return (
     <div className="container">

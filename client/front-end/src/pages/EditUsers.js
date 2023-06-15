@@ -14,7 +14,7 @@ const EditUsers = () => {
   const [changePassword, setChangePassword] = useState(false);
   const [selectedRoles, setSelectedRoles] = useState([]);
   const [email, setEmail] = useState('');
-  const [gender, setGender] = useState('MALE');
+  const [gender, setGender] = useState('');
   const [fullName, setFullName] = useState('');
   const [password, setPassword] = useState('');
 
@@ -135,11 +135,11 @@ const EditUsers = () => {
                 </div>
                 <div className="row col-12">
                   <div className="col-6">
-                    <input type="radio" id="MALE" name="gender" value={gender === 'MALE'} onChange={() => setGender('MALE')} />
+                    <input type="radio" id="MALE" name="gender" value={'MALE'} checked={gender === 'MALE'} onChange={() => setGender('MALE')} />
                     <label htmlFor="MALE">Мужской</label>
                   </div>
                   <div>
-                    <input type="radio" id="FEMALE" name="gender" value={gender === 'FEMALE'} onChange={() => setGender('FEMALE')} />
+                    <input type="radio" id="FEMALE" name="gender" value={'FEMALE'} checked={gender === 'FEMALE'} onChange={() => setGender('FEMALE')} />
                     <label htmlFor="FEMALE">Женский</label>
                   </div>
                 </div>

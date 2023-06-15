@@ -24,6 +24,7 @@ const Profile = () => {
     const response = await dispatch(
       updateProfile({
         newData: {
+          username:user.username,
           password: user.password,
           active: true,
           email: user.email,

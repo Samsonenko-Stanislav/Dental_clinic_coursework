@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { editGoods, getGood } from '../store/slice/GoodsSlice';
+import { editGoods, getGood, nullifyDataGoods } from "../store/slice/GoodsSlice";
 import { UserContext } from '../context/UserContext';
 import { showNotification } from '../App';
 
@@ -17,6 +17,11 @@ const GoodEdit = () => {
 
   useEffect(() => {
     dispatch(getGood({ newData: { id: params.id } }));
+
+
+    return()=>{
+      dispatch(nullifyDataGoods({}))
+    }
   }, [dispatch, params.id]);
 
   useEffect(() => {
