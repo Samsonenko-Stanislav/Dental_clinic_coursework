@@ -10,6 +10,7 @@ const Profile = () => {
   const [user, setUser] = useState({});
   const [changePassword, setChangePassword] = useState(false);
   const profile = useSelector((state) => state.user.profile);
+  const [gender, setGender] = useState('');
 
   useEffect(() => {
     dispatch(getUser({}));
@@ -17,6 +18,7 @@ const Profile = () => {
 
   useEffect(() => {
     setUser({ ...profile, password: '' });
+    setGender(profile?.outpatientCard?.gender || '');
   }, [profile]);
 
   const handleSubmit = async (e) => {
@@ -24,11 +26,11 @@ const Profile = () => {
     const response = await dispatch(
       updateProfile({
         newData: {
-          username:user.username,
+          username: user.username,
           password: user.password,
           active: true,
           email: user.email,
-          gender: user.gender,
+          gender,
           fullName: user.fullName,
         },
       })
@@ -105,25 +107,9 @@ const Profile = () => {
           <div className="mb-4">
             <br />
             <p>Пол:</p>
-            <input
-              type="radio"
-              id="male"
-              name="gender"
-              value="MALE"
-              checked={user?.gender === 'MALE' || user?.outpatientCard?.gender === 'MALE'}
-              onChange={handleInputChange}
-              className="mx-2"
-            />
+            <input type="radio" id="male" name="gender" value="MALE" checked={gender === 'MALE'} onChange={() => setGender('MALE')} className="mx-2" />
             <label htmlFor="male">Мужской</label>
-            <input
-              type="radio"
-              id="FEMALE"
-              name="gender"
-              value="FEMALE"
-              checked={user?.gender === 'FEMALE' || user?.outpatientCard?.gender === 'FEMALE'}
-              onChange={handleInputChange}
-              className="mx-2"
-            />
+            <input type="radio" id="FEMALE" name="gender" value="FEMALE" checked={gender === 'FEMALE'} onChange={() => setGender('FEMALE')} className="mx-2" />
             <label htmlFor="FEMALE">Женский</label>
           </div>
           <button className="w-100 btn btn-primary btn-lg  my-" type="submit">

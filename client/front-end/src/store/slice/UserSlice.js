@@ -16,7 +16,7 @@ export const getUser = createAsyncThunk('userData/getUser', async ({ newData, ca
   return await axiosApi.get('/user/me');
 });
 
-export const updateProfile = createAsyncThunk('userData/getUser', async ({ newData, catchFunction }) => {
+export const updateProfile = createAsyncThunk('userData/updateProfile', async ({ newData, catchFunction }) => {
   return await axiosApi.post('/user/me', removeEmptyFromObject(newData));
 });
 
@@ -84,6 +84,31 @@ const userSlice = createSlice({
     },
 
     [requestLogin.rejected]: (state) => {
+      showNotification('error', 'Неверный логин и/или пароль.', 'Ошибка');
+
+      state.loading = false;
+      state.error = 'Неверный логин и/или пароль.';
+    },
+
+    [updateProfile.pending]: (state) => {
+      state.loading = true;
+    },
+
+    [updateProfile.fulfilled]: (state, action) => {
+      if (action?.payload) {
+        const response = action?.payload?.data;
+
+        saveToLocalStorage('token', response.token, false);
+        saveToLocalStorage('role', response?.roles);
+
+        state.token = response?.data?.token;
+        state.role = response?.data?.roles;
+        state.loading = false;
+        state.error = null;
+      }
+    },
+
+    [updateProfile.rejected]: (state) => {
       showNotification('error', 'Неверный логин и/или пароль.', 'Ошибка');
 
       state.loading = false;
