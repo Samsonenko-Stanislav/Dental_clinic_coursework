@@ -98,8 +98,8 @@ const userSlice = createSlice({
       if (action?.payload) {
         const response = action?.payload?.data;
 
-        saveToLocalStorage('token', response.token, false);
-        saveToLocalStorage('role', response?.roles);
+        saveToLocalStorage('token', response?.data?.token, false);
+        saveToLocalStorage('role', response?.data?.roles);
 
         state.token = response?.data?.token;
         state.role = response?.data?.roles;

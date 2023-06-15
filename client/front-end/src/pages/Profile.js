@@ -11,6 +11,7 @@ const Profile = () => {
   const [changePassword, setChangePassword] = useState(false);
   const profile = useSelector((state) => state.user.profile);
   const [gender, setGender] = useState('');
+  const [email,setEmail]= useState('')
 
   useEffect(() => {
     dispatch(getUser({}));
@@ -19,6 +20,7 @@ const Profile = () => {
   useEffect(() => {
     setUser({ ...profile, password: '' });
     setGender(profile?.outpatientCard?.gender || '');
+    setEmail(profile?.outpatientCard?.email||'')
   }, [profile]);
 
   const handleSubmit = async (e) => {
@@ -29,7 +31,7 @@ const Profile = () => {
           username: user.username,
           password: user.password,
           active: true,
-          email: user.email,
+          email,
           gender,
           fullName: user.fullName,
         },
@@ -100,7 +102,7 @@ const Profile = () => {
                 <label htmlFor="email" className="form-label">
                   Email
                 </label>
-                <input type="text" name="email" className="form-control" id="email" value={user?.outpatientCard?.email || ''} onChange={handleInputChange} />
+                <input type="text" name="email" className="form-control" id="email" value={email} onChange={e=>setEmail(e.target.value)} />
               </div>
             </div>
           </div>
