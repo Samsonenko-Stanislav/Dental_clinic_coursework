@@ -43,7 +43,7 @@ const AppointmentsEdit = () => {
         }, 0);
 
     setTotal(totalSum);
-  }, [currentCheck, checkLines]);
+  }, [currentCheck, checkLines, readOnly]);
 
   useEffect(() => {
     dispatch(getSoloAppointments({ newData: { id: params.id } }));

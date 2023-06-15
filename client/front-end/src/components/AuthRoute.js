@@ -5,11 +5,11 @@ import { useSelector } from 'react-redux';
 export function RequireAuth({ children, access }) {
   const user = useSelector((state) => state.user.token) || loadFromLocalStorage('user');
 
-  if (!access) {
-    return <Navigate to="/" />;
+  if (!user) {
+    return <Navigate to="/login" />;
   }
 
-  if (!user) {
+  if (!access) {
     return <Navigate to="/" />;
   }
 

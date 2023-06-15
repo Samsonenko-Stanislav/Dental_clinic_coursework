@@ -1,26 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUser, updateProfile } from '../store/slice/UserSlice';
+import { getUser, logoutUser, updateProfile } from '../store/slice/UserSlice';
 import { useNavigate } from 'react-router-dom';
 import { showNotification } from '../App';
+import { removeFromLocalStorage } from '../utils/localStorage';
 
 const Profile = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [user, setUser] = useState({});
   const [changePassword, setChangePassword] = useState(false);
   const profile = useSelector((state) => state.user.profile);
   const [gender, setGender] = useState('');
-  const [email,setEmail]= useState('')
+  const [email, setEmail] = useState('');
+  const [fullName, setFullName] = useState('');
+  const [username, setUserName] = useState('');
+  const [password, setPassword] = useState('');
 
   useEffect(() => {
     dispatch(getUser({}));
   }, [dispatch]);
 
   useEffect(() => {
-    setUser({ ...profile, password: '' });
     setGender(profile?.outpatientCard?.gender || '');
-    setEmail(profile?.outpatientCard?.email||'')
+    setEmail(profile?.outpatientCard?.email || '');
+    setFullName(profile?.outpatientCard?.fullName || '');
+    setUserName(profile?.username || '');
   }, [profile]);
 
   const handleSubmit = async (e) => {
@@ -28,39 +32,36 @@ const Profile = () => {
     const response = await dispatch(
       updateProfile({
         newData: {
-          username: user.username,
-          password: user.password,
+          username,
+          password,
           active: true,
           email,
           gender,
-          fullName: user.fullName,
+          fullName,
         },
       })
     );
 
-    if (response?.type?.includes('fulfilled')) {
+    if (password || username !== profile?.username) {
+      removeFromLocalStorage('token');
+      removeFromLocalStorage('role');
+      dispatch(logoutUser({}));
+      showNotification('success', 'Вы успешно изменили профиль', 'Профиль');
+      navigate('/login');
+    } else if (response?.type?.includes('fulfilled')) {
       navigate('/');
       showNotification('success', 'Вы успешно изменили профиль', 'Профиль');
+    } else if (response?.type?.includes('rejected')) {
+      showNotification('error', response?.payload?.data?.message, 'Профиль');
     }
   };
 
   const handleCheckboxChange = (e) => {
     setChangePassword(e.target.checked);
   };
-
-  const handleInputChange = (e) => {
-    setUser({
-      ...user,
-      [e.target.name]: e.target.value,
-    });
-  };
-
   const handleRemoveChangePassword = () => {
-    setUser({
-      ...user,
-      password: '',
-    });
     setChangePassword(!changePassword);
+    setPassword('');
   };
 
   return (
@@ -73,7 +74,7 @@ const Profile = () => {
               <label htmlFor="username" className="form-label">
                 Логин
               </label>
-              <input type="text" name="username" className="form-control" id="username" required value={user.username || ''} onChange={handleInputChange} />
+              <input type="text" name="username" className="form-control" id="username" required value={username} onChange={(e) => setUserName(e.target.value)} />
             </div>
           </div>
           <div className="col-12">
@@ -81,19 +82,21 @@ const Profile = () => {
             <label htmlFor="changePassword" className="form-label">
               Сменить пароль
             </label>
-            <div className="col-6" id="forChangePassword" style={{ display: changePassword ? 'block' : 'none' }}>
-              <label htmlFor="password" className="form-label">
-                Новый пароль
-              </label>
-              <input type="password" name="password" id="password" className="form-control" value={user.password || ''} onChange={handleInputChange} />
-            </div>
+            {changePassword && (
+              <div className="col-6" id="forChangePassword">
+                <label htmlFor="password" className="form-label">
+                  Новый пароль
+                </label>
+                <input type="password" name="password" id="password" className="form-control" value={password} onChange={(e) => setPassword(e.target.value)} />
+              </div>
+            )}
           </div>
           <div className="row col-12">
             <div className="col-6">
               <label htmlFor="fullName" className="form-label">
                 ФИО
               </label>
-              <input type="text" name="fullName" className="form-control" id="fullName" required value={user.fullName || ''} onChange={handleInputChange} />
+              <input type="text" name="fullName" className="form-control" id="fullName" required value={fullName} onChange={(e) => setFullName(e.target.value)} />
             </div>
           </div>
           <div className="row">
@@ -102,7 +105,7 @@ const Profile = () => {
                 <label htmlFor="email" className="form-label">
                   Email
                 </label>
-                <input type="text" name="email" className="form-control" id="email" value={email} onChange={e=>setEmail(e.target.value)} />
+                <input type="text" name="email" className="form-control" id="email" value={email} onChange={(e) => setEmail(e.target.value)} />
               </div>
             </div>
           </div>
@@ -118,7 +121,6 @@ const Profile = () => {
             Сохранить
           </button>
         </div>
-        <input type="hidden" name="userId" value={user.id || ''} />
       </form>
       {changePassword && (
         <button className="btn btn-secondary my-4" onClick={handleRemoveChangePassword}>

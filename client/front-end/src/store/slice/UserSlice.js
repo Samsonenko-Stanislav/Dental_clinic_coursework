@@ -95,14 +95,8 @@ const userSlice = createSlice({
     },
 
     [updateProfile.fulfilled]: (state, action) => {
+
       if (action?.payload) {
-        const response = action?.payload?.data;
-
-        saveToLocalStorage('token', response?.data?.token, false);
-        saveToLocalStorage('role', response?.data?.roles);
-
-        state.token = response?.data?.token;
-        state.role = response?.data?.roles;
         state.loading = false;
         state.error = null;
       }
