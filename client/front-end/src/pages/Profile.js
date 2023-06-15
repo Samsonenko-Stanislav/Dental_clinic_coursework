@@ -42,6 +42,12 @@ const Profile = () => {
       })
     );
 
+    if (response?.type?.includes('rejected')) {
+      showNotification('error', response?.payload?.data?.message, 'Профиль');
+
+      return;
+    }
+
     if (response?.type?.includes('fulfilled') && (password || username !== profile?.username)) {
       removeFromLocalStorage('token');
       removeFromLocalStorage('role');
@@ -51,8 +57,6 @@ const Profile = () => {
     } else if (response?.type?.includes('fulfilled')) {
       navigate('/');
       showNotification('success', 'Вы успешно изменили профиль', 'Профиль');
-    } else if (response?.type?.includes('rejected')) {
-      showNotification('error', response?.payload?.data?.message, 'Профиль');
     }
   };
 
