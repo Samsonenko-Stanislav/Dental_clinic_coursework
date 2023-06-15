@@ -44,7 +44,7 @@ public class OutpatientCardServiceImpl implements OutpatientCardService {
         StringBuilder sb = new StringBuilder();
 
         if (form.getUsername() != null && !form.getUsername().equals(user.getUsername())) {
-            if (usesRepositotory.findByUsername(form.getUsername()) != null) {
+            if (!usesRepositotory.existsByUsername(form.getUsername())) {
                 user.setUsername(form.getUsername());
                 sb.append("Логин изменен\n");
             } else {
