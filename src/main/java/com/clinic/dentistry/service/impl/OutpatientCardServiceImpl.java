@@ -33,12 +33,12 @@ public class OutpatientCardServiceImpl implements OutpatientCardService {
 
     @Override
     public ApiResponse userMeEdit(User user, UserEditForm form) {
+        ApiResponse response = new ApiResponse();
         OutpatientCard card = user.getOutpatientCard();
         if (card == null) {
-            return ApiResponse.builder()
-                    .status(500)
-                    .message("Ошибка структуры данных")
-                    .build();
+            response.setStatus(500);
+            response.setMessage("Ошибка структуры данных");
+            return response;
         }
 
         StringBuilder sb = new StringBuilder();
@@ -48,7 +48,9 @@ public class OutpatientCardServiceImpl implements OutpatientCardService {
                 user.setUsername(form.getUsername());
                 sb.append("Логин изменен\n");
             } else {
-                sb.append("Пользователь с таким логином уже существует!\n");
+                response.setStatus(400);
+                response.setMessage("Пользователь с таким логином уже существует!");
+                return response;
             }
         }
 
@@ -59,13 +61,18 @@ public class OutpatientCardServiceImpl implements OutpatientCardService {
 
         if (form.getFullName() != null && !form.getFullName().equals(card.getFullName())) {
             card.setFullName(form.getFullName());
+            if (user.getEmployee() != null){
+                user.getEmployee().setFullName(form.getFullName());
+            }
             sb.append("Имя изменено\n");
         }
 
         if (form.getEmail() != null && !form.getEmail().equals(card.getEmail())) {
             OutpatientCard otherCard = outpatientCardRepository.findByEmail(form.getEmail());
             if (otherCard != null) {
-                sb.append("Пользователь с таким email уже существует!\n");
+                response.setStatus(400);
+                response.setMessage("Пользователь с таким email уже существует!");
+                return response;
             } else {
                 card.setEmail(form.getEmail());
                 sb.append("Email изменен\n");
@@ -80,21 +87,9 @@ public class OutpatientCardServiceImpl implements OutpatientCardService {
         outpatientCardRepository.save(user.getOutpatientCard());
         usesRepositotory.save(user);
 
-        LoginResponse response = new LoginResponse(
-                this.encodeCredentials(user.getUsername(), form.getPassword()),
-                user.getRoles()
-        );
-
-        return ApiResponse.builder()
-                .status(200)
-                .message(sb.toString())
-                .data(response)
-                .build();
-    }
-
-    private String encodeCredentials(String username, String password) {
-        String credentials = username + ":" + password;
-        return Base64.getEncoder().encodeToString(credentials.getBytes());
+        response.setStatus(200);
+        response.setMessage(sb.toString());
+        return response;
     }
 
 }
