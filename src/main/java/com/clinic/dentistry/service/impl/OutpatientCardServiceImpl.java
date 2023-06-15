@@ -46,7 +46,7 @@ public class OutpatientCardServiceImpl implements OutpatientCardService {
         if (form.getUsername() != null && !form.getUsername().equals(user.getUsername())) {
             if (!usesRepositotory.existsByUsername(form.getUsername())) {
                 user.setUsername(form.getUsername());
-                sb.append("Логин изменен\n");
+                sb.append("логин изменен ");
             } else {
                 response.setStatus(400);
                 response.setMessage("Пользователь с таким логином уже существует!");
@@ -56,7 +56,7 @@ public class OutpatientCardServiceImpl implements OutpatientCardService {
 
         if (form.getPassword() != null && !form.getPassword().isEmpty()) {
             user.setPassword(passwordEncoder.encode(form.getPassword()));
-            sb.append("Пароль изменен\n");
+            sb.append("пароль изменен ");
         }
 
         if (form.getFullName() != null && !form.getFullName().equals(card.getFullName())) {
@@ -64,7 +64,7 @@ public class OutpatientCardServiceImpl implements OutpatientCardService {
             if (user.getEmployee() != null){
                 user.getEmployee().setFullName(form.getFullName());
             }
-            sb.append("Имя изменено\n");
+            sb.append("имя изменено ");
         }
 
         if (form.getEmail() != null && !form.getEmail().equals(card.getEmail())) {
@@ -75,13 +75,13 @@ public class OutpatientCardServiceImpl implements OutpatientCardService {
                 return response;
             } else {
                 card.setEmail(form.getEmail());
-                sb.append("Email изменен\n");
+                sb.append("email изменен ");
             }
         }
 
         if (form.getGender() != card.getGender()) {
             card.setGender(form.getGender());
-            sb.append("Пол изменен\n");
+            sb.append("пол изменен ");
         }
 
         outpatientCardRepository.save(user.getOutpatientCard());
