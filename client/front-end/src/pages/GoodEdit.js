@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { editGoods, getGood, nullifyDataGoods } from "../store/slice/GoodsSlice";
+import { editGoods, getGood, nullifyDataGoods } from '../store/slice/GoodsSlice';
 import { UserContext } from '../context/UserContext';
 import { showNotification } from '../App';
 
@@ -15,13 +15,13 @@ const GoodEdit = () => {
   const [active, setActive] = useState(false);
   const { setLoading } = useContext(UserContext);
 
+
   useEffect(() => {
     dispatch(getGood({ newData: { id: params.id } }));
 
-
-    return()=>{
-      dispatch(nullifyDataGoods({}))
-    }
+    return () => {
+      dispatch(nullifyDataGoods({}));
+    };
   }, [dispatch, params.id]);
 
   useEffect(() => {
@@ -52,7 +52,7 @@ const GoodEdit = () => {
       <form onSubmit={handleSubmit}>
         <div className="row">
           <div className="col-3">
-            <input type="checkbox" name="active" id="active" defaultChecked={good.active} value={active} onChange={(e) => setActive(e.target.checked)} />
+            <input type="checkbox" name="active" id="active" value={active} checked={active} onChange={(e) => setActive(e.target.checked)} />
             <label htmlFor="active" className="form-label">
               Активная
             </label>
