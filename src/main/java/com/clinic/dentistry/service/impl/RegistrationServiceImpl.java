@@ -10,6 +10,7 @@ import com.clinic.dentistry.repo.UserRepository;
 import com.clinic.dentistry.service.MailService;
 import com.clinic.dentistry.service.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -53,14 +54,18 @@ public class RegistrationServiceImpl implements RegistrationService {
                 .outpatientCard(outpatientCard)
                 .build();
         userRepository.save(user);
-        mailService.sendNotification(
-                "Здравствуйте, " + outpatientCard.getFullName() + "! \n" +
-                        "Благодарим за регистрацию на нашем сайте. С нетерпением ждем Вас в нашей стоматологической клинике!!! \n" +
-                        "С уважением, \n" +
-                        "Коллектив стоматологической клиники 'Улыбка премиум' ",
-                outpatientCard.getEmail(),
-                "Успешная регистрация"
-        );
+        try {
+            mailService.sendNotification(
+                    "Здравствуйте, " + outpatientCard.getFullName() + "! \n" +
+                            "Благодарим за регистрацию на нашем сайте. С нетерпением ждем Вас в нашей стоматологической клинике!!! \n" +
+                            "С уважением, \n" +
+                            "Коллектив стоматологической клиники 'Улыбка премиум' ",
+                    outpatientCard.getEmail(),
+                    "Успешная регистрация"
+            );
+        } catch (MailException ignored) {
+        }
+
         return ApiResponse.builder()
                 .status(200)
                 .message("Регистрация прошла успешно")

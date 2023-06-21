@@ -9,6 +9,7 @@ import com.clinic.dentistry.repo.UserRepository;
 import com.clinic.dentistry.service.AppointmentService;
 import com.clinic.dentistry.service.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailException;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
@@ -147,18 +148,22 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointment.setActive(Boolean.TRUE);
         appointmentRepository.save(appointment);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyy HH:mm");
-        mailService.sendNotification(
-                "Здравствуйте, " + appointment.getClient().getFullName() + "! \n" +
-                        "Вы успешно записаны на прием к врачу" + appointment.getDoctor().getJobTitle() +
-                        " " + appointment.getDoctor().getFullName() + "  на " + appointment.getDate().format(formatter) +
-                        "\n С нетерпением ждем Вас в нашей стоматологической клинике!!! \n" +
-                        "Если Ваш и планы изменились и Вы не сможете придти на прием, большая просьба отменить запись по ссылке: \n"
-                        + "http://стоматология.online/appointments/" + appointment.getId() + "/edit" +
-                        " \n С уважением, \n" +
-                        "Коллектив стоматологической клиники 'Улыбка премиум' ",
-                appointment.getClient().getEmail(),
-                "Запись на прием"
-        );
+        try {
+            mailService.sendNotification(
+                    "Здравствуйте, " + appointment.getClient().getFullName() + "! \n" +
+                            "Вы успешно записаны на прием к врачу" + appointment.getDoctor().getJobTitle() +
+                            " " + appointment.getDoctor().getFullName() + "  на " + appointment.getDate().format(formatter) +
+                            "\n С нетерпением ждем Вас в нашей стоматологической клинике!!! \n" +
+                            "Если Ваш и планы изменились и Вы не сможете придти на прием, большая просьба отменить запись по ссылке: \n"
+                            + "http://стоматология.online/appointments/" + appointment.getId() + "/edit" +
+                            " \n С уважением, \n" +
+                            "Коллектив стоматологической клиники 'Улыбка премиум' ",
+                    appointment.getClient().getEmail(),
+                    "Запись на прием"
+            );
+        } catch (MailException ignored) {
+        }
+
         return appointment;
     }
 
@@ -167,16 +172,20 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointment.setActive(Boolean.FALSE);
         appointmentRepository.save(appointment);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyy HH:mm");
-        mailService.sendNotification(
-                "Здравствуйте, " + appointment.getClient().getFullName() + "! \n" +
-                        "Ваша запись на прием к врачу" + appointment.getDoctor().getJobTitle() +
-                       " " + appointment.getDoctor().getFullName() + "  на " + appointment.getDate().format(formatter) +
-                       " успешно отменена. \n" +
-                        "С уважением, \n" +
-                       "Коллектив стоматологической клиники 'Улыбка премиум' ",
-                appointment.getClient().getEmail(),
-                "Отмена записи на прием"
-        );
+        try{
+            mailService.sendNotification(
+                    "Здравствуйте, " + appointment.getClient().getFullName() + "! \n" +
+                            "Ваша запись на прием к врачу" + appointment.getDoctor().getJobTitle() +
+                            " " + appointment.getDoctor().getFullName() + "  на " + appointment.getDate().format(formatter) +
+                            " успешно отменена. \n" +
+                            "С уважением, \n" +
+                            "Коллектив стоматологической клиники 'Улыбка премиум' ",
+                    appointment.getClient().getEmail(),
+                    "Отмена записи на прием"
+            );
+        } catch (MailException ignored) {
+        }
+
     }
 
     @Override
