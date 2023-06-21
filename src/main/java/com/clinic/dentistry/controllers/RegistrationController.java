@@ -1,5 +1,6 @@
 package com.clinic.dentistry.controllers;
 
+import com.clinic.dentistry.annotations.SendMailReg;
 import com.clinic.dentistry.dto.ApiResponse;
 import com.clinic.dentistry.dto.user.RegisterForm;
 import com.clinic.dentistry.service.RegistrationService;
@@ -18,6 +19,7 @@ public class RegistrationController {
     private RegistrationService registrationService;
 
     @PostMapping("/sign_up")
+    @SendMailReg
     public ResponseEntity<ApiResponse> signUp(@Valid @RequestBody RegisterForm request){
         ApiResponse response = registrationService.userRegistration(request);
         return new ResponseEntity<>(response,HttpStatus.valueOf(response.getStatus()));
