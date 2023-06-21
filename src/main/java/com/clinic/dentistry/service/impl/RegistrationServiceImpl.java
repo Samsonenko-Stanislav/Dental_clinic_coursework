@@ -58,7 +58,8 @@ public class RegistrationServiceImpl implements RegistrationService {
                         "Благодарим за регистрацию на нашем сайте. С нетерпением ждем Вас в нашей стоматологической клинике!!! \n" +
                         "С уважением, \n" +
                         "Коллектив стоматологической клиники 'Улыбка премиум' ",
-                outpatientCard.getEmail()
+                outpatientCard.getEmail(),
+                "Успешная регистрация"
         );
         return ApiResponse.builder()
                 .status(200)

@@ -71,7 +71,8 @@ public class CheckServiceImpl implements CheckService {
                         + "http://стоматология.online/appointments/" + appointment.getId() + "/edit" +
                        " \nС уважением, \n" +
                         "Коллектив стоматологической клиники 'Улыбка премиум' ",
-                appointment.getClient().getEmail()
+                appointment.getClient().getEmail(),
+                "Врачебное заключение"
         );
     }
 

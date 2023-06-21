@@ -24,18 +24,14 @@ public class MailService {
     }
 
     @Async
-    public void sendNotification(String text, String EMAIL_TO) throws MailException {
+    public void sendNotification(String text, String EMAIL_TO, String subject) throws MailException {
 
         SimpleMailMessage mail = new SimpleMailMessage();
-        mail.setFrom(EMAIL_FROM);
+        mail.setFrom("dentistry.samsonenko@mail.ru");
         mail.setTo(EMAIL_TO);
-        mail.setSubject(
-                DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).format(LocalDateTime.now())
-        );
+        mail.setSubject(subject);
 
         mail.setText(text);
-
-
         javaMailSender.send(mail);
     }
 }

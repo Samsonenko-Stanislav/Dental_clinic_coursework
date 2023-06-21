@@ -156,7 +156,8 @@ public class AppointmentServiceImpl implements AppointmentService {
                         + "http://стоматология.online/appointments/" + appointment.getId() + "/edit" +
                         " \n С уважением, \n" +
                         "Коллектив стоматологической клиники 'Улыбка премиум' ",
-                appointment.getClient().getEmail()
+                appointment.getClient().getEmail(),
+                "Запись на прием"
         );
         return appointment;
     }
@@ -173,7 +174,8 @@ public class AppointmentServiceImpl implements AppointmentService {
                        " успешно отменена. \n" +
                         "С уважением, \n" +
                        "Коллектив стоматологической клиники 'Улыбка премиум' ",
-                appointment.getClient().getEmail()
+                appointment.getClient().getEmail(),
+                "Отмена записи на прием"
         );
     }
 
