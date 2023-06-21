@@ -14,7 +14,7 @@ import java.time.format.FormatStyle;
 
 @Service
 public class MailService {
-    public static final String EMAIL_FROM = "dentistry.samsonenko@gmail.com";
+    public static final String EMAIL_FROM = "dentistry.samsonenko@mail.ru";
 
     private final JavaMailSender javaMailSender;
 

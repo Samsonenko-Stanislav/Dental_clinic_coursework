@@ -5,7 +5,7 @@ import { store } from './index';
 // baseURL: 'http://localhost:8086',
 
 const axiosApi = axios.create({
-  baseURL: 'http://стоматология.online:8086',
+  baseURL: 'http://localhost:8083',
 });
 
 axiosApi.interceptors.request.use(async (config) => {

@@ -7,6 +7,7 @@ import com.clinic.dentistry.models.*;
 import com.clinic.dentistry.repo.EmployeeRepository;
 import com.clinic.dentistry.repo.OutpatientCardRepository;
 import com.clinic.dentistry.repo.UserRepository;
+import com.clinic.dentistry.service.MailService;
 import com.clinic.dentistry.service.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,6 +27,8 @@ public class RegistrationServiceImpl implements RegistrationService {
     @Autowired
     private EmployeeRepository employeeRepository;
 
+    @Autowired
+    private MailService mailService;
     @Override
     public ApiResponse userRegistration(RegisterForm request) {
         if (this.isUserInDB(request)) {
@@ -50,7 +53,13 @@ public class RegistrationServiceImpl implements RegistrationService {
                 .outpatientCard(outpatientCard)
                 .build();
         userRepository.save(user);
-
+        mailService.sendNotification(
+                "Здравствуйте, " + outpatientCard.getFullName() + "! \n" +
+                        "Благодарим за регистрацию на нашем сайте. С нетерпением ждем Вас в нашей стоматологической клинике!!! \n" +
+                        "С уважением, \n" +
+                        "Коллектив стоматологической клиники 'Улыбка премиум' ",
+                outpatientCard.getEmail()
+        );
         return ApiResponse.builder()
                 .status(200)
                 .message("Регистрация прошла успешно")
@@ -138,7 +147,6 @@ public class RegistrationServiceImpl implements RegistrationService {
             } else {
                 OutpatientCard card = userDb.getOutpatientCard();
                 userDb.setOutpatientCard(null);
-                //TODO уточнить удаляем или нет
                 if (card != null) {
                     outpatientCardRepository.delete(card);
                 }
@@ -150,7 +158,6 @@ public class RegistrationServiceImpl implements RegistrationService {
             } else {
                 Employee employee = userDb.getEmployee();
                 userDb.setEmployee(null);
-                //TODO уточнить удаляем или нет
                 if (employee != null) {
                     employeeRepository.delete(employee);
                 }

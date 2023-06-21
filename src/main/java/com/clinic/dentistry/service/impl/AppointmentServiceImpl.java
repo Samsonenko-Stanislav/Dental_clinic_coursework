@@ -7,6 +7,7 @@ import com.clinic.dentistry.models.User;
 import com.clinic.dentistry.repo.AppointmentRepository;
 import com.clinic.dentistry.repo.UserRepository;
 import com.clinic.dentistry.service.AppointmentService;
+import com.clinic.dentistry.service.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,8 @@ public class AppointmentServiceImpl implements AppointmentService {
     private UserRepository userRepository;
 
     private LocalDateTime now = LocalDateTime.now();
+    @Autowired
+    private MailService mailService;
 
     @Override
     public List<AppointmentDto> getAvailableDatesByDoctors(Iterable<User> doctors) {
@@ -143,6 +146,18 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointment.setDate(date);
         appointment.setActive(Boolean.TRUE);
         appointmentRepository.save(appointment);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyy HH:mm");
+        mailService.sendNotification(
+                "Здравствуйте, " + appointment.getClient().getFullName() + "! \n" +
+                        "Вы успешно записаны на прием к врачу" + appointment.getDoctor().getJobTitle() +
+                        " " + appointment.getDoctor().getFullName() + "  на " + appointment.getDate().format(formatter) +
+                        "\n С нетерпением ждем Вас в нашей стоматологической клинике!!! \n" +
+                        "Если Ваш и планы изменились и Вы не сможете придти на прием, большая просьба отменить запись по ссылке: \n"
+                        + "http://стоматология.online/appointments/" + appointment.getId() + "/edit" +
+                        " \n С уважением, \n" +
+                        "Коллектив стоматологической клиники 'Улыбка премиум' ",
+                appointment.getClient().getEmail()
+        );
         return appointment;
     }
 
@@ -150,6 +165,16 @@ public class AppointmentServiceImpl implements AppointmentService {
     public void cancelAppointment(Appointment appointment) {
         appointment.setActive(Boolean.FALSE);
         appointmentRepository.save(appointment);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyy HH:mm");
+        mailService.sendNotification(
+                "Здравствуйте, " + appointment.getClient().getFullName() + "! \n" +
+                        "Ваша запись на прием к врачу" + appointment.getDoctor().getJobTitle() +
+                       " " + appointment.getDoctor().getFullName() + "  на " + appointment.getDate().format(formatter) +
+                       " успешно отменена. \n" +
+                        "С уважением, \n" +
+                       "Коллектив стоматологической клиники 'Улыбка премиум' ",
+                appointment.getClient().getEmail()
+        );
     }
 
     @Override

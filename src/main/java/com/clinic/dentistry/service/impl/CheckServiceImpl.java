@@ -10,9 +10,11 @@ import com.clinic.dentistry.repo.CheckLineRepository;
 import com.clinic.dentistry.repo.CheckRepository;
 import com.clinic.dentistry.repo.GoodRepository;
 import com.clinic.dentistry.service.CheckService;
+import com.clinic.dentistry.service.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Optional;
 
@@ -27,6 +29,8 @@ public class CheckServiceImpl implements CheckService {
     private CheckLineRepository checkLineRepository;
     @Autowired
     private AppointmentRepository appointmentRepository;
+
+    private MailService mailService;
 
     @Override
     public Check createCheckFromForm(AppointmentEditForm form, Appointment appointment) {
@@ -56,6 +60,18 @@ public class CheckServiceImpl implements CheckService {
         appointment.setConclusion(form.getConclusion());
         appointment.setActive(false);
         appointmentRepository.save(appointment);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyy HH:mm");
+        mailService.sendNotification(
+                "Здравствуйте, " + appointment.getClient().getFullName() + "! \n" +
+                        "Звключение врача" + appointment.getDoctor().getJobTitle() +
+                        " " + appointment.getDoctor().getFullName() + "  от " + appointment.getDate().format(formatter) +
+                       " : \n" + appointment.getConclusion() + "\n" +
+                       "С заключением, а также со списком оказанных Вам услуг можно ознакомиться по ссылке: \n"
+                        + "http://стоматология.online/appointments/" + appointment.getId() + "/edit" +
+                       " \n С уважением, \n" +
+                        "Коллектив стоматологической клиники 'Улыбка премиум' ",
+                appointment.getClient().getEmail()
+        );
     }
 
     @Override

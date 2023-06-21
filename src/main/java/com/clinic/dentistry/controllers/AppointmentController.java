@@ -48,7 +48,6 @@ public class AppointmentController {
 
     @PostMapping("/add")
     @PreAuthorize("hasAuthority('USER')")
-    @SendMailAddApp
     public HttpStatus appointmentsAdd(@AuthenticationPrincipal User user, @RequestParam("doctorId") User doctor,
                                       @RequestParam("dateStr") String dateStr) {
         appointmentService.addAppointment(dateStr, doctor, user);
@@ -93,7 +92,6 @@ public class AppointmentController {
 
     @PostMapping("/{appointmentId}/edit")
     @PreAuthorize("hasAuthority('DOCTOR')")
-    @SendMailConclusion
     public HttpStatus appointmentsEdit(@PathVariable("appointmentId") Long appointmentId,
                                        @RequestBody AppointmentEditForm form
     ) {
@@ -110,7 +108,6 @@ public class AppointmentController {
 
     @GetMapping("/{appointmentId}/cancel")
     @PreAuthorize("hasAuthority('USER')")
-    @SendMailCancelApp
     public HttpStatus appointmentsCancel(@AuthenticationPrincipal User user,
                                          @PathVariable("appointmentId") Appointment appointment
     ) {
