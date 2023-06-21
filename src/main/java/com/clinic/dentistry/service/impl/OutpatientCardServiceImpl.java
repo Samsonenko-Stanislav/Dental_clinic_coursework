@@ -8,10 +8,12 @@ import com.clinic.dentistry.models.OutpatientCard;
 import com.clinic.dentistry.models.User;
 import com.clinic.dentistry.repo.OutpatientCardRepository;
 import com.clinic.dentistry.repo.UserRepository;
+import com.clinic.dentistry.service.MailService;
 import com.clinic.dentistry.service.OutpatientCardService;
 import com.fasterxml.jackson.core.Base64Variant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.mail.MailException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,8 @@ public class OutpatientCardServiceImpl implements OutpatientCardService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private UserRepository usesRepositotory;
+    @Autowired
+    private MailService mailService;
 
     @Override
     public List<OutpatientCard> findAllCards() {
@@ -68,16 +72,20 @@ public class OutpatientCardServiceImpl implements OutpatientCardService {
         }
 
         if (form.getEmail() != null && !form.getEmail().equals(card.getEmail())) {
-            OutpatientCard otherCard = outpatientCardRepository.findByEmail(form.getEmail());
-            if (otherCard != null) {
-                response.setStatus(400);
-                response.setMessage("Пользователь с таким email уже существует!");
-                return response;
-            } else {
+                try {
+                    mailService.sendNotification(
+                            "Здравствуйте, " + card.getFullName() + "! \n" +
+                                    "Ваш E-mail успешно изменен. \n" +
+                                    "С уважением, \n" +
+                                    "Коллектив стоматологической клиники 'Улыбка премиум' ",
+                            form.getEmail(),
+                            "Успешная смена e-mail"
+                    );
+                } catch (MailException ignored) {
+                }
                 card.setEmail(form.getEmail());
                 sb.append("email изменен ");
             }
-        }
 
         if (form.getGender() != card.getGender()) {
             card.setGender(form.getGender());
