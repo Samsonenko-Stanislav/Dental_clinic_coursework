@@ -135,7 +135,7 @@ const userSlice = createSlice({
     [createUser.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.error.message;
-      showNotification('error', 'Такой пользователь уже существует', 'Создание Юзера');
+      showNotification('error', 'Такой пользователь уже существует', 'Создание пользователя');
     },
 
     [getUser.pending]: (state) => {
@@ -165,6 +165,7 @@ const userSlice = createSlice({
     [updateUser.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.error.message;
+      showNotification('error', 'Такой пользователь уже существует', 'Редактирование пользователя');
     },
 
     [getUsers.pending]: (state) => {

@@ -122,6 +122,14 @@ public class RegistrationServiceImpl implements RegistrationService {
                     .build();
         }
 
+        if (userRepository.findUserByUsername(form.getUsername()) != null &&
+                !optionalUser.get().getUsername().equals(form.getUsername())){
+            return ApiResponse.builder()
+                    .status(400)
+                    .message("Пользователь с такими данными уже существует!")
+                    .build();
+        }
+
         try {
             User userDb = optionalUser.get();
 
@@ -189,10 +197,10 @@ public class RegistrationServiceImpl implements RegistrationService {
             return true;
         }
 
-        OutpatientCard outpatientCard = outpatientCardRepository.findByEmail(request.getEmail());
+       /* OutpatientCard outpatientCard = outpatientCardRepository.findByEmail(request.getEmail());
         if (outpatientCard != null) {
             return true;
-        }
+        }*/
 
         return false;
     }
