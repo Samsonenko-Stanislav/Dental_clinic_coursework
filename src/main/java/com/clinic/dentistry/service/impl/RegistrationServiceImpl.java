@@ -111,6 +111,19 @@ public class RegistrationServiceImpl implements RegistrationService {
         }
 
         userRepository.save(user);
+        if (user.getOutpatientCard() != null){
+            try {
+                mailService.sendNotification(
+                        "Здравствуйте, " + user.getOutpatientCard().getFullName() + "! \n" +
+                                "Вы успешно зарегистрированы администратором на нашем сайте. С нетерпением ждем Вас в нашей стоматологической клинике!!! \n" +
+                                "С уважением, \n" +
+                                "Коллектив стоматологической клиники 'Улыбка премиум' ",
+                        user.getOutpatientCard().getEmail(),
+                        "Успешная регистрация"
+                );
+            } catch (MailException ignored) {
+            }
+        }
 
         return ApiResponse.builder()
                 .status(200)
