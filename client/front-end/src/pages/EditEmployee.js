@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { editEmployee, nullifyDataEmployee, requestSoloEmployee } from '../store/slice/EmployeeSlice';
 import { showNotification } from '../App';
+import NotFound from "./NotFound";
 
 const EditEmployee = () => {
   const navigate = useNavigate();
@@ -41,53 +42,58 @@ const EditEmployee = () => {
       showNotification('success', 'Вы успешно изменили сотрудника', 'Изменение Сотрудника');
     }
   };
-
+if (employee.id){
   return (
-    <div className="col-md-7 col-lg-8 mt-4">
-      <h4 className="mb-3">Редактировать сотрудника {params.id}</h4>
-      <form onSubmit={handleSubmit}>
-        <div className="row">
-          <div className="row col-12">
-            <div className="col-6">
-              <label htmlFor="fullName" className="form-label">
-                ФИО
-              </label>
-              <input type="text" name="fullName" className="form-control" id="fullName" required value={fullName} onChange={(e) => setFullName(e.target.value)} />
+      <div className="col-md-7 col-lg-8 mt-4">
+        <h4 className="mb-3">Редактировать сотрудника {params.id}</h4>
+        <form onSubmit={handleSubmit}>
+          <div className="row">
+            <div className="row col-12">
+              <div className="col-6">
+                <label htmlFor="fullName" className="form-label">
+                  ФИО
+                </label>
+                <input type="text" name="fullName" className="form-control" id="fullName" required value={fullName} onChange={(e) => setFullName(e.target.value)} />
+              </div>
+              <div className="col-6">
+                <label htmlFor="jobTitle" className="form-label">
+                  Должность
+                </label>
+                <input type="text" name="jobTitle" className="form-control" id="jobTitle" value={jobTitle} onChange={(e) => setTitle(e.target.value)} />
+              </div>
             </div>
-            <div className="col-6">
-              <label htmlFor="jobTitle" className="form-label">
-                Должность
-              </label>
-              <input type="text" name="jobTitle" className="form-control" id="jobTitle" value={jobTitle} onChange={(e) => setTitle(e.target.value)} />
+            <div className="row col-12 my-4">
+              <div className="col-6">
+                <label htmlFor="workStart" className="form-label">
+                  Старт рабочего дня
+                </label>
+                <input type="time" name="workStart" className="form-control" id="workStart" value={workStart} onChange={(e) => setTimeStart(e.target.value)} />
+              </div>
+              <div className="col-6">
+                <label htmlFor="workEnd" className="form-label">
+                  Конец рабочего дня
+                </label>
+                <input type="time" name="workEnd" className="form-control" id="workEnd" value={workEnd} onChange={(e) => setTimeEnd(e.target.value)} />
+              </div>
+              <div className="col-6 mt-2">
+                <label htmlFor="durationApp" className="form-label">
+                  Время приема (минут)
+                </label>
+                <input type="text" name="durationApp" className="form-control" id="durationApp" value={durationApp} onChange={(e) => setTimeReception(e.target.value)} />
+              </div>
             </div>
+            <button className="btn btn-primary btn-lg my-4" type="submit">
+              Сохранить
+            </button>
           </div>
-          <div className="row col-12 my-4">
-            <div className="col-6">
-              <label htmlFor="workStart" className="form-label">
-                Старт рабочего дня
-              </label>
-              <input type="time" name="workStart" className="form-control" id="workStart" value={workStart} onChange={(e) => setTimeStart(e.target.value)} />
-            </div>
-            <div className="col-6">
-              <label htmlFor="workEnd" className="form-label">
-                Конец рабочего дня
-              </label>
-              <input type="time" name="workEnd" className="form-control" id="workEnd" value={workEnd} onChange={(e) => setTimeEnd(e.target.value)} />
-            </div>
-            <div className="col-6 mt-2">
-              <label htmlFor="durationApp" className="form-label">
-                Время приема (минут)
-              </label>
-              <input type="text" name="durationApp" className="form-control" id="durationApp" value={durationApp} onChange={(e) => setTimeReception(e.target.value)} />
-            </div>
-          </div>
-          <button className="btn btn-primary btn-lg my-4" type="submit">
-            Сохранить
-          </button>
-        </div>
-      </form>
-    </div>
+        </form>
+      </div>
   );
+}
+else {
+  return <NotFound/>
+}
+
 };
 
 export default EditEmployee;
