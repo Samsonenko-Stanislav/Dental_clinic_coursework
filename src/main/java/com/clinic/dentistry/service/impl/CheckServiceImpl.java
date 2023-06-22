@@ -69,7 +69,7 @@ public class CheckServiceImpl implements CheckService {
                             " " + appointment.getDoctor().getFullName() + "  от " + appointment.getDate().format(formatter) +
                             " : \n" + appointment.getConclusion() + "\n" +
                             "С заключением, а также со списком оказанных Вам услуг можно ознакомиться по ссылке: \n"
-                            + "http://стоматология.online/appointments/" + appointment.getId() + "/edit" +
+                            + "http://стоматология.online/appointments/" + "edit/" + appointment.getId() +
                             " \nС уважением, \n" +
                             "Коллектив стоматологической клиники 'Улыбка премиум' ",
                     appointment.getClient().getEmail(),

@@ -155,7 +155,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                             " " + appointment.getDoctor().getFullName() + "  на " + appointment.getDate().format(formatter) +
                             "\n С нетерпением ждем Вас в нашей стоматологической клинике!!! \n" +
                             "Если Ваш и планы изменились и Вы не сможете придти на прием, большая просьба отменить запись по ссылке: \n"
-                            + "http://стоматология.online/appointments/" + appointment.getId() + "/edit" +
+                            + "http://стоматология.online/appointments/" + "edit/" + appointment.getId() +
                             " \n С уважением, \n" +
                             "Коллектив стоматологической клиники 'Улыбка премиум' ",
                     appointment.getClient().getEmail(),
