@@ -58,7 +58,7 @@ public class RegistrationServiceImpl implements RegistrationService {
             mailService.sendNotification(
                     "Здравствуйте, " + outpatientCard.getFullName() + "! \n" +
                             "Благодарим за регистрацию на нашем сайте. С нетерпением ждем Вас в нашей стоматологической клинике!!! \n" +
-                            "С уважением, \n" +
+                            "\nС уважением, \n" +
                             "Коллектив стоматологической клиники 'Улыбка премиум' ",
                     outpatientCard.getEmail(),
                     "Успешная регистрация"
@@ -115,8 +115,8 @@ public class RegistrationServiceImpl implements RegistrationService {
             try {
                 mailService.sendNotification(
                         "Здравствуйте, " + user.getOutpatientCard().getFullName() + "! \n" +
-                                "Вы успешно зарегистрированы администратором на нашем сайте. С нетерпением ждем Вас в нашей стоматологической клинике!!! \n" +
-                                "С уважением, \n" +
+                                "\nВы успешно зарегистрированы администратором на нашем сайте. С нетерпением ждем Вас в нашей стоматологической клинике!!! \n" +
+                                "\nС уважением, \n" +
                                 "Коллектив стоматологической клиники 'Улыбка премиум' ",
                         user.getOutpatientCard().getEmail(),
                         "Успешная регистрация"

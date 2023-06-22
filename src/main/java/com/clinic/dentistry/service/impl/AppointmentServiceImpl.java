@@ -151,10 +151,10 @@ public class AppointmentServiceImpl implements AppointmentService {
         try {
             mailService.sendNotification(
                     "Здравствуйте, " + appointment.getClient().getFullName() + "! \n" +
-                            "Вы успешно записаны на прием к врачу" + appointment.getDoctor().getJobTitle() +
+                            "\nВы успешно записаны на прием к врачу" + appointment.getDoctor().getJobTitle() +
                             " " + appointment.getDoctor().getFullName() + "  на " + appointment.getDate().format(formatter) +
                             "\n С нетерпением ждем Вас в нашей стоматологической клинике!!! \n" +
-                            "Если Ваш и планы изменились и Вы не сможете придти на прием, большая просьба отменить запись по ссылке: \n"
+                            "Если Ваши планы изменились и Вы не сможете придти на прием, большая просьба отменить запись по ссылке: \n"
                             + "http://стоматология.online/appointments/" + "edit/" + appointment.getId() +
                             " \n С уважением, \n" +
                             "Коллектив стоматологической клиники 'Улыбка премиум' ",
@@ -175,10 +175,10 @@ public class AppointmentServiceImpl implements AppointmentService {
         try{
             mailService.sendNotification(
                     "Здравствуйте, " + appointment.getClient().getFullName() + "! \n" +
-                            "Ваша запись на прием к врачу" + appointment.getDoctor().getJobTitle() +
+                            "\nВаша запись на прием к врачу" + appointment.getDoctor().getJobTitle() +
                             " " + appointment.getDoctor().getFullName() + "  на " + appointment.getDate().format(formatter) +
                             " успешно отменена. \n" +
-                            "С уважением, \n" +
+                            "\nС уважением, \n" +
                             "Коллектив стоматологической клиники 'Улыбка премиум' ",
                     appointment.getClient().getEmail(),
                     "Отмена записи на прием"

@@ -68,9 +68,9 @@ public class CheckServiceImpl implements CheckService {
                             "Заключение врача " + appointment.getDoctor().getJobTitle() +
                             " " + appointment.getDoctor().getFullName() + "  от " + appointment.getDate().format(formatter) +
                             " : \n" + appointment.getConclusion() + "\n" +
-                            "С заключением, а также со списком оказанных Вам услуг можно ознакомиться по ссылке: \n"
+                            "\nС заключением, а также со списком оказанных Вам услуг можно ознакомиться по ссылке: \n"
                             + "http://стоматология.online/appointments/" + "edit/" + appointment.getId() +
-                            " \nС уважением, \n" +
+                            " \n\nС уважением, \n" +
                             "Коллектив стоматологической клиники 'Улыбка премиум' ",
                     appointment.getClient().getEmail(),
                     "Врачебное заключение"

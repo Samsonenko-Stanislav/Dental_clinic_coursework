@@ -76,7 +76,7 @@ public class OutpatientCardServiceImpl implements OutpatientCardService {
                     mailService.sendNotification(
                             "Здравствуйте, " + card.getFullName() + "! \n" +
                                     "Ваш E-mail успешно изменен. \n" +
-                                    "С уважением, \n" +
+                                    "\nС уважением, \n" +
                                     "Коллектив стоматологической клиники 'Улыбка премиум' ",
                             form.getEmail(),
                             "Успешная смена e-mail"
