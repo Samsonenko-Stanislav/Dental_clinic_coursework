@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateUser, getSoloUser, nullifyUser } from '../store/slice/UserSlice';
 import { useNavigate, useParams } from 'react-router-dom';
 import NotFound from "./NotFound";
+import {showNotification} from "../App";
 
 const EditUsers = () => {
   const navigate = useNavigate();
@@ -63,7 +64,10 @@ const EditUsers = () => {
     event.preventDefault();
     const response = await dispatch(updateUser({ newData: { active, username, id: params.id, employeeId: employee, roles: selectedRoles, email, gender, fullName, password } }));
     setPassword('');
-    if (response?.type?.includes('fulfilled')) navigate('/user');
+    if (response?.type?.includes('fulfilled')){
+      navigate('/user');
+      showNotification('success', 'Вы успешно изменили пользователя', 'Изменение пользователя');
+    }
   };
 if (user?.user){
   return (

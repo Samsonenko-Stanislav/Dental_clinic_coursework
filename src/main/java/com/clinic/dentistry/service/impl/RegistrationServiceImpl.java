@@ -212,16 +212,12 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     private boolean isUserInDB(RegisterForm request) {
         User user = userRepository.findByUsername(request.getUsername());
-        if (user != null) {
-            return true;
-        }
+        return user != null;
 
        /* OutpatientCard outpatientCard = outpatientCardRepository.findByEmail(request.getEmail());
         if (outpatientCard != null) {
             return true;
         }*/
-
-        return false;
     }
 
 }
