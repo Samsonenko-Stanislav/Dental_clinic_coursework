@@ -147,7 +147,7 @@ const AppointmentsEdit = () => {
                   Доктор: {appointment?.doctor?.fullName} {appointment?.doctor?.jobTitle}
                 </h5>
                 <h5 className="mb-1">Пациент: {appointment?.client?.fullName}</h5>
-                <h5 className="mb-1">Амбулаторная карта: {appointment.id}</h5>
+                <h5 className="mb-1">Амбулаторная карта: {appointment?.client?.id}</h5>
                 <h5 className="mb-1">Email пациента: {appointment?.client?.email}</h5>
                 <h5 className="mb-1">{appointment?.client?.gender === 'MALE' ? 'Пол пациента: Мужской' : 'Пол пациента: Женский'}</h5>
               </div>
