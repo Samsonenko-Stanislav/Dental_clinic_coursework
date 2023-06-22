@@ -144,6 +144,7 @@ const AppointmentsEdit = () => {
                   <h5>{moment(appointment.date).format('lll')}</h5>
                 </div>
                 <h5 className="mb-1">
+                  <h5 className="mb-1">Номер записи: {appointment.id}</h5>
                   Доктор: {appointment?.doctor?.fullName} {appointment?.doctor?.jobTitle}
                 </h5>
                 <h5 className="mb-1">Пациент: {appointment?.client?.fullName}</h5>
