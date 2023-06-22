@@ -8,6 +8,7 @@
 }
 
 .NotFound_pict{
-    width: 50%;
-    height: 50%;
+    width:auto;
+    height: 35vw;
+    margin: auto;
 }
