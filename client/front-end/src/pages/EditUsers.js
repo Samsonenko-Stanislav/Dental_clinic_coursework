@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateUser, getSoloUser, nullifyUser } from '../store/slice/UserSlice';
 import { useNavigate, useParams } from 'react-router-dom';
+import NotFound from "./NotFound";
 
 const EditUsers = () => {
   const navigate = useNavigate();
@@ -64,7 +65,7 @@ const EditUsers = () => {
     setPassword('');
     if (response?.type?.includes('fulfilled')) navigate('/user');
   };
-
+if (user?.user){
   return (
     <div className="container">
       <div className="col-md-7 col-lg-8">
@@ -125,41 +126,46 @@ const EditUsers = () => {
               </div>
             )}
 
-            {selectedRoles.includes('USER') && (
-              <div id="forUser">
-                <div className="col-6">
-                  <label htmlFor="email" className="form-label">
-                    e-mail
-                  </label>
-                  <input type="email" name="email" className="form-control" id="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-                </div>
-                <div className="row col-12">
-                  <div className="col-6">
-                    <input type="radio" id="MALE" name="gender" value={'MALE'} checked={gender === 'MALE'} onChange={() => setGender('MALE')} />
-                    <label htmlFor="MALE">Мужской</label>
-                  </div>
-                  <div>
-                    <input type="radio" id="FEMALE" name="gender" value={'FEMALE'} checked={gender === 'FEMALE'} onChange={() => setGender('FEMALE')} />
-                    <label htmlFor="FEMALE">Женский</label>
-                  </div>
-                </div>
+              {selectedRoles.includes('USER') && (
+                  <div id="forUser">
+                    <div className="col-6">
+                      <label htmlFor="email" className="form-label">
+                        e-mail
+                      </label>
+                      <input type="email" name="email" className="form-control" id="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                    </div>
+                    <div className="row col-12">
+                      <div className="col-6">
+                        <input type="radio" id="MALE" name="gender" value={'MALE'} checked={gender === 'MALE'} onChange={() => setGender('MALE')} />
+                        <label htmlFor="MALE">Мужской</label>
+                      </div>
+                      <div>
+                        <input type="radio" id="FEMALE" name="gender" value={'FEMALE'} checked={gender === 'FEMALE'} onChange={() => setGender('FEMALE')} />
+                        <label htmlFor="FEMALE">Женский</label>
+                      </div>
+                    </div>
 
-                <div className="col-6">
-                  <label htmlFor="fullName" className="form-label">
-                    ФИО
-                  </label>
-                  <input type="text" name="fullName" className="form-control" required id="fullName" value={fullName} onChange={(e) => setFullName(e.target.value)} />
-                </div>
-              </div>
-            )}
-            <button className="w-100 btn btn-primary btn-lg my-4" type="submit">
-              Сохранить
-            </button>
-          </div>
-        </form>
+                    <div className="col-6">
+                      <label htmlFor="fullName" className="form-label">
+                        ФИО
+                      </label>
+                      <input type="text" name="fullName" className="form-control" required id="fullName" value={fullName} onChange={(e) => setFullName(e.target.value)} />
+                    </div>
+                  </div>
+              )}
+              <button className="w-100 btn btn-primary btn-lg my-4" type="submit">
+                Сохранить
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
   );
+}
+else{
+  return <NotFound/>
+}
+
 };
 
 export default EditUsers;
