@@ -26,6 +26,7 @@ import Spinner from "./components/Spinner";
 import { useSelector } from "react-redux";
 import { NoLoginRoute } from "./components/NoLoginRoute";
 import { notification } from "antd";
+import NotFound from "./pages/NotFound";
 
 export const showNotification = (type, text, title) => {
   if(notification[type]){
@@ -52,6 +53,7 @@ const App = () => {
         <div className="container overflow-auto overflow-block">
           <Routes>
             <Route path="/" element={<Home />} />
+              <Route path="/*" element={<NotFound />} />
             <Route
               path="/login"
               element={
