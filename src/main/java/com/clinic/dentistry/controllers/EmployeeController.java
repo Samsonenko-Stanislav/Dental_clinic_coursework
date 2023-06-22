@@ -50,8 +50,13 @@ public class EmployeeController {
 
     @PostMapping("/edit/{employeeId}")
     public ResponseEntity<?> employeeSave(@PathVariable("employeeId") Long employeeId, @RequestBody EmployeeDto employeeDto) {
-        ApiResponse response = employeeService.editEmployee(employeeId, employeeDto);
-        return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
+        if (employeeService.findEmployee(employeeId)!=null){
+            ApiResponse response = employeeService.editEmployee(employeeId, employeeDto);
+            return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
+        }
+        throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND
+        );
     }
 
 }
