@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { editEmployee, nullifyDataEmployee, requestSoloEmployee } from '../store/slice/EmployeeSlice';
 import { showNotification } from '../App';
-import NotFound from "./NotFound";
+import NotFound from "../components/NotFoundComponent/NotFound";
 
 const EditEmployee = () => {
   const navigate = useNavigate();

@@ -1,6 +1,6 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import AD_pict from "../assets/403.png";
+import AD_pict from "../../assets/403.png";
 import "./AccessDenied.css"
 
 const AccessDenied = () => {

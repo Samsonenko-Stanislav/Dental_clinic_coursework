@@ -6,7 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { requestGoods } from '../store/slice/GoodsSlice';
 import moment from 'moment';
 import 'moment/locale/ru';
-import NotFound from "./NotFound";
+import NotFound from "../components/NotFoundComponent/NotFound";
 moment.locale('ru');
 
 const AppointmentsEdit = () => {

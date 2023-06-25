@@ -26,7 +26,7 @@ import Spinner from "./components/Spinner";
 import { useSelector } from "react-redux";
 import { NoLoginRoute } from "./components/NoLoginRoute";
 import { notification } from "antd";
-import NotFound from "./pages/NotFound";
+import NotFound from "./components/NotFoundComponent/NotFound";
 
 export const showNotification = (type, text, title) => {
   if(notification[type]){

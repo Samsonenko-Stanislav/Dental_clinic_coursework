@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { editGoods, getGood, nullifyDataGoods } from '../store/slice/GoodsSlice';
 import { UserContext } from '../context/UserContext';
 import { showNotification } from '../App';
-import NotFound from "./NotFound";
+import NotFound from "../components/NotFoundComponent/NotFound";
 
 const GoodEdit = () => {
   const navigate = useNavigate();

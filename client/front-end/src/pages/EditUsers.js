@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateUser, getSoloUser, nullifyUser } from '../store/slice/UserSlice';
 import { useNavigate, useParams } from 'react-router-dom';
-import NotFound from "./NotFound";
+import NotFound from "../components/NotFoundComponent/NotFound";
 import {showNotification} from "../App";
 
 const EditUsers = () => {
