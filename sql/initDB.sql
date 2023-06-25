@@ -127,7 +127,7 @@ values (1, 'admin', '$2y$10$1ALFTjjpKspNC0T2oE16PuiWa/lXaPWflAhJmcLx2bGGkpUNdzlt
 
 
 insert into user_role (user_id, roles)
-values (1, 'ADMIN'), (2, 'DOCTOR'), (2, 'USER');
+values (1, 'ADMIN'), (2, 'DOCTOR'), (3, 'USER');
 
 INSERT INTO good (id, active, name, price) VALUES
 (1, true, 'Первичный прием', 2000.0),
