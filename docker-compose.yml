@@ -28,7 +28,7 @@ services:
       - SPRING_DATASOURCE_PASSWORD=postgres
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
     ports:
-      - '8086:8083'
+      - '8086:8086'
     depends_on:
       postgres:
         condition: service_healthy
