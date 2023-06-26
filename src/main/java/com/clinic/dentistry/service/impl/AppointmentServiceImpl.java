@@ -151,7 +151,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         try {
             mailService.sendNotification(
                     "Здравствуйте, " + appointment.getClient().getFullName() + "! \n" +
-                            "\nВы успешно записаны на прием к врачу" + appointment.getDoctor().getJobTitle() +
+                            "\nВы успешно записаны на прием к врачу " + appointment.getDoctor().getJobTitle() +
                             " " + appointment.getDoctor().getFullName() + "  на " + appointment.getDate().format(formatter) +
                             "\n С нетерпением ждем Вас в нашей стоматологической клинике!!! \n" +
                             "Если Ваши планы изменились и Вы не сможете придти на прием, большая просьба отменить запись по ссылке: \n"
