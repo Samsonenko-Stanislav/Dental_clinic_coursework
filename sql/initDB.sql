@@ -114,7 +114,7 @@ alter table user_role
 
 
 
-insert into employee (id, duration_app, full_name, job_title, work_end, work_start) VALUES
+insert into employee (id, duration_app, full_name, job_title, work_start, work_end) VALUES
     (1, 30, 'Иванов Иван Иванович', 'Стоматолог-терапевт', '09:00:00', '18:00:00');
 
 insert into outpatient_card (id, full_name, email, gender) VALUES
