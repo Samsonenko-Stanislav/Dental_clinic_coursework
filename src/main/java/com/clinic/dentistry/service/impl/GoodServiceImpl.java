@@ -26,7 +26,7 @@ public class GoodServiceImpl implements GoodService {
 
    @Override
     public void goodSave(Good good){
-       good.setActive(true);
+       //good.setActive(true);
        goodRepository.save(good);
    }
 

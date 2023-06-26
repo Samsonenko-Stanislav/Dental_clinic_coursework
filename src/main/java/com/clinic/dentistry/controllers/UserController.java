@@ -49,9 +49,9 @@ public class UserController {
         User user = userService.findUser(userId);
         if (user != null) {
             model.put("user", user);
-            model.put("roles", Role.values());
-            model.put("employees", employeeService.findAllEmployees());
-            model.put("users", outpatientCardService.findAllCards());
+           // model.put("roles", Role.values());
+           // model.put("employees", employeeService.findAllEmployees());
+           // model.put("users", outpatientCardService.findAllCards());
             return model;
         }
         throw new ResponseStatusException(

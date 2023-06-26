@@ -10,9 +10,10 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Builder
 @Entity
+@SequenceGenerator(name="patient_id", initialValue=2)
 public class OutpatientCard {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "patient_id")
     private Long id;
 
     private String fullName;
