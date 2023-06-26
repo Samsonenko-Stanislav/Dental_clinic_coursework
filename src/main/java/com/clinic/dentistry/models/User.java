@@ -18,7 +18,7 @@ import java.util.Set;
 @SequenceGenerator(name="user_id", initialValue=4)
 public class User implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "user_id")
     private Long id;
     private String username;
     private String password;
