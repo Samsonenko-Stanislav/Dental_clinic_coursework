@@ -28,11 +28,13 @@ public class AppointmentController {
     private final GoodService goodService;
 
     @GetMapping("/clientList")
+    @PreAuthorize("hasAuthority('USER')")
     public Iterable<Appointment> getClientAppointments(@AuthenticationPrincipal User user) {
         return appointmentService.getClientList(user);
     }
 
     @GetMapping("/doctorList")
+    @PreAuthorize("hasAuthority('DOCTOR')")
     public Iterable<Appointment> getDoctorAppointments(@AuthenticationPrincipal User user) {
         return appointmentService.getDoctorList(user);
     }

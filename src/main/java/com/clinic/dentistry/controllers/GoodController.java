@@ -1,10 +1,12 @@
 package com.clinic.dentistry.controllers;
 
+import com.clinic.dentistry.dto.ApiResponse;
 import com.clinic.dentistry.models.Good;
 import com.clinic.dentistry.service.GoodService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -47,18 +49,18 @@ public class GoodController {
     }
 
     @PostMapping("/new")
-    public HttpStatus goodNewForm(
+    public ResponseEntity<ApiResponse> goodNewForm(
             @RequestBody Good good
     ) {
-        goodService.goodSave(good);
-        return HttpStatus.CREATED;
+       ApiResponse response = goodService.goodSave(good);
+        return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
     }
 
 
     @PostMapping("{goodId}")
-    public HttpStatus goodEdit(@PathVariable("goodId") Long goodId, @RequestBody Good newData) {
-        goodService.goodEdit(goodId, newData);
-        return HttpStatus.OK;
+    public ResponseEntity<ApiResponse> goodEdit(@PathVariable("goodId") Long goodId, @RequestBody Good newData) {
+        ApiResponse response =goodService.goodEdit(goodId, newData);
+        return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
     }
 
 }

@@ -1,5 +1,6 @@
 package com.clinic.dentistry.service.impl;
 
+import com.clinic.dentistry.dto.ApiResponse;
 import com.clinic.dentistry.models.Good;
 import com.clinic.dentistry.repo.GoodRepository;
 import com.clinic.dentistry.service.GoodService;
@@ -25,23 +26,34 @@ public class GoodServiceImpl implements GoodService {
    }
 
    @Override
-    public void goodSave(Good good){
+    public ApiResponse goodSave(Good good){
        //good.setActive(true);
        goodRepository.save(good);
+       return ApiResponse.builder()
+               .status(201)
+               .message("Услуга успешно создана")
+               .build();
    }
 
    @Override
-    public void goodEdit(Long goodId, Good newData)
+    public ApiResponse goodEdit(Long goodId, Good newData)
    {
        Optional<Good> optGood = goodRepository.findById(goodId);
        if (!optGood.isPresent()){
-           return;
+           return ApiResponse.builder()
+                   .status(404)
+                   .message("Редактируемая услуга не найдена")
+                   .build();
        }
        Good good = optGood.get();
        good.setName(newData.getName());
        good.setPrice(newData.getPrice());
        good.setActive(newData.isActive());
        goodRepository.save(good);
+       return ApiResponse.builder()
+               .status(200)
+               .message("Услуга успешно отредактирована")
+               .build();
    }
 
    @Override

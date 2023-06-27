@@ -33,7 +33,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         return ApiResponse.builder()
                 .status(201)
-                .message("Success")
+                .message("Сотрудник успешно создан!")
                 .build();
     }
 
@@ -44,7 +44,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (employee == null) {
             return ApiResponse.builder()
                     .status(404)
-                    .message("Не найден работник с ID " + employeeId)
+                    .message("Не найден сотрудник с ID " + employeeId)
                     .build();
         }
 
@@ -57,8 +57,8 @@ public class EmployeeServiceImpl implements EmployeeService {
        employeeRepository.save(employee);
 
         return ApiResponse.builder()
-                .status(201)
-                .message("Success")
+                .status(200)
+                .message("Данные о сотруднике успешно обновлены!")
                 .build();
     }
 
