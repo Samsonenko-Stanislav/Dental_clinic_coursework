@@ -122,6 +122,10 @@ public class RegistrationServiceImpl implements RegistrationService {
                         "Успешная регистрация"
                 );
             } catch (MailException ignored) {
+                return ApiResponse.builder()
+                        .status(200)
+                        .message("Регистрация прошла успешно")
+                        .build();
             }
         }
 
@@ -197,8 +201,8 @@ public class RegistrationServiceImpl implements RegistrationService {
                     .build();
         }catch (Exception e){
             return ApiResponse.builder()
-                    .status(500)
-                    .message(e.getClass().getSimpleName() + " " + e.getMessage())
+                    .status(400)
+                    .message("Неккоректный запрос")
                     .build();
         }
 
