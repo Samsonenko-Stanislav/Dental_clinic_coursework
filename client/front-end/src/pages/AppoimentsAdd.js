@@ -55,7 +55,7 @@ const AppointmentsAdd = () => {
                       {doctor?.timetable?.length
                         ? doctor?.timetable.map((date, index) => (
                             <div key={index} className="col-md-4 border rounded">
-                              <div className="ps-2 pt-2">{date.day}</div>
+                              <div className="ps-2 pt-2">{moment(date.day).format('ll')}</div>
                               <div className="p-2">
                                 {date.times.map((time) => (
                                   <button key={time} className="mt-1 ms-1" onClick={() => handleSetDoctor(doctor.id, date.day + 'T' + time, doctor.fullName)}>
@@ -77,7 +77,7 @@ const AppointmentsAdd = () => {
       {currentNameDoctor && (
         <form onSubmit={handleSubmit} className="mt-2">
           <div>Выбранный врач: {currentNameDoctor}</div>
-          <div>Выбранная дата: {moment(selectedAppointmentDate).format('lll')}</div>
+          <div>Выбранная дата: {moment(selectedAppointmentDate).format('LLLL')}</div>
           <button className="btn btn-primary btn-lg my-1" id="add_appointment" type="submit">
             Добавить запись
           </button>

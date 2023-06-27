@@ -48,7 +48,7 @@ const Appointments = () => {
                 <div className="col p-4 d-flex flex-column position-static">
                   <strong className="d-inline-block mb-2 text-primary">{appointment.client.fullName}</strong>
                   <h3 className="mb-0">{appointment.name}</h3>
-                  <div className="mb-1 text-muted">{moment(appointment.date).format('lll')}</div>
+                  <div className="mb-1 text-muted">{moment(appointment.date).format('llll')}</div>
                   <Link to={`/appointments/edit/${appointment.id}`} className="stretched-link">
                     Подробнее
                   </Link>
@@ -74,7 +74,7 @@ const Appointments = () => {
               <div className="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
                 <div className="col p-4 d-flex flex-column position-static">
                   <strong className="d-inline-block mb-2 text-primary">{appointment?.doctor?.fullName}</strong>
-                  <div className="mb-1 text-muted">{moment(appointment.date).format('lll')}</div>
+                  <div className="mb-1 text-muted">{moment(appointment.date).format('llll')}</div>
                   <Link href={`/appointments/edit/${appointment.id}`} className="stretched-link">
                     Подробнее
                   </Link>

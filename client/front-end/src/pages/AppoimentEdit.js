@@ -141,7 +141,7 @@ const AppointmentsEdit = () => {
                   </label>
                 </div>
                 <div className="col-3 mb-1 text-muted">
-                  <h5>{moment(appointment.date).format('lll')}</h5>
+                  <h5>{moment(appointment.date).format('llll')}</h5>
                 </div>
                 <h5 className="mb-1">
                   <h5 className="mb-1">Номер записи: {appointment.id}</h5>
