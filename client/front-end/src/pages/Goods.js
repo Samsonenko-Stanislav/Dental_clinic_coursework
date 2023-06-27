@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { requestGoods } from '../store/slice/GoodsSlice';
-import EmptyComponent from '../components/EmptyComonent/EmptyComonent';
+import EmptyComponent from '../components/EmptyComponent/EmptyComponent';
 import { Checkbox } from 'antd';
 
 const Goods = () => {

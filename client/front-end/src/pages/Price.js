@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { requestPrice } from '../store/slice/PriceSlice';
-import EmptyComponent from '../components/EmptyComonent/EmptyComonent';
+import EmptyComponent from '../components/EmptyComponent/EmptyComponent';
 
 const Price = () => {
   const dispatch = useDispatch();

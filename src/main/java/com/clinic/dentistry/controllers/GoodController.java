@@ -16,7 +16,6 @@ import java.util.HashMap;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/good")
-@PreAuthorize("hasAuthority('ADMIN')")
 public class GoodController {
     @Autowired
     private GoodService goodService;
@@ -29,7 +28,7 @@ public class GoodController {
         model.put("goods", goods);
         return model;
     }
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("{goodId}")
     public HashMap<String, Object> goodEditForm(@PathVariable("goodId") Long goodId) {
         HashMap<String, Object> model = new HashMap<>();
@@ -42,12 +41,12 @@ public class GoodController {
                 HttpStatus.NOT_FOUND
         );
     }
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/new")
     public HttpStatus goodNewForm() {
         return HttpStatus.OK;
     }
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/new")
     public ResponseEntity<ApiResponse> goodNewForm(
             @RequestBody Good good
@@ -56,7 +55,7 @@ public class GoodController {
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
     }
 
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("{goodId}")
     public ResponseEntity<ApiResponse> goodEdit(@PathVariable("goodId") Long goodId, @RequestBody Good newData) {
         ApiResponse response =goodService.goodEdit(goodId, newData);
