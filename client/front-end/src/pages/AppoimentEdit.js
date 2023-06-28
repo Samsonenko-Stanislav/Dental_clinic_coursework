@@ -16,7 +16,7 @@ const AppointmentsEdit = () => {
   const appointmentStore = useSelector((state) => state.appointments.appointment);
   const goodsStore = useSelector((state) => state.goods.goods);
   const checkLines = appointmentStore.checkLines || [];
-
+  const { setLoading } = useContext(UserContext);
   const readOnly = useMemo(() => {
     return appointmentStore.readOnly;
   }, [appointmentStore.readOnly]);
@@ -118,11 +118,13 @@ const AppointmentsEdit = () => {
 
   const cancelHandler = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const response = await dispatch(cancelAppointment({ newData: { id: params.id } }));
 
     if (response?.type?.includes('fulfilled')) {
       navigate('/appointments');
     }
+    setLoading(false);
   };
 
   if (!Object.keys(appointmentStore).length) {
