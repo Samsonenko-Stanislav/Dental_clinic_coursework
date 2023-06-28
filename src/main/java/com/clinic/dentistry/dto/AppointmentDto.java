@@ -12,7 +12,7 @@ public class AppointmentDto {
     public final List<DayTimes> timetable;
 
     public AppointmentDto(User user) {
-        id = user.getId();
+        id = user.getEmployeeId();
         fullName = user.getFullName();
         jobTitle = user.getEmployee().getJobTitle();
         timetable = new ArrayList<>();

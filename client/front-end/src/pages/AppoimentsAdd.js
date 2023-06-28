@@ -6,6 +6,7 @@ import { UserContext } from "../context/UserContext";
 import "moment/locale/ru";
 import { useNavigate } from "react-router-dom";
 import { showNotification } from "../App";
+import employee from "./Employee";
 
 moment.locale('ru');
 
@@ -17,7 +18,6 @@ const AppointmentsAdd = () => {
   const [selectedAppointmentDate, setSelectedAppointmentDate] = useState('');
   const doctors = useSelector((state) => state.appointments.doctors) || [];
   const { setLoading } = useContext(UserContext);
-
   const handleSetDoctor = (id, time, name) => {
     setSelectedDoctorId(id);
     setSelectedAppointmentDate(time);

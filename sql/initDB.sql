@@ -118,7 +118,7 @@ insert into employee (id, duration_app, full_name, job_title, work_start, work_e
     (1, 30, 'Иванов Иван Иванович', 'Стоматолог-терапевт', '09:00:00', '18:00:00');
 
 insert into outpatient_card (id, full_name, email, gender) VALUES
-    (1, 'Петров Петр Петрович', 'patient@example.com', 'MALE');
+    (1, 'Петров Петр Петрович', 'patient@mailforspam.com', 'MALE');
 
 insert into usr(id, username, password, active, employee_id, outpatient_card_id)
 values (1,'admin', '$2y$10$1ALFTjjpKspNC0T2oE16PuiWa/lXaPWflAhJmcLx2bGGkpUNdzlty', true, null, null),

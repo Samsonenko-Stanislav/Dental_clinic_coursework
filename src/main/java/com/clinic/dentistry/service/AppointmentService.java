@@ -19,7 +19,7 @@ public interface AppointmentService {
     List<Appointment> getDoctorList(User user);
 
     Iterable<User> getActiveDoctors();
-    Appointment addAppointment(String dateStr, User doctor, User user);
+    Appointment addAppointment(String dateStr, Employee doctor, User user);
     void cancelAppointment(Appointment appointment);
     Boolean isCanEditByDoctor(User user, Appointment appointment);
     Boolean isCanCancel(User user, Appointment appointment);

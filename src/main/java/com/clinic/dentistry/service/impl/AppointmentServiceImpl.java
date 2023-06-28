@@ -2,6 +2,7 @@ package com.clinic.dentistry.service.impl;
 
 import com.clinic.dentistry.dto.AppointmentDto;
 import com.clinic.dentistry.models.Appointment;
+import com.clinic.dentistry.models.Employee;
 import com.clinic.dentistry.models.Role;
 import com.clinic.dentistry.models.User;
 import com.clinic.dentistry.repo.AppointmentRepository;
@@ -139,10 +140,10 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public Appointment addAppointment(String dateStr, User doctor, User user) {
+    public Appointment addAppointment(String dateStr, Employee doctor, User user) {
         LocalDateTime date = LocalDateTime.parse(dateStr);
         Appointment appointment = new Appointment();
-        appointment.setDoctor(doctor.getEmployee());
+        appointment.setDoctor(doctor);
         appointment.setClient(user.getOutpatientCard());
         appointment.setDate(date);
         appointment.setActive(Boolean.TRUE);

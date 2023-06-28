@@ -52,7 +52,7 @@ public class AppointmentController {
 
     @PostMapping("/add")
     @PreAuthorize("hasAuthority('USER')")
-    public HttpStatus appointmentsAdd(@AuthenticationPrincipal User user, @RequestParam("doctorId") User doctor,
+    public HttpStatus appointmentsAdd(@AuthenticationPrincipal User user, @RequestParam("doctorId") Employee doctor,
                                       @RequestParam("dateStr") String dateStr) {
         appointmentService.addAppointment(dateStr, doctor, user);
         return HttpStatus.CREATED;
