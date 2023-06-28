@@ -1,5 +1,6 @@
 package com.clinic.dentistry.service;
 
+import com.clinic.dentistry.dto.AddAppointmentDTO;
 import com.clinic.dentistry.dto.AppointmentDto;
 import com.clinic.dentistry.models.Appointment;
 import com.clinic.dentistry.models.Employee;
@@ -19,7 +20,7 @@ public interface AppointmentService {
     List<Appointment> getDoctorList(User user);
 
     Iterable<User> getActiveDoctors();
-    Appointment addAppointment(String dateStr, Employee doctor, User user);
+    Appointment addAppointment(User user, AddAppointmentDTO addAppointment);
     void cancelAppointment(Appointment appointment);
     Boolean isCanEditByDoctor(User user, Appointment appointment);
     Boolean isCanCancel(User user, Appointment appointment);

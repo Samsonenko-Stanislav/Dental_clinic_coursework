@@ -10,7 +10,7 @@ export const requestAppointmentsDoctors = createAsyncThunk('userData/requestAppo
 });
 
 export const addAppointments = createAsyncThunk('userData/addAppointments', async ({ newData, catchFunction }) => {
-  return await axiosApi.post(`/appointments/add?doctorId=${newData.id}&dateStr=${newData.time}`, newData);
+  return await axiosApi.post(`/appointments/add`, newData);
 });
 
 export const getAddAppointments = createAsyncThunk('userData/getAddAppointments', async ({ newData, catchFunction }) => {

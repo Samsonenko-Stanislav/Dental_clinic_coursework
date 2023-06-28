@@ -1,11 +1,13 @@
 package com.clinic.dentistry.service.impl;
 
+import com.clinic.dentistry.dto.AddAppointmentDTO;
 import com.clinic.dentistry.dto.AppointmentDto;
 import com.clinic.dentistry.models.Appointment;
 import com.clinic.dentistry.models.Employee;
 import com.clinic.dentistry.models.Role;
 import com.clinic.dentistry.models.User;
 import com.clinic.dentistry.repo.AppointmentRepository;
+import com.clinic.dentistry.repo.EmployeeRepository;
 import com.clinic.dentistry.repo.UserRepository;
 import com.clinic.dentistry.service.AppointmentService;
 import com.clinic.dentistry.service.MailService;
@@ -28,6 +30,9 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private EmployeeRepository employeeRepository;
 
     private LocalDateTime now = LocalDateTime.now();
     @Autowired
@@ -140,12 +145,14 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public Appointment addAppointment(String dateStr, Employee doctor, User user) {
-        LocalDateTime date = LocalDateTime.parse(dateStr);
+    public Appointment addAppointment(User user, AddAppointmentDTO addAppointment) {
+        System.out.println("Yrre " + addAppointment.toString());
         Appointment appointment = new Appointment();
+        Employee doctor = employeeRepository.findEmployeeById(addAppointment.getId());
         appointment.setDoctor(doctor);
         appointment.setClient(user.getOutpatientCard());
-        appointment.setDate(date);
+
+        appointment.setDate(LocalDateTime.parse(addAppointment.getDate()));
         appointment.setActive(Boolean.TRUE);
         appointmentRepository.save(appointment);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyy HH:mm");

@@ -1,5 +1,6 @@
 package com.clinic.dentistry.controllers;
 
+import com.clinic.dentistry.dto.AddAppointmentDTO;
 import com.clinic.dentistry.dto.AppointmentDto;
 import com.clinic.dentistry.dto.AppointmentEditForm;
 import com.clinic.dentistry.models.*;
@@ -52,9 +53,8 @@ public class AppointmentController {
 
     @PostMapping("/add")
     @PreAuthorize("hasAuthority('USER')")
-    public HttpStatus appointmentsAdd(@AuthenticationPrincipal User user, @RequestParam("doctorId") Employee doctor,
-                                      @RequestParam("dateStr") String dateStr) {
-        appointmentService.addAppointment(dateStr, doctor, user);
+    public HttpStatus appointmentsAdd(@AuthenticationPrincipal User user, @RequestBody AddAppointmentDTO addAppointment) {
+        appointmentService.addAppointment(user, addAppointment);
         return HttpStatus.CREATED;
     }
 
