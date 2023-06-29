@@ -80,9 +80,9 @@ public class AppointmentController {
     @GetMapping("/cancel/{appointmentId}")
     @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<?> appointmentsCancel(@AuthenticationPrincipal User user,
-                                         @PathVariable("appointmentId") Appointment appointment
+                                         @PathVariable("appointmentId") Long appointmentId
     ) {
-        ApiResponse response = appointmentService.appointmentsCancel(user, appointment);
+        ApiResponse response = appointmentService.appointmentsCancel(user, appointmentId);
         return new ResponseEntity<>(response, response.getStatus());
     }
 }

@@ -41,5 +41,5 @@ public interface AppointmentService {
 
     ApiResponse editAppointment(User user, Long appointmentId, AppointmentEditForm form);
 
-    ApiResponse appointmentsCancel(User user, Appointment appointment);
+    ApiResponse appointmentsCancel(User user, Long appointmentId);
 }

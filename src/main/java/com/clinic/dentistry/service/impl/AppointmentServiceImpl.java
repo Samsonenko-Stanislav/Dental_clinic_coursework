@@ -323,17 +323,24 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public ApiResponse appointmentsCancel(User user, Appointment appointment){
-        if (isCanCancel(user, appointment)) {
-            cancelAppointment(appointment);
-            return ApiResponse.builder()
-                    .status(HttpStatus.OK)
-                    .message("Запись с ID "+ appointment.getId() + " успешно отменена!").build();
+    public ApiResponse appointmentsCancel(User user, Long appointmentId){
+        Appointment appointment = appointmentRepository.findAppointmentById(appointmentId);
+        if (appointment != null){
+            if (isCanCancel(user, appointment)) {
+                cancelAppointment(appointment);
+                return ApiResponse.builder()
+                        .status(HttpStatus.OK)
+                        .message("Запись с ID "+ appointmentId + " успешно отменена!").build();
+            }
+            else
+                return ApiResponse.builder()
+                        .status(HttpStatus.BAD_REQUEST)
+                        .message("Вы не можете отменить запись с ID " + appointmentId + "!").build();
         }
         else
             return ApiResponse.builder()
                     .status(HttpStatus.BAD_REQUEST)
-                    .message("Вы не можете отменить запись с ID " + appointment.getId() + "!").build();
+                    .message("Вы не можете отменить запись с ID " + appointmentId + "!").build();
     }
 }
 
