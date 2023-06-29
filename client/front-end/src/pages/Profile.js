@@ -43,23 +43,28 @@ const Profile = () => {
     );
 
     if (response?.type?.includes('rejected')) {
-      showNotification('error','Введите корректные данные', 'Профиль');
+      showNotification('error','Пользователь с таким логином уже существует', 'Профиль');
 
       return;
     }
 
     if (response?.type?.includes('fulfilled') && (password || username !== profile?.username)) {
+      console.log(username)
+      console.log(password)
       removeFromLocalStorage('token');
       removeFromLocalStorage('role');
       dispatch(logoutUser({}));
-      await dispatch(
-          requestLogin({
-            newData: {
-              username,
-              password,
-            },
-          })
-      );
+      if (password){
+        await dispatch(
+            requestLogin({
+              newData: {
+                username,
+                password,
+              },
+            })
+        );
+      }
+
       showNotification('success', 'Вы успешно изменили профиль', 'Профиль');
       navigate('/');
     } else if (response?.type?.includes('fulfilled')) {
@@ -117,7 +122,7 @@ const Profile = () => {
                 <label htmlFor="email" className="form-label">
                   Email
                 </label>
-                <input type="text" name="email" className="form-control" id="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                <input type="email" name="email" className="form-control" id="email" value={email} onChange={(e) => setEmail(e.target.value)} />
               </div>
             </div>
           </div>
