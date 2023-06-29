@@ -7,8 +7,9 @@ import com.clinic.dentistry.service.GoodService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Map;
+import java.util.HashMap;
 import java.util.Optional;
 
 @Service
@@ -60,5 +61,28 @@ public class GoodServiceImpl implements GoodService {
    @Override
     public Good findGood(Long id){
         return goodRepository.findGoodById(id);
+   }
+
+   @Override
+    public HashMap<String, Object> getGoodList(){
+       HashMap<String, Object> model = new HashMap<>();
+       Iterable<Good> goods;
+       goods = findAllGoods();
+       model.put("goods", goods);
+       return model;
+   }
+
+   @Override
+    public HashMap<String, Object> goodGet(Long goodId){
+       HashMap<String, Object> model = new HashMap<>();
+       Good good = findGood(goodId);
+       if (good != null) {
+           model.put("good", good);
+           return model;
+       }
+       throw new ResponseStatusException(
+               HttpStatus.NOT_FOUND
+       );
+
    }
 }

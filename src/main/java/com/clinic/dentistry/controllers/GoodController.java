@@ -23,30 +23,14 @@ public class GoodController {
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DOCTOR')")
     @GetMapping
     public HashMap<String, Object> goodList() {
-        HashMap<String, Object> model = new HashMap<>();
-        Iterable<Good> goods;
-        goods = goodService.findAllGoods();
-        model.put("goods", goods);
-        return model;
+        return goodService.getGoodList();
     }
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("{goodId}")
     public HashMap<String, Object> goodEditForm(@PathVariable("goodId") Long goodId) {
-        HashMap<String, Object> model = new HashMap<>();
-        Good good = goodService.findGood(goodId);
-        if (good != null) {
-            model.put("good", good);
-            return model;
-        }
-        throw new ResponseStatusException(
-                HttpStatus.NOT_FOUND
-        );
+        return goodService.goodGet(goodId);
     }
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("/new")
-    public HttpStatus goodNewForm() {
-        return HttpStatus.OK;
-    }
+
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/new")
     public ResponseEntity<ApiResponse> goodNewForm(
