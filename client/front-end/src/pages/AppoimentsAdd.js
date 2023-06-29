@@ -32,7 +32,7 @@ const AppointmentsAdd = () => {
     e.preventDefault();
 
     setLoading(true);
-    const response = await dispatch(addAppointments({ newData: { id: selectedDoctorId, date: selectedAppointmentDate } }));
+    const response = await dispatch(addAppointments({ newData: { doctorId: selectedDoctorId, date: selectedAppointmentDate } }));
     if (response?.type?.includes('fulfilled')) {
       navigate('/appointments');
       showNotification('success', 'Вы успешно записаны', 'Запись');

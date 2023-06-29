@@ -25,4 +25,6 @@ public interface AppointmentService {
     Boolean isCanEditByDoctor(User user, Appointment appointment);
     Boolean isCanCancel(User user, Appointment appointment);
     Appointment findAppointment(Long id);
+
+    Boolean isVacantAppointment(AddAppointmentDTO addAppointment);
 }

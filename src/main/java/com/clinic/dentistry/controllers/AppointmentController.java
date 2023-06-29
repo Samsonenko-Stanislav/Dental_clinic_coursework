@@ -1,11 +1,14 @@
 package com.clinic.dentistry.controllers;
 
 import com.clinic.dentistry.dto.AddAppointmentDTO;
+import com.clinic.dentistry.dto.ApiResponse;
 import com.clinic.dentistry.dto.AppointmentDto;
 import com.clinic.dentistry.dto.AppointmentEditForm;
 import com.clinic.dentistry.models.*;
+import com.clinic.dentistry.repo.EmployeeRepository;
 import com.clinic.dentistry.service.AppointmentService;
 import com.clinic.dentistry.service.CheckService;
+import com.clinic.dentistry.service.EmployeeService;
 import com.clinic.dentistry.service.GoodService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,6 +30,7 @@ public class AppointmentController {
     private final AppointmentService appointmentService;
     private final CheckService checkService;
     private final GoodService goodService;
+    private final EmployeeService employeeService;
 
     @GetMapping("/clientList")
     @PreAuthorize("hasAuthority('USER')")
@@ -53,9 +57,24 @@ public class AppointmentController {
 
     @PostMapping("/add")
     @PreAuthorize("hasAuthority('USER')")
-    public HttpStatus appointmentsAdd(@AuthenticationPrincipal User user, @RequestBody AddAppointmentDTO addAppointment) {
-        appointmentService.addAppointment(user, addAppointment);
-        return HttpStatus.CREATED;
+    public ApiResponse appointmentsAdd(@AuthenticationPrincipal User user, @RequestBody AddAppointmentDTO addAppointment) {
+        if (employeeService.findEmployee(addAppointment.getDoctorId()) == null)
+            return ApiResponse.builder()
+                    .status(404)
+                    .message("Врач с ID " + addAppointment.getDoctorId() + " не найден!!")
+                    .build();
+        if (appointmentService.isVacantAppointment(addAppointment)) {
+            appointmentService.addAppointment(user, addAppointment);
+            return ApiResponse.builder()
+                    .status(201)
+                    .message("Запись добавлена!")
+                    .build();
+        }
+
+        return ApiResponse.builder()
+                .status(400)
+                .message("Данное время не доступно!")
+                .build();
     }
 
     @GetMapping("/{appointmentId}/edit")

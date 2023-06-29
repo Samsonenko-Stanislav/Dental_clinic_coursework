@@ -146,13 +146,12 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public Appointment addAppointment(User user, AddAppointmentDTO addAppointment) {
-        System.out.println("Yrre " + addAppointment.toString());
         Appointment appointment = new Appointment();
-        Employee doctor = employeeRepository.findEmployeeById(addAppointment.getId());
+        Employee doctor = employeeRepository.findEmployeeById(addAppointment.getDoctorId());
+        System.out.println("Here" + doctor);
         appointment.setDoctor(doctor);
         appointment.setClient(user.getOutpatientCard());
-
-        appointment.setDate(LocalDateTime.parse(addAppointment.getDate()));
+        appointment.setDate(addAppointment.getDate());
         appointment.setActive(Boolean.TRUE);
         appointmentRepository.save(appointment);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyy HH:mm");
@@ -216,4 +215,24 @@ public class AppointmentServiceImpl implements AppointmentService {
         return appointmentRepository.findAppointmentById(id);
     }
 
+    @Override
+    public Boolean isVacantAppointment(AddAppointmentDTO addAppointment){
+        Employee doctor = employeeRepository.findEmployeeById(addAppointment.getDoctorId());
+        if (doctor == null)
+            return false;
+       Iterable<Appointment> appointments = appointmentRepository.findAppointmentByDoctor(doctor);
+       for (Appointment appointment:appointments) {
+           System.out.println(appointment.getDate() + " " + addAppointment.getDate());
+             if (appointment.getDate().equals(addAppointment.getDate()))
+                 return false;
+       }
+
+       return true;
+       }
+
 }
+
+
+
+
+

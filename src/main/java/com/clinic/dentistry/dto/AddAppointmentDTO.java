@@ -10,14 +10,7 @@ import java.util.Locale;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AddAppointmentDTO {
-    @Override
-    public String toString() {
-        return "AddAppointmentDTO{" +
-                "id=" + id +
-                ", date=" + date +
-                '}';
-    }
 
-    private Long id;
-    private String date;
+    private Long doctorId;
+    private LocalDateTime date;
 }
