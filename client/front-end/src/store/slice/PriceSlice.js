@@ -8,7 +8,7 @@ const initialState = {
 };
 
 export const requestPrice = createAsyncThunk('userData/requestPrice', async ({ newData, catchFunction }) => {
-  return await axiosApi.get('/good', newData);
+  return await axiosApi.get('/price', newData);
 });
 
 const priceSlice = createSlice({

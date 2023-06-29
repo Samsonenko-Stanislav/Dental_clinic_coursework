@@ -20,6 +20,7 @@ public class GoodController {
     @Autowired
     private GoodService goodService;
 
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DOCTOR')")
     @GetMapping
     public HashMap<String, Object> goodList() {
         HashMap<String, Object> model = new HashMap<>();

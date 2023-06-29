@@ -223,7 +223,9 @@ public class AppointmentServiceImpl implements AppointmentService {
        Iterable<Appointment> appointments = appointmentRepository.findAppointmentByDoctor(doctor);
        for (Appointment appointment:appointments) {
            System.out.println(appointment.getDate() + " " + addAppointment.getDate());
-             if (appointment.getDate().equals(addAppointment.getDate()))
+             if (appointment.getDate().equals(addAppointment.getDate()) &&
+           (appointment.getActive().equals(true) ||
+                   appointment.getActive().equals(false) && appointment.getConclusion()!=null ))
                  return false;
        }
 
