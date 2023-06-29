@@ -60,19 +60,19 @@ public class AppointmentController {
     public ApiResponse appointmentsAdd(@AuthenticationPrincipal User user, @RequestBody AddAppointmentDTO addAppointment) {
         if (employeeService.findEmployee(addAppointment.getDoctorId()) == null)
             return ApiResponse.builder()
-                    .status(404)
+                    .status(HttpStatus.NOT_FOUND)
                     .message("Врач с ID " + addAppointment.getDoctorId() + " не найден!!")
                     .build();
         if (appointmentService.isVacantAppointment(addAppointment)) {
             appointmentService.addAppointment(user, addAppointment);
             return ApiResponse.builder()
-                    .status(201)
+                    .status(HttpStatus.CREATED)
                     .message("Запись добавлена!")
                     .build();
         }
 
         return ApiResponse.builder()
-                .status(400)
+                .status(HttpStatus.BAD_REQUEST)
                 .message("Данное время не доступно!")
                 .build();
     }
@@ -139,12 +139,12 @@ public class AppointmentController {
         if (appointmentService.isCanCancel(user, appointment)) {
             appointmentService.cancelAppointment(appointment);
             return ApiResponse.builder()
-                    .status(200)
+                    .status(HttpStatus.OK)
                     .message("Запись с ID "+ appointment.getId() + " успешно отменена!").build();
         }
         else
             return ApiResponse.builder()
-                    .status(400)
+                    .status(HttpStatus.BAD_REQUEST)
                     .message("Вы не можете отменить запись с ID " + appointment.getId() + "!").build();
     }
 }

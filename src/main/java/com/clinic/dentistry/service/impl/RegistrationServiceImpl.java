@@ -10,6 +10,7 @@ import com.clinic.dentistry.repo.UserRepository;
 import com.clinic.dentistry.service.MailService;
 import com.clinic.dentistry.service.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.mail.MailException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -34,7 +35,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     public ApiResponse userRegistration(RegisterForm request) {
         if (this.isUserInDB(request)) {
             return ApiResponse.builder()
-                    .status(400)
+                    .status(HttpStatus.BAD_REQUEST)
                     .message("Пользователь с такими данными уже существует!")
                     .build();
         }
@@ -67,7 +68,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         }
 
         return ApiResponse.builder()
-                .status(200)
+                .status(HttpStatus.CREATED)
                 .message("Регистрация прошла успешно")
                 .build();
     }
@@ -76,7 +77,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     public ApiResponse createUser(RegisterForm request) {
         if (this.isUserInDB(request)) {
             return ApiResponse.builder()
-                    .status(400)
+                    .status(HttpStatus.BAD_REQUEST)
                     .message("Пользователь с такими данными уже существует!")
                     .build();
         }
@@ -123,14 +124,14 @@ public class RegistrationServiceImpl implements RegistrationService {
                 );
             } catch (MailException ignored) {
                 return ApiResponse.builder()
-                        .status(200)
+                        .status(HttpStatus.CREATED)
                         .message("Регистрация прошла успешно")
                         .build();
             }
         }
 
         return ApiResponse.builder()
-                .status(200)
+                .status(HttpStatus.CREATED)
                 .message("Регистрация прошла успешно")
                 .build();
     }
@@ -140,7 +141,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         Optional<User> optionalUser = userRepository.findById(userId);
         if (!optionalUser.isPresent()) {
             return ApiResponse.builder()
-                    .status(404)
+                    .status(HttpStatus.NOT_FOUND)
                     .message("Не найден пользователь с ID " + userId)
                     .build();
         }
@@ -148,7 +149,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         if (userRepository.findUserByUsername(form.getUsername()) != null &&
                 !optionalUser.get().getUsername().equals(form.getUsername())){
             return ApiResponse.builder()
-                    .status(400)
+                    .status(HttpStatus.BAD_REQUEST)
                     .message("Пользователь с такими данными уже существует!")
                     .build();
         }
@@ -196,12 +197,12 @@ public class RegistrationServiceImpl implements RegistrationService {
 
             userRepository.save(userDb);
             return ApiResponse.builder()
-                    .status(200)
+                    .status(HttpStatus.OK)
                     .message("Пользователь отредактирован")
                     .build();
         }catch (Exception e){
             return ApiResponse.builder()
-                    .status(400)
+                    .status(HttpStatus.BAD_REQUEST)
                     .message("Неккоректный запрос")
                     .build();
         }

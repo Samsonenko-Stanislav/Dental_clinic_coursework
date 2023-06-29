@@ -13,6 +13,7 @@ import com.clinic.dentistry.service.OutpatientCardService;
 import com.fasterxml.jackson.core.Base64Variant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.mail.MailException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -40,7 +41,7 @@ public class OutpatientCardServiceImpl implements OutpatientCardService {
         ApiResponse response = new ApiResponse();
         OutpatientCard card = user.getOutpatientCard();
         if (card == null) {
-            response.setStatus(500);
+            response.setStatus(HttpStatus.BAD_REQUEST);
             response.setMessage("Ошибка структуры данных");
             return response;
         }
@@ -52,7 +53,7 @@ public class OutpatientCardServiceImpl implements OutpatientCardService {
                 user.setUsername(form.getUsername());
                 sb.append("логин изменен ");
             } else {
-                response.setStatus(400);
+                response.setStatus(HttpStatus.BAD_REQUEST);
                 response.setMessage("Пользователь с таким логином уже существует!");
                 return response;
             }
@@ -95,7 +96,7 @@ public class OutpatientCardServiceImpl implements OutpatientCardService {
         outpatientCardRepository.save(user.getOutpatientCard());
         usesRepositotory.save(user);
 
-        response.setStatus(200);
+        response.setStatus(HttpStatus.OK);
         response.setMessage(sb.toString());
         return response;
     }

@@ -1,6 +1,7 @@
 package com.clinic.dentistry.dto;
 
 import lombok.*;
+import org.springframework.http.HttpStatus;
 
 @Getter
 @Setter
@@ -8,6 +9,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class ApiResponse {
-    private int status;
+    private HttpStatus status;
     private String message;
 }

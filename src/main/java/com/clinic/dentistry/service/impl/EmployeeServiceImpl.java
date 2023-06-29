@@ -6,6 +6,7 @@ import com.clinic.dentistry.models.Employee;
 import com.clinic.dentistry.repo.EmployeeRepository;
 import com.clinic.dentistry.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,7 +33,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeRepository.save(employee);
 
         return ApiResponse.builder()
-                .status(201)
+                .status(HttpStatus.CREATED)
                 .message("Сотрудник успешно создан!")
                 .build();
     }
@@ -43,7 +44,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         if (employee == null) {
             return ApiResponse.builder()
-                    .status(404)
+                    .status(HttpStatus.NOT_FOUND)
                     .message("Не найден сотрудник с ID " + employeeId)
                     .build();
         }
@@ -57,7 +58,7 @@ public class EmployeeServiceImpl implements EmployeeService {
        employeeRepository.save(employee);
 
         return ApiResponse.builder()
-                .status(200)
+                .status(HttpStatus.OK)
                 .message("Данные о сотруднике успешно обновлены!")
                 .build();
     }

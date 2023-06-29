@@ -52,14 +52,14 @@ public class GoodController {
             @RequestBody Good good
     ) {
        ApiResponse response = goodService.goodSave(good);
-        return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
+        return new ResponseEntity<>(response, response.getStatus());
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("{goodId}")
     public ResponseEntity<ApiResponse> goodEdit(@PathVariable("goodId") Long goodId, @RequestBody Good newData) {
         ApiResponse response =goodService.goodEdit(goodId, newData);
-        return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
+        return new ResponseEntity<>(response, response.getStatus());
     }
 
 }

@@ -22,6 +22,6 @@ public class RegistrationController {
     @PostMapping("/sign_up")
     public ResponseEntity<ApiResponse> signUp(@Valid @RequestBody RegisterForm request){
         ApiResponse response = registrationService.userRegistration(request);
-        return new ResponseEntity<>(response,HttpStatus.valueOf(response.getStatus()));
+        return new ResponseEntity<>(response, response.getStatus());
     }
 }

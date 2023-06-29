@@ -5,6 +5,7 @@ import com.clinic.dentistry.models.Good;
 import com.clinic.dentistry.repo.GoodRepository;
 import com.clinic.dentistry.service.GoodService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -30,7 +31,7 @@ public class GoodServiceImpl implements GoodService {
        //good.setActive(true);
        goodRepository.save(good);
        return ApiResponse.builder()
-               .status(201)
+               .status(HttpStatus.CREATED)
                .message("Услуга успешно создана")
                .build();
    }
@@ -41,7 +42,7 @@ public class GoodServiceImpl implements GoodService {
        Optional<Good> optGood = goodRepository.findById(goodId);
        if (!optGood.isPresent()){
            return ApiResponse.builder()
-                   .status(404)
+                   .status(HttpStatus.NOT_FOUND)
                    .message("Редактируемая услуга не найдена")
                    .build();
        }
@@ -51,7 +52,7 @@ public class GoodServiceImpl implements GoodService {
        good.setActive(newData.isActive());
        goodRepository.save(good);
        return ApiResponse.builder()
-               .status(200)
+               .status(HttpStatus.OK)
                .message("Услуга успешно отредактирована")
                .build();
    }

@@ -71,21 +71,21 @@ public class UserController {
     @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<?> userMeEdit(@AuthenticationPrincipal User user, @RequestBody UserEditForm editForm) {
         ApiResponse response = outpatientCardService.userMeEdit(user, editForm);
-        return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
+        return new ResponseEntity<>(response, response.getStatus());
     }
 
     @PostMapping("/new")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ApiResponse> userNewForm(@RequestBody RegisterForm request) {
         ApiResponse response = registrationService.createUser(request);
-        return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
+        return new ResponseEntity<>(response, response.getStatus());
     }
 
     @PostMapping("/edit/{userId}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ApiResponse> userEdit(@PathVariable("userId") Long userId, @RequestBody UserEditForm editForm) {
         ApiResponse response = registrationService.editUser(userId, editForm);
-        return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
+        return new ResponseEntity<>(response, response.getStatus());
     }
 
 }
