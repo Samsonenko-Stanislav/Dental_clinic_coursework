@@ -16,4 +16,6 @@ public interface GoodService {
     HashMap<String, Object> getGoodList();
 
     HashMap<String, Object> goodGet(Long goodId);
+
+    HashMap<String, Object> priceGet();
 }

@@ -85,4 +85,13 @@ public class GoodServiceImpl implements GoodService {
        );
 
    }
+
+   @Override
+    public HashMap<String, Object> priceGet(){
+       HashMap<String, Object> model = new HashMap<>();
+       Iterable<Good> goods;
+       goods = findActiveGoods();
+       model.put("goods", goods);
+       return model;
+   }
 }

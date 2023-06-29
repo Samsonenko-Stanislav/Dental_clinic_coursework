@@ -19,10 +19,6 @@ public class PriceController {
 
     @GetMapping
     public HashMap<String, Object> priceList() {
-        HashMap<String, Object> model = new HashMap<>();
-        Iterable<Good> goods;
-        goods = goodService.findActiveGoods();
-        model.put("goods", goods);
-        return model;
+        return goodService.priceGet();
     }
 }
