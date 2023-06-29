@@ -12,6 +12,7 @@ import com.clinic.dentistry.service.EmployeeService;
 import com.clinic.dentistry.service.GoodService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -47,104 +48,41 @@ public class AppointmentController {
     @GetMapping("/add")
     @PreAuthorize("hasAuthority('USER')")
     public List<AppointmentDto> appointmentsAddForm() {
-        Map<String, Object> model = new HashMap<>();
-
-        Iterable<User> doctors = appointmentService.getActiveDoctors();
-        List<AppointmentDto> availableDatesByDoctor = appointmentService.getAvailableDatesByDoctors(doctors);
-        model.put("doctors", availableDatesByDoctor);
+        List<AppointmentDto> availableDatesByDoctor = appointmentService.appointmentsAddForm();
         return availableDatesByDoctor;
     }
 
     @PostMapping("/add")
     @PreAuthorize("hasAuthority('USER')")
-    public ApiResponse appointmentsAdd(@AuthenticationPrincipal User user, @RequestBody AddAppointmentDTO addAppointment) {
-        if (employeeService.findEmployee(addAppointment.getDoctorId()) == null)
-            return ApiResponse.builder()
-                    .status(HttpStatus.NOT_FOUND)
-                    .message("Врач с ID " + addAppointment.getDoctorId() + " не найден!!")
-                    .build();
-        if (appointmentService.isVacantAppointment(addAppointment)) {
-            appointmentService.addAppointment(user, addAppointment);
-            return ApiResponse.builder()
-                    .status(HttpStatus.CREATED)
-                    .message("Запись добавлена!")
-                    .build();
-        }
-
-        return ApiResponse.builder()
-                .status(HttpStatus.BAD_REQUEST)
-                .message("Данное время не доступно!")
-                .build();
+    public ResponseEntity<?> appointmentsAdd(@AuthenticationPrincipal User user, @RequestBody AddAppointmentDTO addAppointment) {
+        ApiResponse response = appointmentService.appointmentsAdd(user,addAppointment);
+        return new ResponseEntity<>(response, response.getStatus());
     }
 
     @GetMapping("/edit/{appointmentId}")
     public Map<String, Object> appointmentsEdit(@AuthenticationPrincipal User user,
                                                 @PathVariable("appointmentId") Long appointmentId
     ) {
-        Map<String, Object> model = new HashMap<>();
-
-        Appointment appointment = appointmentService.findAppointment(appointmentId);
-        if (appointment != null) {
-            if (appointmentService.isUserAppointment(user, appointment)) {
-                Boolean readOnly = Boolean.TRUE;
-                Boolean canCancel = Boolean.FALSE;
-                if (appointmentService.isCanEditByDoctor(user, appointment)) {
-                    readOnly = Boolean.FALSE;
-                    Iterable<Good> goods = goodService.findActiveGoods();
-                    model.put("goods", goods);
-                }
-
-                Optional<Check> check = checkService.findCheck(appointment);
-                if (check.isPresent()) {
-                    Iterable<CheckLine> checkLines = checkService.findCheckLines(check);
-                    model.put("checkLines", checkLines);
-                }
-
-                if (appointmentService.isCanCancel(user, appointment)) {
-                    canCancel = Boolean.TRUE;
-                }
-
-                model.put("appointment", appointment);
-                model.put("readOnly", readOnly);
-                model.put("canCancel", canCancel);
-                return model;
-            }
-        }
-        throw new ResponseStatusException(
-                HttpStatus.NOT_FOUND
-        );
+        return appointmentService.getAppointment(user, appointmentId);
     }
 
     @PostMapping("/edit/{appointmentId}")
     @PreAuthorize("hasAuthority('DOCTOR')")
-    public HttpStatus appointmentsEdit(@PathVariable("appointmentId") Long appointmentId,
+    public ResponseEntity<?> appointmentsEdit(@AuthenticationPrincipal User user,
+                                       @PathVariable("appointmentId") Long appointmentId,
                                        @RequestBody AppointmentEditForm form
     ) {
-        Appointment appointment = appointmentService.findAppointment(appointmentId);
-        if (appointment != null) {
-            checkService.addConclusion(appointment, form);
-            checkService.createCheckFromForm(form, appointment);
-            return HttpStatus.OK;
-        }
-        throw new ResponseStatusException(
-                HttpStatus.NOT_FOUND
-        );
+
+        ApiResponse response = appointmentService.editAppointment(user, appointmentId, form);
+        return new ResponseEntity<>(response, response.getStatus());
     }
 
     @GetMapping("/cancel/{appointmentId}")
     @PreAuthorize("hasAuthority('USER')")
-    public ApiResponse appointmentsCancel(@AuthenticationPrincipal User user,
+    public ResponseEntity<?> appointmentsCancel(@AuthenticationPrincipal User user,
                                          @PathVariable("appointmentId") Appointment appointment
     ) {
-        if (appointmentService.isCanCancel(user, appointment)) {
-            appointmentService.cancelAppointment(appointment);
-            return ApiResponse.builder()
-                    .status(HttpStatus.OK)
-                    .message("Запись с ID "+ appointment.getId() + " успешно отменена!").build();
-        }
-        else
-            return ApiResponse.builder()
-                    .status(HttpStatus.BAD_REQUEST)
-                    .message("Вы не можете отменить запись с ID " + appointment.getId() + "!").build();
+        ApiResponse response = appointmentService.appointmentsCancel(user, appointment);
+        return new ResponseEntity<>(response, response.getStatus());
     }
 }

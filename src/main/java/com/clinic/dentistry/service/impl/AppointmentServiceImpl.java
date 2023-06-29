@@ -1,19 +1,19 @@
 package com.clinic.dentistry.service.impl;
 
 import com.clinic.dentistry.dto.AddAppointmentDTO;
+import com.clinic.dentistry.dto.ApiResponse;
 import com.clinic.dentistry.dto.AppointmentDto;
-import com.clinic.dentistry.models.Appointment;
-import com.clinic.dentistry.models.Employee;
-import com.clinic.dentistry.models.Role;
-import com.clinic.dentistry.models.User;
+import com.clinic.dentistry.dto.AppointmentEditForm;
+import com.clinic.dentistry.models.*;
 import com.clinic.dentistry.repo.AppointmentRepository;
 import com.clinic.dentistry.repo.EmployeeRepository;
 import com.clinic.dentistry.repo.UserRepository;
-import com.clinic.dentistry.service.AppointmentService;
-import com.clinic.dentistry.service.MailService;
+import com.clinic.dentistry.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.mail.MailException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -33,6 +33,15 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Autowired
     private EmployeeRepository employeeRepository;
+
+    @Autowired
+    private EmployeeService employeeService;
+
+    @Autowired
+    private GoodService goodService;
+
+    @Autowired
+    private CheckService checkService;
 
     private LocalDateTime now = LocalDateTime.now();
     @Autowired
@@ -82,6 +91,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                             if (!appointment.getActive() && appointment.getConclusion() == null){
                                 dateTaken = Boolean.FALSE;
                             }
+
                         }
                         if (dateTaken.equals(Boolean.FALSE)) {
                             avalibleTimes.add(time.format(formatterTime));
@@ -238,6 +248,110 @@ public class AppointmentServiceImpl implements AppointmentService {
     public Boolean isUserAppointment(User user, Appointment appointment){
             return !(user.getOutpatientCard() != null && !appointment.getClient().getId().equals(user.getOutpatientCard().getId())
                     || user.getEmployee() != null && !appointment.getDoctor().getId().equals(user.getEmployee().getId()));
+    }
+
+    @Override
+    public List<AppointmentDto> appointmentsAddForm(){
+        Map<String, Object> model = new HashMap<>();
+        Iterable<User> doctors = getActiveDoctors();
+        List<AppointmentDto> availableDatesByDoctor = getAvailableDatesByDoctors(doctors);
+        model.put("doctors", availableDatesByDoctor);
+        return availableDatesByDoctor;
+    };
+
+    @Override
+    public ApiResponse appointmentsAdd(User user, AddAppointmentDTO addAppointment){
+        if (employeeService.findEmployee(addAppointment.getDoctorId()) == null)
+            return ApiResponse.builder()
+                    .status(HttpStatus.NOT_FOUND)
+                    .message("Врач с ID " + addAppointment.getDoctorId() + " не найден!!")
+                    .build();
+        if (isVacantAppointment(addAppointment)) {
+            addAppointment(user, addAppointment);
+            return ApiResponse.builder()
+                    .status(HttpStatus.CREATED)
+                    .message("Запись добавлена!")
+                    .build();
+        }
+
+        return ApiResponse.builder()
+                .status(HttpStatus.BAD_REQUEST)
+                .message("Данное время не доступно!")
+                .build();
+    };
+
+    @Override
+    public Map<String, Object> getAppointment(User user, Long appointmentId){
+        Map<String, Object> model = new HashMap<>();
+
+        Appointment appointment =  findAppointment(appointmentId);
+        if (appointment != null) {
+            if (isUserAppointment(user, appointment)) {
+                Boolean readOnly = Boolean.TRUE;
+                Boolean canCancel = Boolean.FALSE;
+                if (isCanEditByDoctor(user, appointment)) {
+                    readOnly = Boolean.FALSE;
+                    Iterable<Good> goods = goodService.findActiveGoods();
+                    model.put("goods", goods);
+                }
+
+                Optional<Check> check = checkService.findCheck(appointment);
+                if (check.isPresent()) {
+                    Iterable<CheckLine> checkLines = checkService.findCheckLines(check);
+                    model.put("checkLines", checkLines);
+                }
+
+                if (isCanCancel(user, appointment)) {
+                    canCancel = Boolean.TRUE;
+                }
+
+                model.put("appointment", appointment);
+                model.put("readOnly", readOnly);
+                model.put("canCancel", canCancel);
+                return model;
+            }
+        }
+        throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND
+        );
+    }
+
+    @Override
+    public ApiResponse editAppointment(User user, Long appointmentId, AppointmentEditForm form){
+        Appointment appointment = findAppointment(appointmentId);
+        if (appointment != null) {
+            if  (isCanEditByDoctor(user, appointment )){
+                checkService.addConclusion(appointment, form);
+                checkService.createCheckFromForm(form, appointment);
+               return ApiResponse.builder()
+                        .status(HttpStatus.CREATED)
+                        .message("Врачебное заключение добавлено!")
+                        .build();
+            }
+            else return ApiResponse.builder()
+                    .status(HttpStatus.BAD_REQUEST)
+                    .message("Вы не можете оставаить заключение по записи с ID " + appointmentId + " !")
+                    .build();
+
+        }
+        else return ApiResponse.builder()
+                .status(HttpStatus.NOT_FOUND)
+                .message("Запись с ID " + appointmentId + " не найдена!")
+                .build();
+    }
+
+    @Override
+    public ApiResponse appointmentsCancel(User user, Appointment appointment){
+        if (isCanCancel(user, appointment)) {
+            cancelAppointment(appointment);
+            return ApiResponse.builder()
+                    .status(HttpStatus.OK)
+                    .message("Запись с ID "+ appointment.getId() + " успешно отменена!").build();
+        }
+        else
+            return ApiResponse.builder()
+                    .status(HttpStatus.BAD_REQUEST)
+                    .message("Вы не можете отменить запись с ID " + appointment.getId() + "!").build();
     }
 }
 

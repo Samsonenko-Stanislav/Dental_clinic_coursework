@@ -160,7 +160,7 @@ const AppointmentsEdit = () => {
             <div className="row col-12 justify-content-between">
               <div className="row col-4">
                 <h4>Заключение</h4>
-                <textarea rows="15" value={conclusion} disabled={readOnly} name="conclusion" onChange={(e) => setConclusion(e.target.value)} />
+                <textarea required rows="15" value={conclusion} disabled={readOnly} name="conclusion" onChange={(e) => setConclusion(e.target.value)} />
               </div>
               <div className="row col-7">
                 <h4>Чек</h4>

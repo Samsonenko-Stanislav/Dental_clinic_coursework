@@ -1,10 +1,17 @@
 package com.clinic.dentistry.service;
 
 import com.clinic.dentistry.dto.AddAppointmentDTO;
+import com.clinic.dentistry.dto.ApiResponse;
 import com.clinic.dentistry.dto.AppointmentDto;
+import com.clinic.dentistry.dto.AppointmentEditForm;
 import com.clinic.dentistry.models.Appointment;
 import com.clinic.dentistry.models.Employee;
 import com.clinic.dentistry.models.User;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -25,8 +32,14 @@ public interface AppointmentService {
     Boolean isCanEditByDoctor(User user, Appointment appointment);
     Boolean isCanCancel(User user, Appointment appointment);
     Appointment findAppointment(Long id);
-
     Boolean isVacantAppointment(AddAppointmentDTO addAppointment);
-
     Boolean isUserAppointment(User user, Appointment appointment);
+    List<AppointmentDto> appointmentsAddForm();
+    ApiResponse appointmentsAdd(User user, AddAppointmentDTO addAppointment);
+
+    Map<String, Object> getAppointment(User user, Long appointmentId);
+
+    ApiResponse editAppointment(User user, Long appointmentId, AppointmentEditForm form);
+
+    ApiResponse appointmentsCancel(User user, Appointment appointment);
 }
