@@ -18,15 +18,15 @@ export const getAddAppointments = createAsyncThunk('userData/getAddAppointments'
 });
 
 export const editAppointments = createAsyncThunk('userData/editAppointments', async ({ newData, catchFunction }) => {
-  return await axiosApi.post(`/appointments/${newData.appointmentId}/edit`, newData);
+  return await axiosApi.post(`/appointments/edit/${newData.appointmentId}`, newData);
 });
 
 export const getSoloAppointments = createAsyncThunk('userData/getSoloAppointments', async ({ newData, catchFunction }) => {
-  return await axiosApi.get(`/appointments/${newData.id}/edit`, newData);
+  return await axiosApi.get(`/appointments/edit/${newData.id}`, newData);
 });
 
 export const cancelAppointment = createAsyncThunk('userData/cancelAppointment', async ({ newData, catchFunction }) => {
-  return await axiosApi.get(`/appointments/${newData.id}/cancel`, newData);
+  return await axiosApi.get(`/appointments/cancel/${newData.id}`, newData);
 });
 
 const initialState = {

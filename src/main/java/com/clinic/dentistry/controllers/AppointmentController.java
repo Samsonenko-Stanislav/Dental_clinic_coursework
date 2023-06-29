@@ -77,7 +77,7 @@ public class AppointmentController {
                 .build();
     }
 
-    @GetMapping("/{appointmentId}/edit")
+    @GetMapping("/edit/{appointmentId}")
     public Map<String, Object> appointmentsEdit(@AuthenticationPrincipal User user,
                                                 @PathVariable("appointmentId") Long appointmentId
     ) {
@@ -85,35 +85,37 @@ public class AppointmentController {
 
         Appointment appointment = appointmentService.findAppointment(appointmentId);
         if (appointment != null) {
-            Boolean readOnly = Boolean.TRUE;
-            Boolean canCancel = Boolean.FALSE;
-            if (appointmentService.isCanEditByDoctor(user, appointment)) {
-                readOnly = Boolean.FALSE;
-                Iterable<Good> goods = goodService.findActiveGoods();
-                model.put("goods", goods);
-            }
+            if (appointmentService.isUserAppointment(user, appointment)) {
+                Boolean readOnly = Boolean.TRUE;
+                Boolean canCancel = Boolean.FALSE;
+                if (appointmentService.isCanEditByDoctor(user, appointment)) {
+                    readOnly = Boolean.FALSE;
+                    Iterable<Good> goods = goodService.findActiveGoods();
+                    model.put("goods", goods);
+                }
 
-            Optional<Check> check = checkService.findCheck(appointment);
-            if (check.isPresent()) {
-                Iterable<CheckLine> checkLines = checkService.findCheckLines(check);
-                model.put("checkLines", checkLines);
-            }
+                Optional<Check> check = checkService.findCheck(appointment);
+                if (check.isPresent()) {
+                    Iterable<CheckLine> checkLines = checkService.findCheckLines(check);
+                    model.put("checkLines", checkLines);
+                }
 
-            if (appointmentService.isCanCancel(user, appointment)) {
-                canCancel = Boolean.TRUE;
-            }
+                if (appointmentService.isCanCancel(user, appointment)) {
+                    canCancel = Boolean.TRUE;
+                }
 
-            model.put("appointment", appointment);
-            model.put("readOnly", readOnly);
-            model.put("canCancel", canCancel);
-            return model;
+                model.put("appointment", appointment);
+                model.put("readOnly", readOnly);
+                model.put("canCancel", canCancel);
+                return model;
+            }
         }
         throw new ResponseStatusException(
                 HttpStatus.NOT_FOUND
         );
     }
 
-    @PostMapping("/{appointmentId}/edit")
+    @PostMapping("/edit/{appointmentId}")
     @PreAuthorize("hasAuthority('DOCTOR')")
     public HttpStatus appointmentsEdit(@PathVariable("appointmentId") Long appointmentId,
                                        @RequestBody AppointmentEditForm form
@@ -129,7 +131,7 @@ public class AppointmentController {
         );
     }
 
-    @GetMapping("/{appointmentId}/cancel")
+    @GetMapping("/cancel/{appointmentId}")
     @PreAuthorize("hasAuthority('USER')")
     public HttpStatus appointmentsCancel(@AuthenticationPrincipal User user,
                                          @PathVariable("appointmentId") Appointment appointment

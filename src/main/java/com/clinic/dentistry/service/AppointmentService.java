@@ -27,4 +27,6 @@ public interface AppointmentService {
     Appointment findAppointment(Long id);
 
     Boolean isVacantAppointment(AddAppointmentDTO addAppointment);
+
+    Boolean isUserAppointment(User user, Appointment appointment);
 }

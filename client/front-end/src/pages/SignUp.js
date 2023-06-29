@@ -88,7 +88,7 @@ const SignUp = () => {
           <div>
             {' '}
             <label htmlFor="EMAIL">e-mail</label>
-            <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" className="form-control" id="EMAIL" placeholder="e-mail" name="email" />
+            <input required value={email} onChange={(e) => setEmail(e.target.value)} type="email" className="form-control" id="EMAIL" placeholder="e-mail" name="email" />
           </div>
           <div>
             <input type="radio" id="MALE" name="gender" value={gender} onChange={() => setGender('MALE')} />
