@@ -26,6 +26,7 @@ const AppointmentsEdit = () => {
   const [currentCheck, setCurrentCheck] = useState([{ id: 0, good: null, price: null, qty: null, total: null, goodId: null }]);
   const [total, setTotal] = useState(0);
 
+
   const goods = useMemo(() => {
     return goodsStore.filter((user) => user.active) || [];
   }, [goodsStore]);
@@ -100,6 +101,7 @@ const AppointmentsEdit = () => {
   };
 
   const handleSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
     const response = await dispatch(
       editAppointments({
@@ -110,10 +112,10 @@ const AppointmentsEdit = () => {
         },
       })
     );
-
     if (response?.type?.includes('fulfilled')) {
       navigate('/appointments');
     }
+    setLoading(false);
   };
 
   const cancelHandler = async (e) => {

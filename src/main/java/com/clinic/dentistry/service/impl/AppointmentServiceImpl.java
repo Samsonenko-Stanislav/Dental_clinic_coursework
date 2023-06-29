@@ -45,7 +45,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         ArrayList<String> avalibleTimes;
         Boolean dateTaken;
 
-        Iterable<Appointment> appointments = appointmentRepository.findByActiveTrue();
+        Iterable<Appointment> appointments = appointmentRepository.findAll();
 
         DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern("HH:mm");
@@ -75,8 +75,12 @@ public class AppointmentServiceImpl implements AppointmentService {
                     for (LocalDateTime time = startTime; time.isBefore(endTime); time = time.plusMinutes(doctor.getEmployee().getDurationApp())) {
                         dateTaken = Boolean.FALSE;
                         for (Appointment appointment : appointments) {
-                            if (appointment.getDoctor().equals(doctor.getEmployee()) && appointment.getDate().equals(time)) {
+                            if ((appointment.getDoctor().equals(doctor.getEmployee()) && appointment.getDate().equals(time))) {
                                 dateTaken = Boolean.TRUE;
+                            }
+
+                            if (!appointment.getActive() && appointment.getConclusion() == null){
+                                dateTaken = Boolean.FALSE;
                             }
                         }
                         if (dateTaken.equals(Boolean.FALSE)) {
@@ -228,7 +232,6 @@ public class AppointmentServiceImpl implements AppointmentService {
                    appointment.getActive().equals(false) && appointment.getConclusion()!=null ))
                  return false;
        }
-
        return true;
        }
     @Override
