@@ -8,7 +8,9 @@ import com.clinic.dentistry.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -66,5 +68,25 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Employee findEmployee(Long id) {
         return employeeRepository.findEmployeeById(id);
+    }
+
+    @Override
+    public HashMap<String, Object> getEmployeeList(){
+        HashMap<String, Object> model = new HashMap<>();
+        model.put("employees", findAllEmployees());
+        return model;
+    }
+
+    @Override
+    public HashMap<String, Object> getEmpl(Long employeeId){
+        HashMap<String, Object> model = new HashMap<>();
+        Employee employee = findEmployee(employeeId);
+        if (employee != null) {
+            model.put("employee", employee);
+            return model;
+        }
+        throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND
+        );
     }
 }

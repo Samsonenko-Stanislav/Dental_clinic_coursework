@@ -24,22 +24,12 @@ public class EmployeeController {
 
     @GetMapping
     public HashMap<String, Object> employeeList() {
-        HashMap<String, Object> model = new HashMap<>();
-        model.put("employees", employeeService.findAllEmployees());
-        return model;
+        return employeeService.getEmployeeList();
     }
 
     @GetMapping("{employeeId}")
     public HashMap<String, Object> employeeEditForm(@PathVariable("employeeId") Long employeeId) {
-        HashMap<String, Object> model = new HashMap<>();
-        Employee employee = employeeService.findEmployee(employeeId);
-        if (employee != null) {
-            model.put("employee", employee);
-            return model;
-        }
-        throw new ResponseStatusException(
-                HttpStatus.NOT_FOUND
-        );
+        return employeeService.getEmpl(employeeId);
     }
 
     @PostMapping("/new")
