@@ -7,6 +7,8 @@ import com.clinic.dentistry.models.Employee;
 import com.clinic.dentistry.models.OutpatientCard;
 import com.clinic.dentistry.models.User;
 
+import java.util.HashMap;
+
 public interface RegistrationService {
     ApiResponse userRegistration(RegisterForm request);
 
@@ -14,4 +16,10 @@ public interface RegistrationService {
 
     ApiResponse editUser(Long userId, UserEditForm editForm);
     boolean isUsernameVacant(String username);
+
+    HashMap<String, Object> getUserList();
+
+    HashMap<String, Object> getUsr(Long userId);
+
+    HashMap<String, Object> getMyProfile(User user);
 }

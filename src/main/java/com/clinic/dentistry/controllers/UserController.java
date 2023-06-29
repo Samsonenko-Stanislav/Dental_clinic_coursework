@@ -36,35 +36,19 @@ public class UserController {
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     public HashMap<String, Object> userList() {
-        HashMap<String, Object> model = new HashMap<>();
-        model.put("users", userService.findAllUsers());
-        model.put("withArchived", true);
-        return model;
+        return registrationService.getUserList();
     }
 
     @GetMapping("{userId}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public HashMap<String, Object> userEditForm(@PathVariable("userId") Long userId) {
-        HashMap<String, Object> model = new HashMap<>();
-        User user = userService.findUser(userId);
-        if (user != null) {
-            model.put("user", user);
-            model.put("roles", Role.values());
-            model.put("employees", employeeService.findAllEmployees());
-            model.put("users", outpatientCardService.findAllCards());
-            return model;
-        }
-        throw new ResponseStatusException(
-                HttpStatus.NOT_FOUND
-        );
+        return registrationService.getUsr(userId);
     }
 
     @GetMapping("/me")
     @PreAuthorize("hasAuthority('USER')")
     public HashMap<String, Object> userMeEditForm(@AuthenticationPrincipal User user) {
-        HashMap<String, Object> model = new HashMap<>();
-        model.put("user", user);
-        return model;
+        return registrationService.getMyProfile(user);
     }
 
     @PostMapping("/me")

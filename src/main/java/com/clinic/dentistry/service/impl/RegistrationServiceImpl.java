@@ -7,13 +7,13 @@ import com.clinic.dentistry.models.*;
 import com.clinic.dentistry.repo.EmployeeRepository;
 import com.clinic.dentistry.repo.OutpatientCardRepository;
 import com.clinic.dentistry.repo.UserRepository;
-import com.clinic.dentistry.service.MailService;
-import com.clinic.dentistry.service.RegistrationService;
+import com.clinic.dentistry.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.MailException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 
@@ -28,6 +28,12 @@ public class RegistrationServiceImpl implements RegistrationService {
     private UserRepository userRepository;
     @Autowired
     private EmployeeRepository employeeRepository;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private EmployeeService employeeService;
+    @Autowired
+    private OutpatientCardService outpatientCardService;
 
     @Autowired
     private MailService mailService;
@@ -225,4 +231,34 @@ public class RegistrationServiceImpl implements RegistrationService {
         }*/
     }
 
+    @Override
+    public HashMap<String, Object> getUserList(){
+        HashMap<String, Object> model = new HashMap<>();
+        model.put("users", userService.findAllUsers());
+        model.put("withArchived", true);
+        return model;
+    }
+
+    @Override
+    public HashMap<String, Object> getUsr(Long userId){
+        HashMap<String, Object> model = new HashMap<>();
+        User user = userService.findUser(userId);
+        if (user != null) {
+            model.put("user", user);
+            model.put("roles", Role.values());
+            model.put("employees", employeeService.findAllEmployees());
+            model.put("users", outpatientCardService.findAllCards());
+            return model;
+        }
+        throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND
+        );
+    }
+
+    @Override
+    public HashMap<String, Object> getMyProfile(User user){
+        HashMap<String, Object> model = new HashMap<>();
+        model.put("user", user);
+        return model;
+    }
 }
