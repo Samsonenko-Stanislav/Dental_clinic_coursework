@@ -53,21 +53,15 @@ public class AppointmentServiceImpl implements AppointmentService {
         Map<String, ArrayList<String>> availableDates;
         ArrayList<String> avalibleTimes;
         Boolean dateTaken;
-
         Iterable<Appointment> appointments = appointmentRepository.findAll();
-
         DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern("HH:mm");
-
-
         List<AppointmentDto> dtoList = new ArrayList<>();
         for (User doctor : doctors) {
             AppointmentDto dto = new AppointmentDto(doctor);
-
             LocalDate startDate = LocalDate.now();
             LocalDate endDate = startDate.plusWeeks(2);
             availableDates = new TreeMap<>();
-
             for (LocalDate date = startDate; date.isBefore(endDate); date = date.plusDays(1)) {
                 if (!(date.getDayOfWeek().equals(DayOfWeek.SUNDAY) || (date.getDayOfWeek().equals(DayOfWeek.MONDAY)))) {
                     avalibleTimes = new ArrayList();
@@ -79,39 +73,27 @@ public class AppointmentServiceImpl implements AppointmentService {
                     }
                     LocalDateTime startTime = date.atTime(workStart);
                     LocalDateTime endTime = date.atTime(workEnd);
-
-
                     for (LocalDateTime time = startTime; time.isBefore(endTime); time = time.plusMinutes(doctor.getEmployee().getDurationApp())) {
                         dateTaken = Boolean.FALSE;
                         for (Appointment appointment : appointments) {
-                            if ((appointment.getDoctor().equals(doctor.getEmployee()) && appointment.getDate().equals(time))) {
+                            if (appointment.getDoctor().equals(doctor.getEmployee()) && appointment.getDate().equals(time)
+                            && (appointment.getActive() || (!appointment.getActive() && appointment.getConclusion()!=null))) {
                                 dateTaken = Boolean.TRUE;
                             }
-
-                            if (!appointment.getActive() && appointment.getConclusion() == null){
-                                dateTaken = Boolean.FALSE;
-                            }
-
                         }
                         if (dateTaken.equals(Boolean.FALSE)) {
                             avalibleTimes.add(time.format(formatterTime));
                         }
                     }
-
-
                     availableDates.put(date.format(formatterDate), avalibleTimes);
-
                     dto.timetable.add(
                             new AppointmentDto.DayTimes(date.format(formatterDate), avalibleTimes));
                 }
             }
             availableDatesByDoctor.put(doctor, availableDates);
-
             dtoList.add(dto);
         }
-
         return dtoList;
-
 //        return availableDatesByDoctor;
     }
 
