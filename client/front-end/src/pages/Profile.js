@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUser, logoutUser, updateProfile } from '../store/slice/UserSlice';
+import {getUser, logoutUser, requestLogin, updateProfile} from '../store/slice/UserSlice';
 import { useNavigate } from 'react-router-dom';
 import { showNotification } from '../App';
 import { removeFromLocalStorage } from '../utils/localStorage';
@@ -52,8 +52,16 @@ const Profile = () => {
       removeFromLocalStorage('token');
       removeFromLocalStorage('role');
       dispatch(logoutUser({}));
+      await dispatch(
+          requestLogin({
+            newData: {
+              username,
+              password,
+            },
+          })
+      );
       showNotification('success', 'Вы успешно изменили профиль', 'Профиль');
-      navigate('/login');
+      navigate('/');
     } else if (response?.type?.includes('fulfilled')) {
       navigate('/');
       showNotification('success', 'Вы успешно изменили профиль', 'Профиль');
