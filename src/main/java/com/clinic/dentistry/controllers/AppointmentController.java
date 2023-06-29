@@ -133,15 +133,18 @@ public class AppointmentController {
 
     @GetMapping("/cancel/{appointmentId}")
     @PreAuthorize("hasAuthority('USER')")
-    public HttpStatus appointmentsCancel(@AuthenticationPrincipal User user,
+    public ApiResponse appointmentsCancel(@AuthenticationPrincipal User user,
                                          @PathVariable("appointmentId") Appointment appointment
     ) {
         if (appointmentService.isCanCancel(user, appointment)) {
             appointmentService.cancelAppointment(appointment);
-            return HttpStatus.OK;
+            return ApiResponse.builder()
+                    .status(200)
+                    .message("Запись с ID "+ appointment.getId() + " успешно отменена!").build();
         }
-        throw new ResponseStatusException(
-                HttpStatus.BAD_REQUEST
-        );
+        else
+            return ApiResponse.builder()
+                    .status(400)
+                    .message("Вы не можете отменить запись с ID " + appointment.getId() + "!").build();
     }
 }
