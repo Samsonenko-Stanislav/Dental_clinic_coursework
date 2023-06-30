@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {getUser, logoutUser, requestLogin, updateProfile} from '../store/slice/UserSlice';
 import { useNavigate } from 'react-router-dom';
 import { showNotification } from '../App';
 import { removeFromLocalStorage } from '../utils/localStorage';
+import {UserContext} from "../context/UserContext";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ const Profile = () => {
   const [fullName, setFullName] = useState('');
   const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
+  const { setLoading } = useContext(UserContext);
 
   useEffect(() => {
     dispatch(getUser({}));
@@ -28,6 +30,7 @@ const Profile = () => {
   }, [profile]);
 
   const handleSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
     const response = await dispatch(
       updateProfile({
@@ -43,8 +46,12 @@ const Profile = () => {
     );
 
     if (response?.type?.includes('rejected')) {
-      showNotification('error','Пользователь с таким логином уже существует', 'Профиль');
-
+      if (!(password) && username !== profile?.username){
+        showNotification('error', 'При смене логина необходимо сменить пароль', 'Профиль')
+      }
+      else
+        showNotification('error','Пользователь с таким логином уже существует', 'Профиль');
+      setLoading(false);
       return;
     }
 
@@ -64,11 +71,12 @@ const Profile = () => {
             })
         );
       }
-
+      setLoading(false);
       showNotification('success', 'Вы успешно изменили профиль', 'Профиль');
       navigate('/');
     } else if (response?.type?.includes('fulfilled')) {
       navigate('/');
+      setLoading(false);
       showNotification('success', 'Вы успешно изменили профиль', 'Профиль');
     }
   };

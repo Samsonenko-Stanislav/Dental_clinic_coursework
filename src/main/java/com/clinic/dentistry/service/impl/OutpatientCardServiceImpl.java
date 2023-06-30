@@ -1,24 +1,20 @@
 package com.clinic.dentistry.service.impl;
 
 import com.clinic.dentistry.dto.ApiResponse;
-import com.clinic.dentistry.dto.auth.LoginResponse;
 import com.clinic.dentistry.dto.user.UserEditForm;
-import com.clinic.dentistry.models.Gender;
 import com.clinic.dentistry.models.OutpatientCard;
 import com.clinic.dentistry.models.User;
 import com.clinic.dentistry.repo.OutpatientCardRepository;
 import com.clinic.dentistry.repo.UserRepository;
 import com.clinic.dentistry.service.MailService;
 import com.clinic.dentistry.service.OutpatientCardService;
-import com.fasterxml.jackson.core.Base64Variant;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.MailException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
 
 @Service
 public class OutpatientCardServiceImpl implements OutpatientCardService {
@@ -47,17 +43,29 @@ public class OutpatientCardServiceImpl implements OutpatientCardService {
         }
 
         StringBuilder sb = new StringBuilder();
-
+        System.out.println(form.getUsername());
+        System.out.println(user.getUsername());
+        if ((!form.getUsername().equals(user.getUsername()) && form.getUsername()!=null) && form.getPassword() == null)
+        {
+            System.out.println("Here");
+            response.setStatus(HttpStatus.BAD_REQUEST);
+            response.setMessage("При смене логина обязательна смена пароля");
+            return response;
+        }
         if (form.getUsername() != null && !form.getUsername().equals(user.getUsername())) {
             if (!usesRepositotory.existsByUsername(form.getUsername())) {
                 user.setUsername(form.getUsername());
                 sb.append("логин изменен ");
             } else {
+                System.out.println("Here3");
                 response.setStatus(HttpStatus.BAD_REQUEST);
                 response.setMessage("Пользователь с таким логином уже существует!");
                 return response;
             }
         }
+
+
+
 
         if (form.getPassword() != null && !form.getPassword().isEmpty()) {
             user.setPassword(passwordEncoder.encode(form.getPassword()));
@@ -75,18 +83,48 @@ public class OutpatientCardServiceImpl implements OutpatientCardService {
         if (form.getEmail() != null && !form.getEmail().equals(card.getEmail())) {
                 try {
                     mailService.sendNotification(
-                            "Здравствуйте, " + card.getFullName() + "! \n" +
+                            "Здравствуйте, " + form.getFullName() + "! \n" +
                                     "Ваш E-mail успешно изменен. \n" +
+                                    "\nВаш логин: " + form.getUsername()  +
+                                    "\nВаш пароль: " + form.getPassword() +
                                     "\nС уважением, \n" +
                                     "Коллектив стоматологической клиники 'Улыбка премиум' ",
                             form.getEmail(),
                             "Успешная смена e-mail"
                     );
+                    mailService.sendNotification(
+                            "Здравствуйте, " + card.getFullName() + "! \n" +
+                                    "Ваш E-mail успешно изменен  на \n" + form.getEmail() +
+                                    "\nВаш логин: " + form.getUsername()  +
+                                    "\nВаш пароль: " + form.getPassword() +
+                                    "\nС уважением, \n" +
+                                    "Коллектив стоматологической клиники 'Улыбка премиум' ",
+                            user.getOutpatientCard().getEmail(),
+                            "Успешная смена e-mail"
+                    );
                 } catch (MailException ignored) {
                 }
+
                 card.setEmail(form.getEmail());
                 sb.append("email изменен ");
             }
+        else {
+            if (form.getUsername() != null && form.getPassword() != null) {
+                try {
+                    mailService.sendNotification(
+                            "Здравствуйте, " + form.getFullName() + "! \n" +
+                                    "Ваши логин и пароль успешно исменены. \n" +
+                                    "\nВаш логин: " + form.getUsername() +
+                                    "\nВаш пароль: " + form.getPassword() +
+                                    "\nС уважением, \n" +
+                                    "Коллектив стоматологической клиники 'Улыбка премиум' ",
+                            form.getEmail(),
+                            "Успешная смена логина и пароля"
+                    );
+                } catch (MailException ignored) {
+                }
+            }
+        }
 
         if (form.getGender() != card.getGender()) {
             card.setGender(form.getGender());
