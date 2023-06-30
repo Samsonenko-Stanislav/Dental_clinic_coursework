@@ -45,7 +45,7 @@ public class RegistrationServiceImpl implements RegistrationService {
                     .message("Пользователь с такими данными уже существует!")
                     .build();
         }
-
+        String password = request.getPassword();
         OutpatientCard outpatientCard = OutpatientCard.builder()
                 .email(request.getEmail())
                 .fullName(request.getFullName())
@@ -64,7 +64,10 @@ public class RegistrationServiceImpl implements RegistrationService {
         try {
             mailService.sendNotification(
                     "Здравствуйте, " + outpatientCard.getFullName() + "! \n" +
-                            "Благодарим за регистрацию на нашем сайте. С нетерпением ждем Вас в нашей стоматологической клинике!!! \n" +
+                            "Благодарим за регистрацию на нашем сайте. \n"+
+                            "\nВаш логин: " + user.getUsername() +
+                            "\nВаш пароль: " + password + "\n" +
+                            " \nС нетерпением ждем Вас в нашей стоматологической клинике!!! \n" +
                             "\nС уважением, \n" +
                             "Коллектив стоматологической клиники 'Улыбка премиум' ",
                     outpatientCard.getEmail(),
