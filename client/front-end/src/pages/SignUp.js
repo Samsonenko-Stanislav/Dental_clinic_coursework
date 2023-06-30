@@ -43,7 +43,6 @@ const SignUp = () => {
           })
       );
       navigate('/');
-      showNotification('success', 'Вы успешно зарегистрированы', 'Услуга');
     }
   };
 

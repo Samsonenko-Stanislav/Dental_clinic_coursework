@@ -64,7 +64,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         try {
             mailService.sendNotification(
                     "Здравствуйте, " + outpatientCard.getFullName() + "! \n" +
-                            "Благодарим за регистрацию на нашем сайте. \n"+
+                            "\nБлагодарим за регистрацию на нашем сайте. \n"+
                             "\nВаш логин: " + user.getUsername() +
                             "\nВаш пароль: " + password + "\n" +
                             "\nПри необходимости Вы можете изменить их по ссылке http://стоматология.online/user/me \n" +
