@@ -12,10 +12,9 @@ import java.util.ArrayList;
 @AllArgsConstructor
 @Builder
 @Entity
-@SequenceGenerator(name="employee_id", initialValue=2)
 public class Employee {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "employee_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String fullName;
     private String jobTitle;

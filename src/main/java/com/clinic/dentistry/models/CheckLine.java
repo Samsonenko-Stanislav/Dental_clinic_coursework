@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Table(name = "app_check_line")
 public class CheckLine{
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)

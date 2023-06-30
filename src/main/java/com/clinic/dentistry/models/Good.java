@@ -9,10 +9,9 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@SequenceGenerator(name="good_id", initialValue=5)
 public class Good {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "good_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private boolean active= true;
