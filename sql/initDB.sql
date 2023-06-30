@@ -75,7 +75,7 @@ create table if not exists usr
 
 create table if not exists user_role
 (
-    user_id bigint primary key,
+    user_id bigint,
     roles   varchar(255),
     foreign key (user_id) references usr(id)
 );

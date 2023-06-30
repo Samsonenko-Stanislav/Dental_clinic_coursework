@@ -13,6 +13,6 @@ public interface CheckService {
     void addConclusion(Appointment appointment, AppointmentEditForm form);
     Optional<Check> findCheck(Appointment appointment);
 
-    public Iterable<CheckLine> findCheckLines(Optional<Check> check);
+    Iterable<CheckLine> findCheckLines(Optional<Check> check);
 
 }

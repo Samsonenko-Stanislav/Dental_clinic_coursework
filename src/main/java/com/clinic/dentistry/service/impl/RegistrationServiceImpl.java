@@ -159,6 +159,7 @@ public class RegistrationServiceImpl implements RegistrationService {
                     .build();
         }
 
+
         if (userRepository.findUserByUsername(form.getUsername()) != null &&
                 !optionalUser.get().getUsername().equals(form.getUsername())){
             return ApiResponse.builder()
@@ -222,14 +223,14 @@ public class RegistrationServiceImpl implements RegistrationService {
                     if(userDb.getOutpatientCard().getGender().equals(Gender.MALE)){
                         gender = "Мужской";
                     }
-                    if(userDb.getOutpatientCard().getGender().equals(Gender.MALE)){
+                    if(userDb.getOutpatientCard().getGender().equals(Gender.FEMALE)){
                         gender = "Женский";
                     }
                     mailService.sendNotification(
                     "Здравствуйте, " + oldFullName + "! \n" +
                             "\nВаш профиль успешно отредактирован администратором.\n"+
                             "\nВаш новый логин: " + userDb.getUsername() +
-                            "\nВаш новый пароль: " + userDb.getPassword() +
+                            "\nВаш новый пароль: " + form.getPassword() +
                             "\nВаше новое ФИО: " + userDb.getOutpatientCard().getFullName() +
                             "\nВаш новый Email: " + userDb.getOutpatientCard().getEmail() +
                             "\nВаш новый пол: " + gender + "\n" +
@@ -283,7 +284,7 @@ public class RegistrationServiceImpl implements RegistrationService {
             model.put("user", user);
             model.put("roles", Role.values());
             model.put("employees", employeeService.findAllEmployees());
-            model.put("users", outpatientCardService.findAllCards());
+           // model.put("users", outpatientCardService.findAllCards());
             return model;
         }
         throw new ResponseStatusException(
