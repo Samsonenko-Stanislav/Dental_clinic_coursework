@@ -130,7 +130,7 @@ const Profile = () => {
                 <label htmlFor="email" className="form-label">
                   Email
                 </label>
-                <input type="email" name="email" className="form-control" id="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                <input required type="email" name="email" className="form-control" id="email" value={email} onChange={(e) => setEmail(e.target.value)} />
               </div>
             </div>
           </div>

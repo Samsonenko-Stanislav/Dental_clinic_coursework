@@ -136,7 +136,7 @@ if (user?.user){
                       <label htmlFor="email" className="form-label">
                         e-mail
                       </label>
-                      <input type="email" name="email" className="form-control" id="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                      <input required type="email" name="email" className="form-control" id="email" value={email} onChange={(e) => setEmail(e.target.value)} />
                     </div>
                     <div className="row col-12">
                       <div className="col-6">

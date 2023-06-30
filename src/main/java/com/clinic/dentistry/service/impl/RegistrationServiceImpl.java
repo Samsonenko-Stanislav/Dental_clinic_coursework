@@ -67,6 +67,7 @@ public class RegistrationServiceImpl implements RegistrationService {
                             "Благодарим за регистрацию на нашем сайте. \n"+
                             "\nВаш логин: " + user.getUsername() +
                             "\nВаш пароль: " + password + "\n" +
+                            "\nПри необходимости Вы можете изменить их по ссылке http://стоматология.online/user/me \n" +
                             " \nС нетерпением ждем Вас в нашей стоматологической клинике!!! \n" +
                             "\nС уважением, \n" +
                             "Коллектив стоматологической клиники 'Улыбка премиум' ",
@@ -125,7 +126,11 @@ public class RegistrationServiceImpl implements RegistrationService {
             try {
                 mailService.sendNotification(
                         "Здравствуйте, " + user.getOutpatientCard().getFullName() + "! \n" +
-                                "\nВы успешно зарегистрированы администратором на нашем сайте. С нетерпением ждем Вас в нашей стоматологической клинике!!! \n" +
+                                "\nВы успешно зарегистрированы администратором на нашем сайте.\n"+
+                                "\nВаш логин: " + request.getUsername() +
+                                "\nВаш пароль: " + request.getPassword() + "\n" +
+                                "\nПри необходимости Вы можете изменить их по ссылке http://стоматология.online/user/me \n" +
+                                "\nС нетерпением ждем Вас в нашей стоматологической клинике!!! \n" +
                                 "\nС уважением, \n" +
                                 "Коллектив стоматологической клиники 'Улыбка премиум' ",
                         user.getOutpatientCard().getEmail(),
@@ -138,7 +143,6 @@ public class RegistrationServiceImpl implements RegistrationService {
                         .build();
             }
         }
-
         return ApiResponse.builder()
                 .status(HttpStatus.CREATED)
                 .message("Регистрация прошла успешно")
@@ -163,8 +167,15 @@ public class RegistrationServiceImpl implements RegistrationService {
                     .build();
         }
 
+
         try {
             User userDb = optionalUser.get();
+            String oldFullName = "";
+            String oldEmail = "";
+            if (userDb.getRoles().contains(Role.USER)){
+                oldFullName = userDb.getOutpatientCard().getFullName();
+                oldEmail = userDb.getOutpatientCard().getEmail();
+            }
 
             Set<Role> roles = form.getRoles() != null ? form.getRoles() : Collections.emptySet();
 
@@ -205,6 +216,33 @@ public class RegistrationServiceImpl implements RegistrationService {
             }
 
             userRepository.save(userDb);
+            if(userDb.getOutpatientCard() != null) {
+                try {
+                    String gender = "";
+                    if(userDb.getOutpatientCard().getGender().equals(Gender.MALE)){
+                        gender = "Мужской";
+                    }
+                    if(userDb.getOutpatientCard().getGender().equals(Gender.MALE)){
+                        gender = "Женский";
+                    }
+                    mailService.sendNotification(
+                    "Здравствуйте, " + oldFullName + "! \n" +
+                            "\nВаш профиль успешно отредактирован администратором.\n"+
+                            "\nВаш новый логин: " + userDb.getUsername() +
+                            "\nВаш новый пароль: " + userDb.getPassword() +
+                            "\nВаше новое ФИО: " + userDb.getOutpatientCard().getFullName() +
+                            "\nВаш новый Email: " + userDb.getOutpatientCard().getEmail() +
+                            "\nВаш новый пол: " + gender + "\n" +
+                            "\nПри необходимости Вы можете изменить их по ссылке http://стоматология.online/user/me \n" +
+                            "\nС нетерпением ждем Вас в нашей стоматологической клинике!!! \n" +
+                            "\nС уважением, \n" +
+                            "Коллектив стоматологической клиники 'Улыбка премиум' ",
+                    oldEmail,
+                    "Успешная регистрация"
+                    );
+                } catch (MailException ignore) {
+                }
+            }
             return ApiResponse.builder()
                     .status(HttpStatus.OK)
                     .message("Пользователь отредактирован")
@@ -227,11 +265,6 @@ public class RegistrationServiceImpl implements RegistrationService {
     private boolean isUserInDB(RegisterForm request) {
         User user = userRepository.findByUsername(request.getUsername());
         return user != null;
-
-       /* OutpatientCard outpatientCard = outpatientCardRepository.findByEmail(request.getEmail());
-        if (outpatientCard != null) {
-            return true;
-        }*/
     }
 
     @Override
