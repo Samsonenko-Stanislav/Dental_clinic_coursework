@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateUser, getSoloUser, nullifyUser } from '../store/slice/UserSlice';
 import { useNavigate, useParams } from 'react-router-dom';
 import NotFound from "../components/NotFoundComponent/NotFound";
 import {showNotification} from "../App";
+import {UserContext} from "../context/UserContext";
 
 const EditUsers = () => {
   const navigate = useNavigate();
@@ -19,6 +20,7 @@ const EditUsers = () => {
   const [gender, setGender] = useState('');
   const [fullName, setFullName] = useState('');
   const [password, setPassword] = useState('');
+  const { setLoading } = useContext(UserContext);
 
   useEffect(() => {
     dispatch(getSoloUser({ newData: { id: params.id } }));
@@ -48,7 +50,6 @@ const EditUsers = () => {
   const handleCheckboxChange = (event) => {
     const role = event.target.name;
     const checked = event.target.checked;
-
     if (checked) {
       setSelectedRoles((prevRoles) => [...prevRoles, role]);
     } else {
@@ -61,9 +62,11 @@ const EditUsers = () => {
   };
 
   const handleSubmit = async (event) => {
+    setLoading(true);
     event.preventDefault();
     const response = await dispatch(updateUser({ newData: { active, username, id: params.id, employeeId: employee, roles: selectedRoles, email, gender, fullName, password } }));
     setPassword('');
+    setLoading(false);
     if (response?.type?.includes('fulfilled')){
       navigate('/user');
       showNotification('success', 'Вы успешно изменили пользователя', 'Изменение пользователя');
