@@ -57,6 +57,7 @@ public class EmployeeServiceImpl implements EmployeeService {
        if (dto.getWorkStart() != null) employee.setWorkStart(dto.getWorkStart());
        if (dto.getWorkEnd() != null) employee.setWorkEnd(dto.getWorkEnd());
        if (dto.getDurationApp() != null) employee.setDurationApp(dto.getDurationApp());
+       if (dto.getWorkDays() != null) employee.setWorkDays(dto.getWorkDays());
 
        employeeRepository.save(employee);
 

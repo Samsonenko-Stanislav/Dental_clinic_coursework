@@ -16,10 +16,48 @@ const EditEmployee = () => {
   const [workStart, setTimeStart] = useState('');
   const [workEnd, setTimeEnd] = useState('');
 
+  const [isMonday, setIsMonday] = useState(false);
+  const [isTuesday, setIsTuesday] = useState(false);
+  const [isWednesday, setIsWednesday] = useState(false);
+  const [isThursday, setIsThursday] = useState(false);
+  const [isFriday, setIsFriday] = useState(false);
+  const [isSaturday, setIsSaturday] = useState(false);
+  const [isSunday, setIsSunday] = useState(false);
+
+  const handleMondayChange = (event) => {
+    setIsMonday(event.target.checked)
+  }
+
+  const handleTuesdayChange = (event) => {
+    setIsTuesday(event.target.checked)
+  }
+  const handleWednesdayChange = (event) => {
+    setIsWednesday(event.target.checked)
+  }
+  const handleThursdayChange = (event) => {
+    setIsThursday(event.target.checked)
+  }
+  const handleFridayChange = (event) => {
+    setIsFriday(event.target.checked)
+  }
+  const handleSaturdayChange = (event) => {
+    setIsSaturday(event.target.checked)
+  }
+  const handleSundayChange = (event) => {
+    setIsSunday(event.target.checked)
+  }
+
   useEffect(() => {
     if (Object.keys(employee).length) {
       setTimeEnd(employee.workEnd);
       setTimeStart(employee.workStart);
+      setIsMonday(employee.workDays.includes('MONDAY'));
+      setIsTuesday(employee.workDays.includes('TUESDAY'));
+      setIsWednesday(employee.workDays.includes('WEDNESDAY'));
+      setIsThursday(employee.workDays.includes("THURSDAY"));
+      setIsFriday(employee.workDays.includes('FRIDAY'));
+      setIsSaturday(employee.workDays.includes('SATURDAY'));
+      setIsSunday(employee.workDays.includes('SUNDAY'));
       setFullName(employee.fullName);
       setTitle(employee.jobTitle);
       setTimeReception(employee.durationApp);
@@ -36,7 +74,28 @@ const EditEmployee = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await dispatch(editEmployee({ newData: { id: params.id, workEnd, workStart, jobTitle, durationApp, fullName } }));
+    const workDays = [];
+
+    if(isMonday) workDays.push('MONDAY');
+    if(isTuesday) workDays.push('TUESDAY');
+    if(isWednesday) workDays.push('WEDNESDAY');
+    if(isThursday) workDays.push('THURSDAY');
+    if(isFriday) workDays.push('FRIDAY');
+    if(isSaturday) workDays.push('SATURDAY');
+    if(isSunday) workDays.push('SUNDAY');
+    const response = await dispatch(editEmployee(
+        { newData:
+              {
+                id: params.id,
+                workEnd,
+                workStart,
+                jobTitle,
+                workDays,
+                durationApp,
+                fullName
+              }
+        })
+    );
     if (response?.type?.includes('fulfilled')) {
       navigate('/employee');
       showNotification('success', 'Вы успешно изменили сотрудника', 'Изменение Сотрудника');
@@ -80,6 +139,47 @@ if (employee.id){
                   Время приема (минут)
                 </label>
                 <input type="text" name="durationApp" className="form-control" id="durationApp" value={durationApp} onChange={(e) => setTimeReception(e.target.value)} />
+              </div>
+              <div className="col">
+                <div className="col-md-5 my-2">
+                  <input type="checkbox" name="MONDAY" id="MONDAY" checked={isMonday} onChange={handleMondayChange} />
+                  <label htmlFor="MONDAY" className="form-label">
+                    Понедельник
+                  </label>
+                </div>
+                <div className="col-md-5 my-2">
+                  <input type="checkbox" name="TUESDAY" id="TUESDAY" checked={isTuesday} onChange={handleTuesdayChange} />
+                  <label htmlFor="TUESDAY" className="form-label">
+                    Вторник
+                  </label>
+                </div>
+                <div className="col-md-5 my-2">
+                  <input type="checkbox" name="WEDNESDAY" id="WEDNESDAY" checked={isWednesday} onChange={handleWednesdayChange} />
+                  <label htmlFor="WEDNESDAY" className="form-label">
+                    Среда
+                  </label>
+                </div>
+                <div className="col-md-5 my-2">
+                  <input type="checkbox" name="THURSDAY" id="THURSDAY" checked={isThursday} onChange={handleThursdayChange} />
+                  <label htmlFor="THURSDAY" className="form-label">
+                    Четверг
+                  </label>
+                </div><div className="col-md-5 my-2">
+                <input type="checkbox" name="FRIDAY" id="FRIDAY" checked={isFriday} onChange={handleFridayChange} />
+                <label htmlFor="FRIDAY" className="form-label">
+                  Пятница
+                </label>
+              </div><div className="col-md-5 my-2">
+                <input type="checkbox" name="SATURDAY" id="SATURDAY" checked={isSaturday} onChange={handleSaturdayChange} />
+                <label htmlFor="SATURDAY" className="form-label">
+                  Суббота
+                </label>
+              </div><div className="col-md-5 my-2">
+                <input type="checkbox" name="SUNDAY" id="SUNDAY" checked={isSunday} onChange={handleSundayChange} />
+                <label htmlFor="SUNDAY" className="form-label">
+                  Воскресенье
+                </label>
+              </div>
               </div>
             </div>
             <button className="btn btn-primary btn-lg my-4" type="submit">
