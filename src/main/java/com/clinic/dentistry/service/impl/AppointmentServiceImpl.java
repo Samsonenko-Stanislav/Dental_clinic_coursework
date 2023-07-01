@@ -175,20 +175,6 @@ public class AppointmentServiceImpl implements AppointmentService {
     public void cancelAppointment(Appointment appointment) {
         appointment.setActive(Boolean.FALSE);
         appointmentRepository.save(appointment);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyy HH:mm");
-        try{
-            mailService.sendNotification(
-                    "Здравствуйте, " + appointment.getClient().getFullName() + "! \n" +
-                            "\nВаша запись на прием к врачу" + appointment.getDoctor().getJobTitle() +
-                            " " + appointment.getDoctor().getFullName() + "  на " + appointment.getDate().format(formatter) +
-                            " успешно отменена. \n" +
-                            "\nС уважением, \n" +
-                            "Коллектив стоматологической клиники 'Улыбка премиум' ",
-                    appointment.getClient().getEmail(),
-                    "Отмена записи на прием"
-            );
-        } catch (MailException ignored) {
-        }
 
     }
 
@@ -328,7 +314,21 @@ public class AppointmentServiceImpl implements AppointmentService {
         Appointment appointment = appointmentRepository.findAppointmentById(appointmentId);
         if (appointment != null){
             if (isCanCancel(user, appointment)) {
-                cancelAppointment(appointment);
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyy HH:mm");
+                try{
+                    mailService.sendNotification(
+                            "Здравствуйте, " + appointment.getClient().getFullName() + "! \n" +
+                                    "\nВаша запись на прием к врачу" + appointment.getDoctor().getJobTitle() +
+                                    " " + appointment.getDoctor().getFullName() + "  на " + appointment.getDate().format(formatter) +
+                                    " успешно отменена. \n" +
+                                    "\nС уважением, \n" +
+                                    "Коллектив стоматологической клиники 'Улыбка премиум' ",
+                            appointment.getClient().getEmail(),
+                            "Отмена записи на прием"
+                    );
+                } catch (MailException ignored) {
+                }
+                appointmentRepository.delete(appointment);
                 return ApiResponse.builder()
                         .status(HttpStatus.OK)
                         .message("Запись с ID "+ appointmentId + " успешно отменена!").build();
