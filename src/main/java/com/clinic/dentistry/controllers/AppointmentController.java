@@ -56,7 +56,7 @@ public class AppointmentController {
         return appointmentService.getAppointment(user, appointmentId);
     }
 
-    @PutMapping("/edit/{appointmentId}")
+    @PostMapping("/edit/{appointmentId}")
     @PreAuthorize("hasAuthority('DOCTOR')")
     public ResponseEntity<?> appointmentsEdit(@AuthenticationPrincipal User user,
                                        @PathVariable("appointmentId") Long appointmentId,

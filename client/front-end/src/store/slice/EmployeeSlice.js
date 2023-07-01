@@ -10,7 +10,7 @@ export const requestSoloEmployee = createAsyncThunk('userData/requestSoloEmploye
 });
 
 export const editEmployee = createAsyncThunk('userData/editEmployee', async ({ newData, catchFunction }) => {
-  return await axiosApi.put('/employee/edit/' + newData.id, newData);
+  return await axiosApi.post('/employee/edit/' + newData.id, newData);
 });
 
 export const addEmployee = createAsyncThunk('userData/addEmployee', async ({ newData, catchFunction }) => {

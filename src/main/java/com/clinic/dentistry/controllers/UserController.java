@@ -42,7 +42,7 @@ public class UserController {
         return registrationService.getMyProfile(user);
     }
 
-    @PutMapping("/me")
+    @PostMapping("/me")
     @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<?> userMeEdit(@AuthenticationPrincipal User user, @RequestBody UserEditForm editForm) {
         ApiResponse response = outpatientCardService.userMeEdit(user, editForm);

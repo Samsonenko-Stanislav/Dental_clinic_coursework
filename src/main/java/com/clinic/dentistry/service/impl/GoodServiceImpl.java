@@ -19,12 +19,12 @@ public class GoodServiceImpl implements GoodService {
 
     @Override
     public Iterable<Good> findActiveGoods(){
-      return goodRepository.findAllByActiveTrue();
+      return goodRepository.findAllByActiveTrueOrderById();
    }
 
    @Override
    public Iterable<Good> findAllGoods(){
-        return goodRepository.findAll();
+        return goodRepository.findAllByActiveTrueOrActiveFalseOrderById();
    }
 
    @Override
