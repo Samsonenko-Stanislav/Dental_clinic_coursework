@@ -23,7 +23,7 @@ public class OutpatientCardServiceImpl implements OutpatientCardService {
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
-    private UserRepository usesRepositotory;
+    private UserRepository userRepository;
     @Autowired
     private MailService mailService;
 
@@ -53,7 +53,7 @@ public class OutpatientCardServiceImpl implements OutpatientCardService {
             return response;
         }
         if (form.getUsername() != null && !form.getUsername().equals(user.getUsername())) {
-            if (!usesRepositotory.existsByUsername(form.getUsername())) {
+            if (!userRepository.existsByUsername(form.getUsername())) {
                 user.setUsername(form.getUsername());
                 sb.append("логин изменен ");
             } else {
@@ -132,7 +132,7 @@ public class OutpatientCardServiceImpl implements OutpatientCardService {
         }
 
         outpatientCardRepository.save(user.getOutpatientCard());
-        usesRepositotory.save(user);
+        userRepository.save(user);
 
         response.setStatus(HttpStatus.OK);
         response.setMessage(sb.toString());

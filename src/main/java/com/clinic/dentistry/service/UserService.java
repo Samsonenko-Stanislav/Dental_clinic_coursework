@@ -26,14 +26,14 @@ public class UserService implements UserDetailsService{
     }
 
     public List<User> findAllUsers(){
-        return userRepository.findAll();
+        return userRepository.findByActiveTrueOrActiveFalseOrderById();
     }
     public User findUser(Long id){
         return userRepository.findUserById(id);
     }
 
     public List<User> findAllActiveUsers(){
-        return userRepository.findByActiveTrue();
+        return userRepository.findByActiveTrueOrderById();
     }
 
     public User getByLogin(String username) {
