@@ -6,7 +6,7 @@ export const requestGoods = createAsyncThunk('userData/requestGoods', async ({ n
 });
 
 export const editGoods = createAsyncThunk('userData/editGoods', async ({ newData, catchFunction }) => {
-  return await axiosApi.post(`/good/${newData.id}`, newData);
+  return await axiosApi.put(`/good/${newData.id}`, newData);
 });
 
 export const getGood = createAsyncThunk('userData/getGood', async ({ newData, catchFunction }) => {

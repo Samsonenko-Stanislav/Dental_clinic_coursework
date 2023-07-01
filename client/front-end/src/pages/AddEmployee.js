@@ -72,7 +72,7 @@ const AddEmployee = () => {
     if (response?.type?.includes('fulfilled')) {
       showNotification('success', 'Вы успешно создали сотрудника', 'Создание Сотрудника');
       navigate("/employee");
-    };
+    }
   };
 
   return (
