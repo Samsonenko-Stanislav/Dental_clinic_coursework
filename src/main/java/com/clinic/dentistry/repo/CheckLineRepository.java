@@ -7,5 +7,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface CheckLineRepository extends JpaRepository<CheckLine, Long> {
     Iterable<CheckLine> findByCheck(Check check);
 
-    Iterable<CheckLine> findByCheckIn(Iterable<Check> checks);
 }

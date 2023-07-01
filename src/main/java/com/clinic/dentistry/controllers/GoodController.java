@@ -5,11 +5,9 @@ import com.clinic.dentistry.models.Good;
 import com.clinic.dentistry.service.GoodService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
 
@@ -41,7 +39,7 @@ public class GoodController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("{goodId}")
+    @PutMapping("{goodId}")
     public ResponseEntity<ApiResponse> goodEdit(@PathVariable("goodId") Long goodId, @RequestBody Good newData) {
         ApiResponse response =goodService.goodEdit(goodId, newData);
         return new ResponseEntity<>(response, response.getStatus());

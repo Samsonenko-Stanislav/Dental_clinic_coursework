@@ -4,7 +4,6 @@ import com.clinic.dentistry.dto.ApiResponse;
 import com.clinic.dentistry.models.Good;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public interface GoodService {
     Iterable<Good> findActiveGoods();

@@ -34,7 +34,7 @@ public class CheckServiceImpl implements CheckService {
     private MailService mailService;
 
     @Override
-    public Check createCheckFromForm(AppointmentEditForm form, Appointment appointment) {
+    public void createCheckFromForm(AppointmentEditForm form, Appointment appointment) {
         Check check;
         Optional<Good> good;
         CheckLine checkLine;
@@ -53,7 +53,6 @@ public class CheckServiceImpl implements CheckService {
             }
         }
 
-        return check;
     }
 
     @Override

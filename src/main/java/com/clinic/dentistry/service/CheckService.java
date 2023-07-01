@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface CheckService {
 
-    Check createCheckFromForm(AppointmentEditForm form, Appointment appointment);
+    void createCheckFromForm(AppointmentEditForm form, Appointment appointment);
     void addConclusion(Appointment appointment, AppointmentEditForm form);
     Optional<Check> findCheck(Appointment appointment);
 

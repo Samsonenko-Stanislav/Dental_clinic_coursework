@@ -1,19 +1,14 @@
 package com.clinic.dentistry.service;
 
-import com.clinic.dentistry.models.*;
-import com.clinic.dentistry.repo.OutpatientCardRepository;
+import com.clinic.dentistry.models.User;
 import com.clinic.dentistry.repo.UserRepository;
-import com.fasterxml.jackson.core.Base64Variant;
-import org.apache.catalina.Store;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
 
 @Service
 public class UserService implements UserDetailsService{
@@ -32,11 +27,4 @@ public class UserService implements UserDetailsService{
         return userRepository.findUserById(id);
     }
 
-    public List<User> findAllActiveUsers(){
-        return userRepository.findByActiveTrueOrderById();
-    }
-
-    public User getByLogin(String username) {
-        return userRepository.findUserByUsername(username);
-    }
 }

@@ -4,5 +4,4 @@ import com.clinic.dentistry.models.OutpatientCard;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface OutpatientCardRepository extends JpaRepository<OutpatientCard, Long> {
-    OutpatientCard findByEmail(String email);
 }

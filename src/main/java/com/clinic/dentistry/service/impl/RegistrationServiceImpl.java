@@ -32,8 +32,6 @@ public class RegistrationServiceImpl implements RegistrationService {
     private UserService userService;
     @Autowired
     private EmployeeService employeeService;
-    @Autowired
-    private OutpatientCardService outpatientCardService;
 
     @Autowired
     private MailService mailService;

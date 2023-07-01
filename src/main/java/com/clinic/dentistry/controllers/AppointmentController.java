@@ -4,24 +4,17 @@ import com.clinic.dentistry.dto.AddAppointmentDTO;
 import com.clinic.dentistry.dto.ApiResponse;
 import com.clinic.dentistry.dto.AppointmentDto;
 import com.clinic.dentistry.dto.AppointmentEditForm;
-import com.clinic.dentistry.models.*;
-import com.clinic.dentistry.repo.EmployeeRepository;
+import com.clinic.dentistry.models.Appointment;
+import com.clinic.dentistry.models.User;
 import com.clinic.dentistry.service.AppointmentService;
-import com.clinic.dentistry.service.CheckService;
-import com.clinic.dentistry.service.EmployeeService;
-import com.clinic.dentistry.service.GoodService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,9 +22,6 @@ import java.util.Optional;
 @PreAuthorize("hasAuthority('USER') or hasAuthority('DOCTOR')")
 public class AppointmentController {
     private final AppointmentService appointmentService;
-    private final CheckService checkService;
-    private final GoodService goodService;
-    private final EmployeeService employeeService;
 
     @GetMapping("/clientList")
     @PreAuthorize("hasAuthority('USER')")
@@ -66,7 +56,7 @@ public class AppointmentController {
         return appointmentService.getAppointment(user, appointmentId);
     }
 
-    @PostMapping("/edit/{appointmentId}")
+    @PutMapping("/edit/{appointmentId}")
     @PreAuthorize("hasAuthority('DOCTOR')")
     public ResponseEntity<?> appointmentsEdit(@AuthenticationPrincipal User user,
                                        @PathVariable("appointmentId") Long appointmentId,

@@ -3,20 +3,15 @@ package com.clinic.dentistry.controllers;
 import com.clinic.dentistry.dto.ApiResponse;
 import com.clinic.dentistry.dto.user.RegisterForm;
 import com.clinic.dentistry.dto.user.UserEditForm;
-import com.clinic.dentistry.models.Role;
 import com.clinic.dentistry.models.User;
-import com.clinic.dentistry.service.EmployeeService;
 import com.clinic.dentistry.service.OutpatientCardService;
 import com.clinic.dentistry.service.RegistrationService;
-import com.clinic.dentistry.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
 
@@ -24,10 +19,6 @@ import java.util.HashMap;
 @RequiredArgsConstructor
 @RequestMapping("/user")
 public class UserController {
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private EmployeeService employeeService;
     @Autowired
     private OutpatientCardService outpatientCardService;
     @Autowired
@@ -51,7 +42,7 @@ public class UserController {
         return registrationService.getMyProfile(user);
     }
 
-    @PostMapping("/me")
+    @PutMapping("/me")
     @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<?> userMeEdit(@AuthenticationPrincipal User user, @RequestBody UserEditForm editForm) {
         ApiResponse response = outpatientCardService.userMeEdit(user, editForm);
@@ -65,7 +56,7 @@ public class UserController {
         return new ResponseEntity<>(response, response.getStatus());
     }
 
-    @PostMapping("/edit/{userId}")
+    @PutMapping("/edit/{userId}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ApiResponse> userEdit(@PathVariable("userId") Long userId, @RequestBody UserEditForm editForm) {
         ApiResponse response = registrationService.editUser(userId, editForm);

@@ -8,7 +8,7 @@ import java.util.Set;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     User findByUsername(String username);
-    User findFirstByUsername(String username);
+
     User findUserById(Long id);
     List findByRolesInAndActiveTrue(Set roles);
 

@@ -7,11 +7,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-
 @Service
 public class MailService {
     public static final String EMAIL_FROM = "dentistry.samsonenko@mail.ru";
@@ -27,7 +22,7 @@ public class MailService {
     public void sendNotification(String text, String EMAIL_TO, String subject) throws MailException {
 
         SimpleMailMessage mail = new SimpleMailMessage();
-        mail.setFrom("dentistry.samsonenko@mail.ru");
+        mail.setFrom(EMAIL_FROM);
         mail.setTo(EMAIL_TO);
         mail.setSubject(subject);
 

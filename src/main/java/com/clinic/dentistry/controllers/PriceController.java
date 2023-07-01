@@ -1,6 +1,5 @@
 package com.clinic.dentistry.controllers;
 
-import com.clinic.dentistry.models.Good;
 import com.clinic.dentistry.service.GoodService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -15,7 +15,6 @@ import org.springframework.mail.MailException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -80,6 +79,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                             if (appointment.getDoctor().equals(doctor.getEmployee()) && appointment.getDate().equals(time)
                                     && (appointment.getActive() || (!appointment.getActive() && appointment.getConclusion() != null))) {
                                 dateTaken = Boolean.TRUE;
+                                break;
                             }
                         }
                         if (dateTaken.equals(Boolean.FALSE)) {
@@ -96,26 +96,6 @@ public class AppointmentServiceImpl implements AppointmentService {
         }
         return dtoList;
 //        return availableDatesByDoctor;
-    }
-
-    @Override
-    public Iterable<Appointment> getArchiveAppointmentsForClient(User user) {
-        return appointmentRepository.findByClientAndConclusionNotNullOrderByDate(user.getOutpatientCard());
-    }
-
-    @Override
-    public Iterable<Appointment> getArchiveAppointmentsForDoctor(User user) {
-        return appointmentRepository.findByDoctorAndConclusionNotNullOrderByDate(user.getEmployee());
-    }
-
-    @Override
-    public Iterable<Appointment> getActiveAppointmentsForClient(User user) {
-        return appointmentRepository.findByClientAndActiveTrueAndConclusionNullOrderByDate(user.getOutpatientCard());
-    }
-
-    @Override
-    public Iterable<Appointment> getActiveAppointmentsForDoctor(User user) {
-        return appointmentRepository.findByDoctorAndActiveTrueAndConclusionNullOrderByDate(user.getEmployee());
     }
 
 
@@ -142,7 +122,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public Appointment addAppointment(User user, AddAppointmentDTO addAppointment) {
+    public void addAppointment(User user, AddAppointmentDTO addAppointment) {
         Appointment appointment = new Appointment();
         Employee doctor = employeeRepository.findEmployeeById(addAppointment.getDoctorId());
         System.out.println("Here" + doctor);
@@ -167,14 +147,6 @@ public class AppointmentServiceImpl implements AppointmentService {
             );
         } catch (MailException ignored) {
         }
-
-        return appointment;
-    }
-
-    @Override
-    public void cancelAppointment(Appointment appointment) {
-        appointment.setActive(Boolean.FALSE);
-        appointmentRepository.save(appointment);
 
     }
 
@@ -226,7 +198,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         List<AppointmentDto> availableDatesByDoctor = getAvailableDatesByDoctors(doctors);
         model.put("doctors", availableDatesByDoctor);
         return availableDatesByDoctor;
-    };
+    }
 
     @Override
     public ApiResponse appointmentsAdd(User user, AddAppointmentDTO addAppointment){
@@ -247,7 +219,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                 .status(HttpStatus.BAD_REQUEST)
                 .message("Данное время не доступно!")
                 .build();
-    };
+    }
 
     @Override
     public Map<String, Object> getAppointment(User user, Long appointmentId){

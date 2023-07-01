@@ -14,8 +14,6 @@ import org.springframework.mail.MailException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class OutpatientCardServiceImpl implements OutpatientCardService {
     @Autowired
@@ -26,11 +24,6 @@ public class OutpatientCardServiceImpl implements OutpatientCardService {
     private UserRepository userRepository;
     @Autowired
     private MailService mailService;
-
-    @Override
-    public List<OutpatientCard> findAllCards() {
-        return outpatientCardRepository.findAll();
-    }
 
     @Override
     public ApiResponse userMeEdit(User user, UserEditForm form) {
