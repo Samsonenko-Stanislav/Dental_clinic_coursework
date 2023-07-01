@@ -63,7 +63,6 @@ public class AppointmentServiceImpl implements AppointmentService {
             LocalDate endDate = startDate.plusWeeks(2);
             availableDates = new TreeMap<>();
             for (LocalDate date = startDate; date.isBefore(endDate); date = date.plusDays(1)) {
-                if (!(date.getDayOfWeek().equals(DayOfWeek.SUNDAY) || (date.getDayOfWeek().equals(DayOfWeek.MONDAY)))) {
                     avalibleTimes = new ArrayList();
                     LocalTime workStart = LocalTime.of(8, 0);
                     LocalTime workEnd = LocalTime.of(17, 0);
@@ -88,7 +87,6 @@ public class AppointmentServiceImpl implements AppointmentService {
                     availableDates.put(date.format(formatterDate), avalibleTimes);
                     dto.timetable.add(
                             new AppointmentDto.DayTimes(date.format(formatterDate), avalibleTimes));
-                }
             }
             availableDatesByDoctor.put(doctor, availableDates);
             dtoList.add(dto);
@@ -99,38 +97,38 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public Iterable<Appointment> getArchiveAppointmentsForClient(User user) {
-        return appointmentRepository.findByClientAndConclusionNotNull(user.getOutpatientCard());
+        return appointmentRepository.findByClientAndConclusionNotNullOrderByDate(user.getOutpatientCard());
     }
 
     @Override
     public Iterable<Appointment> getArchiveAppointmentsForDoctor(User user) {
-        return appointmentRepository.findByDoctorAndConclusionNotNull(user.getEmployee());
+        return appointmentRepository.findByDoctorAndConclusionNotNullOrderByDate(user.getEmployee());
     }
 
     @Override
     public Iterable<Appointment> getActiveAppointmentsForClient(User user) {
-        return appointmentRepository.findByClientAndActiveTrueAndConclusionNull(user.getOutpatientCard());
+        return appointmentRepository.findByClientAndActiveTrueAndConclusionNullOrderByDate(user.getOutpatientCard());
     }
 
     @Override
     public Iterable<Appointment> getActiveAppointmentsForDoctor(User user) {
-        return appointmentRepository.findByDoctorAndActiveTrueAndConclusionNull(user.getEmployee());
+        return appointmentRepository.findByDoctorAndActiveTrueAndConclusionNullOrderByDate(user.getEmployee());
     }
 
 
     @Override
     public List<Appointment> getClientList(User user) {
         List<Appointment> result = new ArrayList<>();
-        appointmentRepository.findByClientAndConclusionNotNull(user.getOutpatientCard()).forEach(result::add);
-        appointmentRepository.findByClientAndActiveTrueAndConclusionNull(user.getOutpatientCard()).forEach(result::add);
+        appointmentRepository.findByClientAndConclusionNotNullOrderByDate(user.getOutpatientCard()).forEach(result::add);
+        appointmentRepository.findByClientAndActiveTrueAndConclusionNullOrderByDate(user.getOutpatientCard()).forEach(result::add);
         return result;
     }
 
     @Override
     public List<Appointment> getDoctorList(User user) {
         List<Appointment> result = new ArrayList<>();
-        appointmentRepository.findByDoctorAndConclusionNotNull(user.getEmployee()).forEach(result::add);
-        appointmentRepository.findByDoctorAndActiveTrueAndConclusionNull(user.getEmployee()).forEach(result::add);
+        appointmentRepository.findByDoctorAndConclusionNotNullOrderByDate(user.getEmployee()).forEach(result::add);
+        appointmentRepository.findByDoctorAndActiveTrueAndConclusionNullOrderByDate(user.getEmployee()).forEach(result::add);
         return result;
     }
 
@@ -216,7 +214,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         Employee doctor = employeeRepository.findEmployeeById(addAppointment.getDoctorId());
         if (doctor == null)
             return false;
-       Iterable<Appointment> appointments = appointmentRepository.findAppointmentByDoctor(doctor);
+       Iterable<Appointment> appointments = appointmentRepository.findAppointmentByDoctorOrderByDate(doctor);
        for (Appointment appointment:appointments) {
            System.out.println(appointment.getDate() + " " + addAppointment.getDate());
              if (appointment.getDate().equals(addAppointment.getDate()) &&

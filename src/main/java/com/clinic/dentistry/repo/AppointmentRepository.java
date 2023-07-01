@@ -11,11 +11,11 @@ import java.util.List;
 
 
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
-    Iterable<Appointment> findByActiveTrue();
-    Iterable<Appointment> findByClientAndConclusionNotNull(OutpatientCard outpatientCard);
-    Iterable<Appointment> findByClientAndActiveTrueAndConclusionNull(OutpatientCard outpatientCard);
-    Iterable<Appointment> findByDoctorAndConclusionNotNull(Employee employee);
-    Iterable<Appointment> findByDoctorAndActiveTrueAndConclusionNull(Employee employee);
+    Iterable<Appointment> findByActiveTrueOrderByDate();
+    Iterable<Appointment> findByClientAndConclusionNotNullOrderByDate(OutpatientCard outpatientCard);
+    Iterable<Appointment> findByClientAndActiveTrueAndConclusionNullOrderByDate(OutpatientCard outpatientCard);
+    Iterable<Appointment> findByDoctorAndConclusionNotNullOrderByDate(Employee employee);
+    Iterable<Appointment> findByDoctorAndActiveTrueAndConclusionNullOrderByDate(Employee employee);
     Appointment findAppointmentById(Long id);
-    Iterable<Appointment> findAppointmentByDoctor(Employee employee);
+    Iterable<Appointment> findAppointmentByDoctorOrderByDate(Employee employee);
  }
