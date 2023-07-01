@@ -102,8 +102,14 @@ insert into user_role (user_id, roles)
 values (1, 'ADMIN'), (2, 'DOCTOR'), (3, 'USER');
 
 INSERT INTO good (active, name, price) VALUES
-(true, 'Первичный прием', 2000.0),
-(true, 'Повтроный прием', 1500.0),
-(true, 'Удаление зуба', 2500.0),
-(true, 'Анестезия', 500.0);
+    (true, 'Первичный прием', 2000.0),
+    (true, 'Повтроный прием', 1500.0),
+    (true, 'Удаление зуба', 2500.0),
+    (true, 'Анестезия', 500.0);
 
+insert into work_days(employee_id, work_days)
+VALUES  (1, 'MONDAY'),
+        (1, 'TUESDAY'),
+        (1, 'WEDNESDAY'),
+        (1, 'THURSDAY'),
+        (1, 'FRIDAY');
