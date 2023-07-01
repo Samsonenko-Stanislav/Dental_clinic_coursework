@@ -107,6 +107,12 @@ const AddEmployee = () => {
                 </label>
                 <input type="time" name="workEnd" className="form-control" id="workEnd" value={workEnd} onChange={(e) => setWorkEnd(e.target.value)} />
               </div>
+              <div className="col-6">
+                <label htmlFor="durationApp" className="form-label">
+                  Время приема (минут)
+                </label>
+                <input type="text" name="durationApp" className="form-control" required id="durationApp" value={durationApp} onChange={(e) => setDurationApp(e.target.value)} />
+              </div>
               <div className="col">
                 <div className="col-md-5 my-2">
                   <input type="checkbox" name="MONDAY" id="MONDAY" checked={isMonday} onChange={handleMondayChange} />
@@ -147,12 +153,6 @@ const AddEmployee = () => {
                   Воскресенье
                 </label>
               </div>
-              </div>
-              <div className="col-6">
-                <label htmlFor="durationApp" className="form-label">
-                  Время приема (минут)
-                </label>
-                <input type="text" name="durationApp" className="form-control" required id="durationApp" value={durationApp} onChange={(e) => setDurationApp(e.target.value)} />
               </div>
             </div>
             <button className="w-100 btn btn-primary btn-lg my-4" type="submit">

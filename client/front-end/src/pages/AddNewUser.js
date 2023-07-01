@@ -251,7 +251,7 @@ const AddNewUser = () => {
             </div>
           </div>
         )}
-        <button className="btn btn-primary btn-lg my-2" type="submit">
+        <button className="w-100 btn btn-primary btn-lg my-4" type="submit">
           Создать
         </button>
       </form>
