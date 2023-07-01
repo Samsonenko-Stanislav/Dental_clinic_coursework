@@ -31,7 +31,10 @@ const EditUsers = () => {
       setUserName(user?.user?.username);
       setActive(user?.user?.active);
       setSelectedRoles(user?.user?.roles);
-      setEmployee(user?.user?.employeeId);
+      if (user.user.employee != null){
+        setEmployee(user?.user?.employeeId);
+      }
+      else setEmployee("");
 
       if (user.user.outpatientCard) {
         setEmail(user.user.outpatientCard.email);
@@ -125,6 +128,7 @@ if (user?.user){
                     Сотрудник
                   </label>
                   <select className="form-select" id="employee" name="employee" value={employee} onChange={(e) => setEmployee(e.target.value)}>
+                    <option key={0} value={0}>{``}</option>
                     {user?.employees.map((employee) => (
                       <option key={employee.id} value={employee.id}>{`${employee.fullName}`}</option>
                     ))}

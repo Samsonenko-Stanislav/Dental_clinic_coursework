@@ -196,23 +196,13 @@ public class RegistrationServiceImpl implements RegistrationService {
                 card.setGender(form.getGender());
                 outpatientCardRepository.save(card);
                 userDb.setOutpatientCard(card);
-            } else {
-                OutpatientCard card = userDb.getOutpatientCard();
-                userDb.setOutpatientCard(null);
-                if (card != null) {
-                    outpatientCardRepository.delete(card);
-                }
             }
 
             if (roles.contains(Role.DOCTOR)) {
                 Employee employee = employeeRepository.findEmployeeById(form.getEmployeeId());
                 userDb.setEmployee(employee);
             } else {
-                Employee employee = userDb.getEmployee();
                 userDb.setEmployee(null);
-                if (employee != null) {
-                    employeeRepository.delete(employee);
-                }
             }
 
             userRepository.save(userDb);

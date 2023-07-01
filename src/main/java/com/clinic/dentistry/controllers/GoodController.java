@@ -39,7 +39,7 @@ public class GoodController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("{goodId}")
+    @PutMapping("{goodId}")
     public ResponseEntity<ApiResponse> goodEdit(@PathVariable("goodId") Long goodId, @RequestBody Good newData) {
         ApiResponse response =goodService.goodEdit(goodId, newData);
         return new ResponseEntity<>(response, response.getStatus());

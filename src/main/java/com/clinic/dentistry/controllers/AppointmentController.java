@@ -56,7 +56,7 @@ public class AppointmentController {
         return appointmentService.getAppointment(user, appointmentId);
     }
 
-    @PostMapping("/edit/{appointmentId}")
+    @PutMapping("/edit/{appointmentId}")
     @PreAuthorize("hasAuthority('DOCTOR')")
     public ResponseEntity<?> appointmentsEdit(@AuthenticationPrincipal User user,
                                        @PathVariable("appointmentId") Long appointmentId,
@@ -67,7 +67,7 @@ public class AppointmentController {
         return new ResponseEntity<>(response, response.getStatus());
     }
 
-    @GetMapping("/cancel/{appointmentId}")
+    @DeleteMapping("/cancel/{appointmentId}")
     @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<?> appointmentsCancel(@AuthenticationPrincipal User user,
                                          @PathVariable("appointmentId") Long appointmentId
