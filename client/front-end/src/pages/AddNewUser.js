@@ -10,6 +10,13 @@ const AddNewUser = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [isDoctor, setIsDoctor] = useState(false);
   const [isUser, setIsUser] = useState(false);
+  const [isMonday, setIsMonday] = useState(false);
+  const [isTuesday, setIsTuesday] = useState(false);
+  const [isWednesday, setIsWednesday] = useState(false);
+  const [isThursday, setIsThursday] = useState(false);
+  const [isFriday, setIsFriday] = useState(false);
+  const [isSaturday, setIsSaturday] = useState(false);
+  const [isSunday, setIsSunday] = useState(false);
   const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
@@ -33,6 +40,30 @@ const AddNewUser = () => {
     setIsUser(event.target.checked);
   };
 
+  const handleMondayChange = (event) => {
+    setIsMonday(event.target.checked)
+  }
+
+  const handleTuesdayChange = (event) => {
+    setIsTuesday(event.target.checked)
+  }
+  const handleWednesdayChange = (event) => {
+    setIsWednesday(event.target.checked)
+  }
+  const handleThursdayChange = (event) => {
+    setIsThursday(event.target.checked)
+  }
+  const handleFridayChange = (event) => {
+    setIsFriday(event.target.checked)
+  }
+  const handleSaturdayChange = (event) => {
+    setIsSaturday(event.target.checked)
+  }
+  const handleSundayChange = (event) => {
+    setIsSunday(event.target.checked)
+  }
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -40,6 +71,18 @@ const AddNewUser = () => {
     if (isUser) roles.push('USER');
     if (isDoctor) roles.push('DOCTOR');
     if (isAdmin) roles.push('ADMIN');
+
+    const workDays = [];
+
+    if(isMonday) workDays.push('MONDAY');
+    if(isTuesday) workDays.push('TUESDAY');
+    if(isWednesday) workDays.push('WEDNESDAY');
+    if(isThursday) workDays.push('THURSDAY');
+    if(isFriday) workDays.push('FRIDAY');
+    if(isSaturday) workDays.push('SATURDAY');
+    if(isSunday) workDays.push('SUNDAY');
+
+
 
     if (!isUser && !isDoctor && !isAdmin) {
       showNotification('error', 'Выберите хоть одну роль', 'Ошибка');
@@ -58,6 +101,7 @@ const AddNewUser = () => {
           jobTitle,
           workStart: !workStart ? null : workStart + ':00',
           workEnd: !workEnd ? null : workEnd + ':00',
+          workDays,
           durationApp,
         },
       })
@@ -142,6 +186,47 @@ const AddNewUser = () => {
                   Время приема (минут)
                 </label>
                 <input type="text" name="durationApp" className="form-control" required id="durationApp" value={durationApp} onChange={(e) => setDurationApp(e.target.value)} />
+              </div>
+              <div className="col">
+                <div className="col-md-5 my-2">
+                  <input type="checkbox" name="MONDAY" id="MONDAY" checked={isMonday} onChange={handleMondayChange} />
+                  <label htmlFor="MONDAY" className="form-label">
+                    Понедельник
+                  </label>
+                </div>
+                <div className="col-md-5 my-2">
+                  <input type="checkbox" name="TUESDAY" id="TUESDAY" checked={isTuesday} onChange={handleTuesdayChange} />
+                  <label htmlFor="TUESDAY" className="form-label">
+                    Вторник
+                  </label>
+                </div>
+                <div className="col-md-5 my-2">
+                  <input type="checkbox" name="WEDNESDAY" id="WEDNESDAY" checked={isWednesday} onChange={handleWednesdayChange} />
+                  <label htmlFor="WEDNESDAY" className="form-label">
+                    Среда
+                  </label>
+                </div>
+                <div className="col-md-5 my-2">
+                  <input type="checkbox" name="THURSDAY" id="THURSDAY" checked={isThursday} onChange={handleThursdayChange} />
+                  <label htmlFor="THURSDAY" className="form-label">
+                    Четверг
+                  </label>
+                </div><div className="col-md-5 my-2">
+                <input type="checkbox" name="FRIDAY" id="FRIDAY" checked={isFriday} onChange={handleFridayChange} />
+                <label htmlFor="FRIDAY" className="form-label">
+                  Пятница
+                </label>
+              </div><div className="col-md-5 my-2">
+                <input type="checkbox" name="SATURDAY" id="SATURDAY" checked={isSaturday} onChange={handleSaturdayChange} />
+                <label htmlFor="SATURDAY" className="form-label">
+                  Суббота
+                </label>
+              </div><div className="col-md-5 my-2">
+                <input type="checkbox" name="SUNDAY" id="SUNDAY" checked={isSunday} onChange={handleSundayChange} />
+                <label htmlFor="SUNDAY" className="form-label">
+                  Воскресенье
+                </label>
+              </div>
               </div>
             </div>
           </div>

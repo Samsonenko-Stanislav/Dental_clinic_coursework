@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -20,7 +21,14 @@ public class Employee {
     private String jobTitle;
     private LocalTime workStart;
     private LocalTime workEnd;
+
+    @ElementCollection(targetClass = WorkDay.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "work_days", joinColumns = @JoinColumn(name = "employee_id"))
+    @Enumerated(EnumType.STRING)
+    private Set<WorkDay> workDays;
+
     private int durationApp;
+
 
     public LocalTime getWorkStart() {
         return workStart != null ? workStart : LocalTime.of(9, 0);

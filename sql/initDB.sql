@@ -80,6 +80,13 @@ create table if not exists user_role
     foreign key (user_id) references usr(id)
 );
 
+create table if not exists work_days
+(
+    employee_id bigint,
+    work_days   varchar(255),
+    foreign key (employee_id) references employee(id)
+);
+
 insert into employee (duration_app, full_name, job_title, work_start, work_end) VALUES
     (30, 'Иванов Иван Иванович', 'Стоматолог-терапевт', '09:00:00', '18:00:00');
 

@@ -30,6 +30,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .jobTitle(dto.getJobTitle())
                 .workStart(dto.getWorkStart())
                 .workEnd(dto.getWorkEnd())
+                .workDays(dto.getWorkDays())
                 .durationApp(dto.getDurationApp())
                 .build();
         employeeRepository.save(employee);

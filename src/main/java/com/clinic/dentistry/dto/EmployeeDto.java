@@ -1,8 +1,10 @@
 package com.clinic.dentistry.dto;
 
+import com.clinic.dentistry.models.WorkDay;
 import lombok.*;
 
 import java.time.LocalTime;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -14,5 +16,6 @@ public class EmployeeDto {
     private String jobTitle;
     private LocalTime workStart;
     private LocalTime workEnd;
+    private Set<WorkDay> workDays;
     private Integer durationApp;
 }

@@ -2,6 +2,7 @@ package com.clinic.dentistry.dto.user;
 
 import com.clinic.dentistry.models.Gender;
 import com.clinic.dentistry.models.Role;
+import com.clinic.dentistry.models.WorkDay;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,6 +37,7 @@ public class RegisterForm {
     private Set<Role> roles;
     private String jobTitle;
     private LocalTime workStart, workEnd;
+    private Set<WorkDay> workDays;
     private int durationApp;
 }
 

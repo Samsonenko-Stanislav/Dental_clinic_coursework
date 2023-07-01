@@ -63,6 +63,8 @@ public class AppointmentServiceImpl implements AppointmentService {
             LocalDate endDate = startDate.plusWeeks(2);
             availableDates = new TreeMap<>();
             for (LocalDate date = startDate; date.isBefore(endDate); date = date.plusDays(1)) {
+                System.out.println();
+                if (doctor.getEmployee().getWorkDays().toString().toUpperCase().contains(date.getDayOfWeek().toString().toUpperCase())) {
                     avalibleTimes = new ArrayList();
                     LocalTime workStart = LocalTime.of(8, 0);
                     LocalTime workEnd = LocalTime.of(17, 0);
@@ -76,7 +78,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                         dateTaken = Boolean.FALSE;
                         for (Appointment appointment : appointments) {
                             if (appointment.getDoctor().equals(doctor.getEmployee()) && appointment.getDate().equals(time)
-                            && (appointment.getActive() || (!appointment.getActive() && appointment.getConclusion()!=null))) {
+                                    && (appointment.getActive() || (!appointment.getActive() && appointment.getConclusion() != null))) {
                                 dateTaken = Boolean.TRUE;
                             }
                         }
@@ -87,6 +89,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                     availableDates.put(date.format(formatterDate), avalibleTimes);
                     dto.timetable.add(
                             new AppointmentDto.DayTimes(date.format(formatterDate), avalibleTimes));
+                }
             }
             availableDatesByDoctor.put(doctor, availableDates);
             dtoList.add(dto);

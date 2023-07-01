@@ -105,6 +105,7 @@ public class RegistrationServiceImpl implements RegistrationService {
                     .jobTitle(request.getJobTitle())
                     .workStart(request.getWorkStart())
                     .workEnd(request.getWorkEnd())
+                    .workDays(request.getWorkDays())
                     .durationApp(request.getDurationApp())
                     .build();
             employeeRepository.save(employee);
