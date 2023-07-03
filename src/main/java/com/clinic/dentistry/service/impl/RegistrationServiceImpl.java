@@ -215,11 +215,18 @@ public class RegistrationServiceImpl implements RegistrationService {
                     if(userDb.getOutpatientCard().getGender().equals(Gender.FEMALE)){
                         gender = "Женский";
                     }
+                    String passwordMessage;
+                    if (form.getPassword() != null){
+                        passwordMessage = "\nВаш новый пароль: " + form.getPassword();
+                    }
+                    else {
+                        passwordMessage = "\nВаш новый пароль остался прижним";
+                    }
                     mailService.sendNotification(
                     "Здравствуйте, " + oldFullName + "! \n" +
                             "\nВаш профиль успешно отредактирован администратором.\n"+
                             "\nВаш новый логин: " + userDb.getUsername() +
-                            "\nВаш новый пароль: " + form.getPassword() +
+                            passwordMessage +
                             "\nВаше новое ФИО: " + userDb.getOutpatientCard().getFullName() +
                             "\nВаш новый Email: " + userDb.getOutpatientCard().getEmail() +
                             "\nВаш новый пол: " + gender + "\n" +
