@@ -47,10 +47,14 @@ const Profile = () => {
 
     if (response?.type?.includes('rejected')) {
       if (!(password) && username !== profile?.username){
+        navigate('/user/me')
         showNotification('error', 'При смене логина необходимо сменить пароль', 'Профиль')
       }
-      else
+      else{
+        navigate('/user/me')
         showNotification('error','Пользователь с таким логином уже существует', 'Профиль');
+      }
+
       setLoading(false);
       return;
     }

@@ -106,7 +106,7 @@ if (user?.user){
                   <label htmlFor="password" className="form-label">
                     Новый пароль
                   </label>
-                  <input type="password" name="password" id="password" className="form-control" password={password} onChange={(e) => setPassword(e.target.value)} />
+                  <input type="password" required name="password" id="password" className="form-control" password={password} onChange={(e) => setPassword(e.target.value)} />
                 </div>
               )}
             </div>

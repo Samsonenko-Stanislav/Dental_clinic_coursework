@@ -156,7 +156,7 @@ const AddNewUser = () => {
               <label htmlFor="fullName" className="form-label">
                 ФИО
               </label>
-              <input type="text" name="fullName" className="form-control" required id="fullName" value={fullName} onChange={(e) => setFullName(e.target.value)} />
+              <input type="text"  name="fullName" className="form-control" required id="fullName" value={fullName} onChange={(e) => setFullName(e.target.value)} />
             </div>
           )}
         </div>

@@ -118,7 +118,7 @@ if (employee.id){
                 <label htmlFor="jobTitle" className="form-label">
                   Должность
                 </label>
-                <input type="text" name="jobTitle" className="form-control" id="jobTitle" value={jobTitle} onChange={(e) => setTitle(e.target.value)} />
+                <input type="text" required name="jobTitle" className="form-control" id="jobTitle" value={jobTitle} onChange={(e) => setTitle(e.target.value)} />
               </div>
             </div>
             <div className="row col-12 my-4">
@@ -126,19 +126,19 @@ if (employee.id){
                 <label htmlFor="workStart" className="form-label">
                   Старт рабочего дня
                 </label>
-                <input type="time" name="workStart" className="form-control" id="workStart" value={workStart} onChange={(e) => setTimeStart(e.target.value)} />
+                <input type="time" required name="workStart" className="form-control" id="workStart" value={workStart} onChange={(e) => setTimeStart(e.target.value)} />
               </div>
               <div className="col-6">
                 <label htmlFor="workEnd" className="form-label">
                   Конец рабочего дня
                 </label>
-                <input type="time" name="workEnd" className="form-control" id="workEnd" value={workEnd} onChange={(e) => setTimeEnd(e.target.value)} />
+                <input type="time" required name="workEnd" className="form-control" id="workEnd" value={workEnd} onChange={(e) => setTimeEnd(e.target.value)} />
               </div>
               <div className="col-6 mt-2">
                 <label htmlFor="durationApp" className="form-label">
                   Время приема (минут)
                 </label>
-                <input type="text" name="durationApp" className="form-control" id="durationApp" value={durationApp} onChange={(e) => setTimeReception(e.target.value)} />
+                <input type="text" required name="durationApp" className="form-control" id="durationApp" value={durationApp} onChange={(e) => setTimeReception(e.target.value)} />
               </div>
               <div className="col">
                 <div className="col-md-5 my-2">

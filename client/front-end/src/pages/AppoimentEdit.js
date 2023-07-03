@@ -116,6 +116,7 @@ const AppointmentsEdit = () => {
     );
     if (response?.type?.includes('fulfilled')) {
       navigate('/appointments');
+      showNotification('success', 'Заключение успешно оставлено!', 'Запись')
     }
     setLoading(false);
   };
@@ -127,6 +128,7 @@ const AppointmentsEdit = () => {
 
     if (response?.type?.includes('fulfilled')) {
       navigate('/appointments');
+      showNotification('success', 'Запись успешно отменена', 'Запись')
     }
     if (response?.type?.includes('rejected')){
       showNotification('error', 'Вы не можете отменить запись, так как не являетесь в ней пациентом', 'Запись');
