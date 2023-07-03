@@ -1,8 +1,9 @@
-import React, { memo, useState } from 'react';
+import React, {memo, useContext, useState} from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { createUser } from '../store/slice/UserSlice';
 import { showNotification } from '../App';
+import {UserContext} from "../context/UserContext";
 
 const AddNewUser = () => {
   const navigate = useNavigate();
@@ -27,6 +28,8 @@ const AddNewUser = () => {
   const [workStart, setWorkStart] = useState('');
   const [workEnd, setWorkEnd] = useState('');
   const [durationApp, setDurationApp] = useState('');
+
+  const { setLoading } = useContext(UserContext);
 
   const handleAdminChange = (event) => {
     setIsAdmin(event.target.checked);
@@ -65,13 +68,12 @@ const AddNewUser = () => {
 
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-
+    e.preventDefault()
+    setLoading(true)
     const roles = [];
     if (isUser) roles.push('USER');
     if (isDoctor) roles.push('DOCTOR');
     if (isAdmin) roles.push('ADMIN');
-
     const workDays = [];
 
     if(isMonday) workDays.push('MONDAY');
@@ -85,6 +87,7 @@ const AddNewUser = () => {
 
 
     if (!isUser && !isDoctor && !isAdmin) {
+      setLoading(false)
       showNotification('error', 'Выберите хоть одну роль', 'Ошибка');
       return;
     }
@@ -107,7 +110,11 @@ const AddNewUser = () => {
       })
     );
 
-    if (response?.type?.includes('fulfilled')) navigate('/user');
+    if (response?.type?.includes('fulfilled')) {
+      setLoading(false)
+      navigate('/user')
+    }
+    ;
   };
 
   return (
