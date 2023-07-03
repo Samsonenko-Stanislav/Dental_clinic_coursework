@@ -220,7 +220,7 @@ public class RegistrationServiceImpl implements RegistrationService {
                         passwordMessage = "\nВаш новый пароль: " + form.getPassword();
                     }
                     else {
-                        passwordMessage = "\nВаш новый пароль остался прижним";
+                        passwordMessage = "\nВаш пароль остался прижним";
                     }
                     mailService.sendNotification(
                     "Здравствуйте, " + oldFullName + "! \n" +
@@ -235,7 +235,7 @@ public class RegistrationServiceImpl implements RegistrationService {
                             "\nС уважением, \n" +
                             "Коллектив стоматологической клиники 'Улыбка премиум' ",
                     oldEmail,
-                    "Успешная регистрация"
+                    "Успешное обновление профиля"
                     );
                     if (!form.getEmail().equals(oldEmail)) {
                         mailService.sendNotification(
@@ -251,7 +251,7 @@ public class RegistrationServiceImpl implements RegistrationService {
                                         "\nС уважением, \n" +
                                         "Коллектив стоматологической клиники 'Улыбка премиум' ",
                                 form.getEmail(),
-                                "Успешная регистрация"
+                                "Успешное обновление профиля"
                         );
                     }
 
