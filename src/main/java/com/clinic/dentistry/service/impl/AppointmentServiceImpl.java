@@ -187,8 +187,10 @@ public class AppointmentServiceImpl implements AppointmentService {
        }
     @Override
     public Boolean isUserAppointment(User user, Appointment appointment){
-            return !(user.getOutpatientCard() != null && !appointment.getClient().getId().equals(user.getOutpatientCard().getId())
-                    || user.getEmployee() != null && !appointment.getDoctor().getId().equals(user.getEmployee().getId()));
+            return (!(user.getOutpatientCard() != null && !appointment.getClient().getId().equals(user.getOutpatientCard().getId())
+                    || user.getEmployee() != null && !appointment.getDoctor().getId().equals(user.getEmployee().getId())))
+                    || ((user.getOutpatientCard() != null && user.getEmployee() != null &&(appointment.getClient().getId().equals(user.getOutpatientCard().getId())
+                      || appointment.getDoctor().getId().equals(user.getEmployee().getId()))));
     }
 
     @Override

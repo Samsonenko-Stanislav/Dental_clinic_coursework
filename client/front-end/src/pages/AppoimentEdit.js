@@ -7,12 +7,14 @@ import { requestGoods } from '../store/slice/GoodsSlice';
 import moment from 'moment';
 import 'moment/locale/ru';
 import NotFound from "../components/NotFoundComponent/NotFound";
+import {showNotification} from "../App";
 moment.locale('ru');
 
 const AppointmentsEdit = () => {
   const dispatch = useDispatch();
   const params = useParams();
   const { role } = useContext(UserContext);
+  const {user} = useContext(UserContext)
   const appointmentStore = useSelector((state) => state.appointments.appointment);
   const goodsStore = useSelector((state) => state.goods.goods);
   const checkLines = appointmentStore.checkLines || [];
@@ -125,6 +127,9 @@ const AppointmentsEdit = () => {
 
     if (response?.type?.includes('fulfilled')) {
       navigate('/appointments');
+    }
+    if (response?.type?.includes('rejected')){
+      showNotification('error', 'Вы не можете отменить запись, так как не являетесь в ней пациентом', 'Запись');
     }
     setLoading(false);
   };
