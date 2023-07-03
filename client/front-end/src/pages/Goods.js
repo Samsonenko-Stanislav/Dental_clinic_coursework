@@ -50,7 +50,7 @@ const Goods = () => {
         <div className="my-4">
           {!withArchived ? (
             <button className="btn btn-primary mx-1" onClick={toggleArchived}>
-              Скрыть архивные услуги
+              Показать активные услуги
             </button>
           ) : (
             <button className="btn btn-primary mx-1" onClick={toggleArchived}>

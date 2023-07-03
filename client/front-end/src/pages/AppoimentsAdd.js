@@ -57,15 +57,15 @@ const AppointmentsAdd = () => {
                             <div key={index} className="col-md-4 border rounded">
                               <div className="ps-2 pt-2">{moment(date.day).format('ll')}</div>
                               <div className="p-2">
-                                {date.times.map((time) => (
+                                {date?.times?.length ? date.times.map((time) => (
                                   <button key={time} className="mt-1 ms-1" onClick={() => handleSetDoctor(doctor.id, date.day + 'T' + time, doctor.fullName)}>
                                     {time}
                                   </button>
-                                ))}
+                                )):<a>На данную дату нет свободных талонов!!!!</a>}
                               </div>
                             </div>
                           ))
-                        : null}
+                        : (<a>На ближайшие 14 дней нет свободных талонов!!!!</a>)}
                     </div>
                   </div>
                 </div>
