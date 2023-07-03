@@ -7,6 +7,7 @@ import "moment/locale/ru";
 import { useNavigate } from "react-router-dom";
 import { showNotification } from "../App";
 import employee from "./Employee";
+import EmptyComponent from "../components/EmptyComponent/EmptyComponent";
 
 moment.locale('ru');
 
@@ -71,7 +72,9 @@ const AppointmentsAdd = () => {
                 </div>
               </div>
             ))
-          : null}
+          : (
+                <EmptyComponent />
+            )}
       </div>
 
       {currentNameDoctor && (
