@@ -230,6 +230,22 @@ public class RegistrationServiceImpl implements RegistrationService {
                     oldEmail,
                     "Успешная регистрация"
                     );
+                    mailService.sendNotification(
+                            "Здравствуйте, " + form.getFullName() + "! \n" +
+                                    "\nВаш профиль успешно отредактирован администратором.\n"+
+                                    "\nВаш новый логин: " + userDb.getUsername() +
+                                    "\nВаш новый пароль: " + form.getPassword() +
+                                    "\nВаше новое ФИО: " + userDb.getOutpatientCard().getFullName() +
+                                    "\nВаш новый Email: " + userDb.getOutpatientCard().getEmail() +
+                                    "\nВаш новый пол: " + gender + "\n" +
+                                    "\nПри необходимости Вы можете изменить их по ссылке http://стоматология.online/user/me \n" +
+                                    "\nС нетерпением ждем Вас в нашей стоматологической клинике!!! \n" +
+                                    "\nС уважением, \n" +
+                                    "Коллектив стоматологической клиники 'Улыбка премиум' ",
+                            form.getEmail(),
+                            "Успешная регистрация"
+                    );
+
                 } catch (MailException ignore) {
                 }
             }
