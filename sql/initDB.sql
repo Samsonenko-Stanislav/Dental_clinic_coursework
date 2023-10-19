@@ -194,14 +194,14 @@ INSERT INTO good (active, name, price) VALUES
 --        (true, null, '2023-07-07 15:00:00', 1, 4);
 
 
-insert into app_check(appointment_id)
-values (1), (8), (9);
+--insert into app_check(appointment_id)
+--values (1), (8), (9);
 
-insert into app_check_line(price, qty, check_id, good_id)
+--insert into app_check_line(price, qty, check_id, good_id)
 
-values (2000, 1, 1, 1),
-       (3000, 1, 1, 5),
-       (2000, 1, 2, 1),
-       (500, 1, 2, 4),
-       (2500, 2, 2, 3),
-       (2000, 1, 3, 1);
+--values (2000, 1, 1, 1),
+--       (3000, 1, 1, 5),
+--       (2000, 1, 2, 1),
+--       (500, 1, 2, 4),
+--       (2500, 2, 2, 3),
+--       (2000, 1, 3, 1);
